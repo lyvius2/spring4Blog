@@ -16,12 +16,17 @@
 	</beans:bean>
 	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<beans:property name="dataSource" ref="dataSource" />
-		<beans:property name="mapperLocations" value="classpath*:query/**" />
+		<beans:property name="mapperLocations" value="classpath*:query/*.xml" />
 	</beans:bean>
 	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<beans:constructor-arg ref="sqlSessionFactory" />
 	</beans:bean>
-
+	<!--
+	<beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yunson.firstapp" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</beans:bean>
+	-->
 	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<beans:property name="dataSource" ref="dataSource" />
 	</beans:bean>

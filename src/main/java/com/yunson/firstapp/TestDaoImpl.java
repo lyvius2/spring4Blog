@@ -11,12 +11,12 @@ import java.sql.SQLException;
  */
 @Repository
 public class TestDaoImpl implements TestDao {
+
 	@Autowired
 	private SqlSession query;
 
 	@Override
 	public String getTest() throws SQLException {
-		String tmp = query.selectOne("query.test");
-		return tmp;
+		return query.selectOne("query.getTest");
 	}
 }
