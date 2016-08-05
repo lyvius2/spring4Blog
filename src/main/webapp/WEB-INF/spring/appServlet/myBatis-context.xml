@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- Config DB Connection Pool -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+        <property name="url" value="jdbc:sqlserver://172.22.32.15:1433;databaseName=DB_JAM" />
+        <property name="username" value="USER_JCUBE_DEV" />
+        <property name="password" value="JAMelql_!%D" />
+    </bean>
+    <context:annotation-config />
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:myBatis-config.xml" />
+        <!--
+        <property name="mapperLocations" value="classpath*:query/*.xml" />
+        -->
+    </bean>
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory" />
+    </bean>
+    <!--
+    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yunson.firstapp" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </beans:bean>
+    -->
+
+    <!-- Transaction Management Config -->
+    <tx:annotation-driven/>
+
+    <aop:config>
+        <aop:advisor advice-ref="transactionAdvice" pointcut="bean(*DaoImpl)" />
+    </aop:config>
+    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="exceptionPut" propagation="REQUIRES_NEW"/>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+</beans>

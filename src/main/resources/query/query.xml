@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="query">
     <select id="getTest" resultType="java.lang.String">
-        SELECT 'TEST from SQL Server3'
+        SELECT AME_Email
+          FROM TB_JAM_AMember
+         WHERE AME_SEQ = 4
     </select>
 </mapper>
