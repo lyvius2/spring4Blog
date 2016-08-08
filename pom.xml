@@ -158,11 +158,18 @@
 			<version>1.4</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+		<!-- Encrypt -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
+		</dependency>
+
+		<!-- Layout Engine -->
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-extras</artifactId>
+			<version>3.0.5</version>
 		</dependency>
 
 		<!-- Test -->

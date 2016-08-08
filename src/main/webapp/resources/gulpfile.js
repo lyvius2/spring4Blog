@@ -21,4 +21,4 @@ gulp.task('vendorJsUglify', function(){
 		.pipe(gulp.dest('./scripts'));
 });
 
-gulp.task('default',['start','vendorJsUglify','semanticUiBuild', 'end']);
+gulp.task('default',['start','vendorJsUglify','semanticUiBuild']);
