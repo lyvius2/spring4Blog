@@ -10,11 +10,10 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!-- Config DB Connection Pool -->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> -->
+    <bean id="dataSource" class="com.yunson.config.DataSourceConfig" destroy-method="close">
         <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-        <property name="url" value="jdbc:sqlserver://172.22.32.15:1433;databaseName=DB_JAM" />
-        <property name="username" value="USER_JCUBE_DEV" />
-        <property name="password" value="JAMelql_!%D" />
+        <property name="url" value="rVICEAa3vncsxfy1QXNYjxObbxm6eeqmVm4jsVUYVMeLqSbXjSrDFo1QMo1y3kA6QznmahYNa9p1M8nYFKD/dmCoS4VaeJ4AJABlobEGrO1KRXAHs22hkHXVr6UvbM5T" />
     </bean>
     <context:annotation-config />
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
