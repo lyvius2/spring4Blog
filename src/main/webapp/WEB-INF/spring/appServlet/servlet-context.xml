@@ -15,7 +15,8 @@
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 
-	<!-- tiles3 Layout Engine Framework -->
+	<!-- tiles3 Layout Engine Framework : change to Sitemesh2 -->
+	<!--
 	<beans:bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
 		<beans:property name="order" value="1" />
@@ -28,12 +29,13 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+	-->
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
-		<beans:property name="order" value="2" />
+		<beans:property name="order" value="1" />
 	</beans:bean>
 	
 	<context:component-scan base-package="com.yunson.firstapp" />

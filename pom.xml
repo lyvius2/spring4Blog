@@ -165,11 +165,18 @@
 			<version>1.10</version>
 		</dependency>
 
-		<!-- Layout Engine -->
+		<!-- Layout Engine
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-extras</artifactId>
 			<version>3.0.5</version>
+		</dependency>
+		-->
+		<!-- Layout Engine : Sitemesh2 -->
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>2.4.2</version>
 		</dependency>
 
 		<!-- Test -->

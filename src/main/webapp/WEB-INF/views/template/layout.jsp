@@ -5,14 +5,14 @@
   Time: 오후 5:31
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Default</title>
+	<title><decorator:title default="Layout Page" /></title>
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/semantic/dist/semantic.min.css" />
 	<style type="text/css">
 		.ui.menu .item img.logo {
@@ -29,14 +29,14 @@
 			padding: 5em 0em;
 		}
 	</style>
+	<decorator:head />
 </head>
 <body>
-	<tiles:insertAttribute name="header" />
-	<div class="ui main text container">
-		<tiles:insertAttribute name="body" />
-	</div>
-	<tiles:insertAttribute name="footer" />
+	<jsp:include page="header.jsp"/>
+	<decorator:body />
+	<jsp:include page="footer.jsp"/>
 	<script src="${pageContext.request.contextPath}/resources/scripts/vendor.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/semantic/dist/semantic.min.js"></script>
+	<decorator:getProperty property="page.script" />
 </body>
 </html>
