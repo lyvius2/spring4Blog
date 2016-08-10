@@ -9,6 +9,10 @@
         <setting name="defaultStatementTimeout" value="3000"/>
     </settings>
 
+    <typeAliases>
+        <typeAlias type="com.yunson.firstapp.MemberVO" alias="Member" />
+    </typeAliases>
+
     <mappers>
         <mapper resource="/query/query.xml" />
     </mappers>
