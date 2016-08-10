@@ -14,13 +14,11 @@
 	<title>새로운 시작</title>
 </head>
 <body>
-	<div class="ui main text container">
-		<h1 class="ui header">Hello Spring 4 & Semantic UI World!</h1>
-		<p>This is a basic fixed menu template using fixed size containers.</p>
-		<p>A text container is used for the main container, which is useful for single column layouts</p>
-		<p>Railways Hi! Current Time is ${serverTime}.</p>
-		<img class="wireframe" src="${pageContext.request.contextPath}/resources/images/faroeIslands.jpg">
-	</div>
+	<h1 class="ui header">Hello Spring 4 & Semantic UI World!</h1>
+	<p>This is a basic fixed menu template using fixed size containers.</p>
+	<p>A text container is used for the main container, which is useful for single column layouts</p>
+	<p>Railways Hi! Current Time is ${serverTime}.</p>
+	<img class="wireframe" src="${pageContext.request.contextPath}/resources/images/faroeIslands.jpg">
 	<content tag="script">
 		<script>
 			console.log('Hello! We are the world');

@@ -33,7 +33,9 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
-	<decorator:body />
+	<div class="ui main text container">
+		<decorator:body />
+	</div>
 	<jsp:include page="footer.jsp"/>
 	<script src="${pageContext.request.contextPath}/resources/scripts/vendor.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/semantic/dist/semantic.min.js"></script>
