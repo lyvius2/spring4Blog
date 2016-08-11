@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- Config DB Connection Pool : Original Class - org.apache.commons.dbcp.BasicDataSource -->
-    <bean id="dataSource" class="com.yunson.config.DataSourceConfig" destroy-method="close">
-        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-        <property name="url" value="rVICEAa3vncsxfy1QXNYjxObbxm6eeqmVm4jsVUYVMeLqSbXjSrDFo1QMo1y3kA6QznmahYNa9p1M8nYFKD/dmCoS4VaeJ4AJABlobEGrO1KRXAHs22hkHXVr6UvbM5T" />
+    <!-- Config DB Connection Pool : Original Class - org.springframework.jdbc.datasource.DriverManagerDataSource -->
+    <bean id="dataSource" class="com.yunson.config.DataSourceConfiguration">
+        <property name="cryptography" ref="cryptography"/>
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+        <property name="url"
+                  value="rVICEAa3vncsxfy1QXNYjxObbxm6eeqmVm4jsVUYVMeLqSbXjSrDFo1QMo1y3kA6QznmahYNa9p1M8nYFKD/dmCoS4VaeJ4AJABlobEGrO1KRXAHs22hkHXVr6UvbM5T"/>
     </bean>
-    <context:annotation-config />
+    <context:annotation-config/>
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="configLocation" value="classpath:mybatis-config.xml" />
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
         <!--
         <property name="mapperLocations" value="classpath*:query/*.xml" />
         -->
     </bean>
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-        <constructor-arg ref="sqlSessionFactory" />
+        <constructor-arg ref="sqlSessionFactory"/>
     </bean>
+    <bean id="cryptography" class="com.yunson.config.Cryptography"/>
     <!--
     <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.yunson.firstapp" />
@@ -36,16 +39,16 @@
     <tx:annotation-driven/>
 
     <aop:config>
-        <aop:advisor advice-ref="transactionAdvice" pointcut="bean(*DaoImpl)" />
+        <aop:advisor advice-ref="transactionAdvice" pointcut="bean(*DaoImpl)"/>
     </aop:config>
     <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="exceptionPut" propagation="REQUIRES_NEW"/>
             <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
-            <tx:method name="*" />
+            <tx:method name="*"/>
         </tx:attributes>
     </tx:advice>
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 </beans>

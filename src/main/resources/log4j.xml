@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.yunson.firstapp">
+	<logger name="com.yunson">
 		<level value="info" />
 	</logger>
 	
