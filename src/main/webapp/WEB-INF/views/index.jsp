@@ -18,6 +18,27 @@
 	<p>This is a basic fixed menu template using fixed size containers.</p>
 	<p>A text container is used for the main container, which is useful for single column layouts</p>
 	<p>Railways Hi! Current Time is ${serverTime}.</p>
+	<p>
+		<i class="jp flag"></i>
+		<i class="tw flag"></i>
+		<i class="is flag"></i>
+		<i class="fi flag"></i>
+		<i class="ee flag"></i>
+		<i class="hk flag"></i>
+		<br/>
+		<i class="kr flag"></i>
+		<i class="se flag"></i>
+		<i class="no flag"></i>
+		<i class="fr flag"></i>
+		<i class="nl flag"></i>
+		<i class="gb flag"></i>
+		<br/>
+		<i class="gb sct flag"></i>
+		<i class="dk flag"></i>
+		<i class="fo flag"></i>
+		<i class="de flag"></i>
+		<i class="sg flag"></i>
+	</p>
 	<img class="wireframe" src="${pageContext.request.contextPath}/resources/images/faroeIslands.jpg">
 	<content tag="script">
 		<script>

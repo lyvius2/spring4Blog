@@ -2,6 +2,7 @@
 <decorators defaultdir="/WEB-INF/views">
     <excludes>
         <pattern>/exclude/*</pattern>
+        <pattern>/api/*</pattern>
     </excludes>
 
     <decorator name="mainTheme" page="template/layout.jsp">

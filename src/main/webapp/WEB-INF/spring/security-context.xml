@@ -22,4 +22,8 @@
         </authentication-provider>
     </authentication-manager>
     -->
+
+    <beans:bean id="passwordEncode" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+        <beans:constructor-arg name="strength" value="512" />
+    </beans:bean>
 </beans:beans>

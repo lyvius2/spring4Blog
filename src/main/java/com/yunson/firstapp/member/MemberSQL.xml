@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunson.firstapp.member.MemberDao">
+    <sql id="getMember">
+        SELECT *
+              ,(SELECT cd_name FROM code WHERE up_cd = 'NAT' AND cd = member.nationality) AS "nationality_name"
+          FROM member
+    </sql>
+
+    <select id="getMemberList" parameterType="java.lang.String" resultType="com.yunson.firstapp.member.MemberVO">
+        <include refid="getMember"/>
+        WHERE use_yn = 'Y'
+        <if test="value != null">
+          AND (username like '%'||#{value}||'%'
+           OR  kr_name like '%'||#{value}||'%'
+           OR  first_name like '%'||#{value}||'%'
+           OR  last_name like '%'||#{value}||'%')
+        </if>
+    </select>
+
+    <select id="getMemberDetail" parameterType="java.util.HashMap" resultType="Member">
+        <include refid="getMember"/>
+        WHERE use_yn = 'Y'
+        <if test="username != null">
+          AND username = #{username}
+        </if>
+        <if test="seq != null">
+          AND seq = #{seq}
+        </if>
+    </select>
+
+    <insert id="setMember" parameterType="Member">
+        INSERT INTO member
+        (username, password, kr_name, first_name, last_name, email, phone, reg_id, nationality)
+        VALUES
+        (#{username}, #{password}, #{kr_name}, #{first_name}, #{last_name}, #{email}, #{phone}, #{username}, #{nationality})
+        <selectKey keyProperty="seq" resultType="java.lang.Integer" order="AFTER">
+            SELECT currval('member_seq_seq')
+        </selectKey>
+    </insert>
+</mapper>

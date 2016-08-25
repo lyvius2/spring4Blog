@@ -4,11 +4,7 @@
   Date: 2016-08-08
   Time: 오후 5:31
   To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
+--%><%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %><%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
@@ -31,7 +27,7 @@
 	</style>
 	<decorator:head />
 </head>
-<body>
+<body ng-app="<decorator:getProperty property="body.ng-app" />">
 	<jsp:include page="header.jsp"/>
 	<div class="ui main text container">
 		<decorator:body />
@@ -39,6 +35,6 @@
 	<jsp:include page="footer.jsp"/>
 	<script src="${pageContext.request.contextPath}/resources/scripts/vendor.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/semantic/dist/semantic.min.js"></script>
-	<decorator:getProperty property="page.script" />
+<decorator:getProperty property="page.script" />
 </body>
 </html>

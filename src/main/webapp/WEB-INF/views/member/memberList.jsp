@@ -19,8 +19,8 @@
 			<div class="item">
 				<i class="large github middle aligned icon"></i>
 				<div class="content">
-					<a href="<c:url value="/member/${member.AME_SEQ}"/>" class="header"><c:out value="${member.AME_MemID}"/>/<c:out value="${member.AME_Name}"/></a>
-					<div class="description"><c:out value="${member.AME_Email}"/></div>
+					<a href="<c:url value="/member/profile/${member.seq}"/>" class="header"><c:out value="${member.username}"/>/<c:out value="${member.kr_name}"/></a>
+					<div class="description"><c:out value="${member.email}"/></div>
 				</div>
 			</div>
 		</c:forEach>
