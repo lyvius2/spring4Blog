@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.context.annotation.SessionScope;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -65,7 +65,6 @@ public class MemberController {
 
 	@RequestMapping("/list")
 	public String memberList(@RequestParam(value = "searchText", required = false)String searchText, Model model) {
-		logger.info("searchText : " + searchText);
 		model.addAttribute("memberList", memberDao.getMemberList(searchText));
 		return "member/memberList";
 	}

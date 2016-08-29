@@ -1,4 +1,4 @@
-<div class="ui fixed inverted menu">
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %><%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><div class="ui fixed inverted menu">
 	<div class="ui container">
 		<a href="#" class="header item">
 			<img class="logo" src="${pageContext.request.contextPath}/resources/images/logo.png">
@@ -23,5 +23,8 @@
 				<a class="item" href="#">Link Item</a>
 			</div>
 		</div>
+		<security:authorize access="isAuthenticated()">
+			<div class="item right floated"><c:out value="${sessionScope.userName}" /> 님 안녕하세요</div>
+		</security:authorize>
 	</div>
 </div>

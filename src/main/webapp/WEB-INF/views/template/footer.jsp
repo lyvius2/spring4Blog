@@ -1,4 +1,4 @@
-<div class="ui inverted vertical footer segment">
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %><div class="ui inverted vertical footer segment">
 	<div class="ui center aligned container">
 		<div class="ui stackable inverted divided grid">
 			<div class="three wide column">

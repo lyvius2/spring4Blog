@@ -37,18 +37,18 @@
 					<div class="sub header">Log-in to your account. Enjoy yhwang131's blog contents.</div>
 				</div>
 			</h2>
-			<form action="" class="ui large form">
+			<form action="/signIn" method="post" class="ui large form">
 				<div class="ui stacked segment">
 					<div class="field">
 						<div class="ui left icon input">
 							<i class="user icon"></i>
-							<input type="text" name="username" placeholder="ID">
+							<input type="text" name="username" placeholder="ID" required>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui left icon input">
 							<i class="lock icon"></i>
-							<input type="password" name="password" placeholder="Password">
+							<input type="password" name="password" placeholder="Password" required>
 						</div>
 					</div>
 					<button class="fluid ui blue icon button">
@@ -56,8 +56,14 @@
 						Login
 					</button>
 				</div>
-				<div class="ui error message"></div>
 			</form>
+			<c:if test="${not empty param.fail}">
+				<div class="ui negative message">
+					<h4 class="ui header">Your login information was invalid, try again.</h4>
+					<p>${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
+				</div>
+				<c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
+			</c:if>
 			<div class="ui message">
 				New to us? <a href="/member/register">Sign Up</a>
 			</div>

@@ -1,14 +1,18 @@
 package com.yunson.firstapp.member;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.Date;
 
 /**
  * Created by yhwang131 on 2016-08-22.
  */
-public class MemberVO {
+public class MemberVO implements UserDetails {
 
 	private int seq;
 
@@ -36,6 +40,12 @@ public class MemberVO {
 	private String permission;
 	private String nationality;
 	private String nationality_name;
+
+	private boolean accountNonExpired;
+	private boolean accountNonLocked;
+	private boolean credentialsNonExpired;
+	private boolean enabled;
+	private Collection<? extends GrantedAuthority> authorities;
 
 	public int getSeq() {
 		return seq;
@@ -165,6 +175,51 @@ public class MemberVO {
 		this.nationality_name = nationality_name;
 	}
 
+	public void setAccountNonExpired(boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+
+	public void setAccountNonLocked(boolean accountNonLocked) {
+		this.accountNonLocked = accountNonLocked;
+	}
+
+	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		this.authorities = authorities;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authorities;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return accountNonExpired;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return accountNonLocked;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return credentialsNonExpired;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
+
 	@Override
 	public String toString() {
 		return "MemberVO{" +
@@ -184,6 +239,11 @@ public class MemberVO {
 				", permission='" + permission + '\'' +
 				", nationality='" + nationality + '\'' +
 				", nationality_name='" + nationality_name + '\'' +
+				", accountNonExpired=" + accountNonExpired +
+				", accountNonLocked=" + accountNonLocked +
+				", credentialsNonExpired=" + credentialsNonExpired +
+				", enabled=" + enabled +
+				", authorities=" + authorities +
 				'}';
 	}
 }

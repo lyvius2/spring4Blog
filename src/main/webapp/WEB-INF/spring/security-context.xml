@@ -6,24 +6,43 @@
              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <!-- Authentication Config -->
-    <http auto-config="true" use-expressions="true">
-        <intercept-url pattern="/test" access="hasRole('ROLE_USER')" />
+    <http auto-config="false" use-expressions="true" create-session="never" disable-url-rewriting="true">
+        <csrf disabled="true" />
+        <intercept-url pattern="/login" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')" />
+        <intercept-url pattern="/member/**" access="hasRole('ROLE_USER')" />
+        <form-login login-page="/login"
+                    login-processing-url="/signIn"
+                    username-parameter="username"
+                    password-parameter="password"
+                    default-target-url="/"
+                    authentication-failure-url="/login?fail=true"
+        />
+        <logout invalidate-session="true"
+                logout-url="/signOut"
+                logout-success-url="/"
+                delete-cookies="JSESSIONID, SPRING_SECURITY_REMEMBER_ME_COOKIE"
+        />
     </http>
 
-    <user-service>
-        <user name="test" password="1234" authorities="ROLE_USER" />
-    </user-service>
-    <!--
-    <authentication-manager>
+    <!--<authentication-manager>
         <authentication-provider>
             <user-service>
                 <user name="test" password="1234" authorities="ROLE_USER" />
             </user-service>
         </authentication-provider>
-    </authentication-manager>
-    -->
+    </authentication-manager>-->
 
     <beans:bean id="passwordEncode" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
         <beans:constructor-arg name="strength" value="512" />
     </beans:bean>
+
+    <beans:bean id="signInUserDetailsService" class="com.yunson.config.SignInUserDetailsService" />
+    <beans:bean id="signInSuccessHandler" class="com.yunson.config.SignInSuccessHandler" />
+    <beans:bean id="signInFailureHandler" class="com.yunson.config.SignInFailureHandler" />
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="signInUserDetailsService">
+            <password-encoder ref="passwordEncode" />
+        </authentication-provider>
+    </authentication-manager>
 </beans:beans>
