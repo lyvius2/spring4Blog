@@ -1,7 +1,6 @@
 /.idea/
 /target/
 /src/test/java/
-/src/main/resources/META-INF/
 /src/main/webapp/WEB-INF/classes/
 /src/main/webapp/resources/node_modules/
 /src/main/webapp/resources/semantic/
