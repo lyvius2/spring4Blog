@@ -40,6 +40,7 @@ public class MemberVO implements UserDetails {
 	private String permission;
 	private String nationality;
 	private String nationality_name;
+	private Date pw_expire_dt;
 
 	private boolean accountNonExpired;
 	private boolean accountNonLocked;
@@ -173,6 +174,14 @@ public class MemberVO implements UserDetails {
 
 	public void setNationality_name(String nationality_name) {
 		this.nationality_name = nationality_name;
+	}
+
+	public Date getPw_expire_dt() {
+		return pw_expire_dt;
+	}
+
+	public void setPw_expire_dt(Date pw_expire_dt) {
+		this.pw_expire_dt = pw_expire_dt;
 	}
 
 	public void setAccountNonExpired(boolean accountNonExpired) {

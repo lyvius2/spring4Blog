@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -52,6 +53,13 @@ public class MemberController {
 		}
 		memberVO.setPassword(encoder.encodePassword(memberVO.getPassword(), null));
 		memberDao.setMember(memberVO);
+		if(memberVO.getSeq() > 0) {
+			RoleVO roleVO = new RoleVO();
+			roleVO.setUsername(memberVO.getUsername());
+			roleVO.setAuthority("ROLE01");
+			roleVO.setReg_id(memberVO.getUsername());
+			memberDao.setRole(roleVO);
+		}
 		return "redirect:profile/" + memberVO.getSeq();
 	}
 

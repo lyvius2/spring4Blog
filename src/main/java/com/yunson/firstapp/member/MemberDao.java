@@ -10,4 +10,6 @@ public interface MemberDao {
 	List<MemberVO> getMemberList(String searchText);
 	MemberVO getMemberDetail(HashMap<String, Object> param);
 	int setMember(MemberVO member);
+	List<RoleVO> getRoleList(String username);
+	int setRole(RoleVO roleVO);
 }

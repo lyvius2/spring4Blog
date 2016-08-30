@@ -7,7 +7,7 @@
           FROM member
     </sql>
 
-    <select id="getMemberList" parameterType="java.lang.String" resultType="com.yunson.firstapp.member.MemberVO">
+    <select id="getMemberList" parameterType="java.lang.String" resultType="Member">
         <include refid="getMember"/>
         WHERE use_yn = 'Y'
         <if test="value != null">
@@ -31,11 +31,25 @@
 
     <insert id="setMember" parameterType="Member">
         INSERT INTO member
-        (username, password, kr_name, first_name, last_name, email, phone, reg_id, nationality)
+        (username, password, kr_name, first_name, last_name, email, phone, reg_id, nationality, pw_expire_dt)
         VALUES
-        (#{username}, #{password}, #{kr_name}, #{first_name}, #{last_name}, #{email}, #{phone}, #{username}, #{nationality})
+        (#{username}, #{password}, #{kr_name}, #{first_name}, #{last_name}, #{email}, #{phone}, #{username}, #{nationality}, (current_date + INTERVAL '90 days'))
         <selectKey keyProperty="seq" resultType="java.lang.Integer" order="AFTER">
             SELECT currval('member_seq_seq')
         </selectKey>
+    </insert>
+
+    <select id="getRoleList" parameterType="java.lang.String" resultType="Role">
+        SELECT fn_code_nm('ROLE', authority) AS "authority"
+          FROM member_authority
+         WHERE use_yn = 'Y'
+           AND username = #{username}
+    </select>
+
+    <insert id="setRole" parameterType="Role">
+        INSERT INTO member_authority
+        (username, authority, reg_id)
+        VALUES
+        (#{username}, #{authority}, #{reg_id})
     </insert>
 </mapper>
