@@ -22,6 +22,9 @@
                 logout-success-url="/"
                 delete-cookies="JSESSIONID, SPRING_SECURITY_REMEMBER_ME_COOKIE"
         />
+        <session-management>
+            <concurrency-control max-sessions="1" />
+        </session-management>
     </http>
 
     <!--<authentication-manager>

@@ -45,8 +45,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(HttpServletRequest request) {
-		logger.info("Access Login Page : " + request.getLocalAddr());
+	public String login() {
 		return "login";
 	}
 }
