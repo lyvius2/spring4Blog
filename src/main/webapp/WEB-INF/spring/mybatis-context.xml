@@ -1,62 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <!-- Config DB Connection Pool : Original Class - org.springframework.jdbc.datasource.DriverManagerDataSource -->
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <!--
-        <property name="cryptography" ref="cryptography"/>
-        <property name="url"
-                  value="rVICEAa3vncsxfy1QXNYjxObbxm6eeqmVm4jsVUYVMeLqSbXjSrDFo1QMo1y3kA6QznmahYNa9p1M8nYFKD/dmCoS4VaeJ4AJABlobEGrO1KRXAHs22hkHXVr6UvbM5T"/>
-        -->
-        <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://localhost:5432/blog"/>
-        <property name="username" value="blogger"/>
-        <property name="password" value="blogger1"/>
-    </bean>
-    <context:annotation-config/>
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation" value="classpath:mybatis-config.xml"/>
-        <property name="mapperLocations">
-            <list>
-                <value>classpath:com/yunson/firstapp/api/ApiSQL.xml</value>
-                <value>classpath:com/yunson/firstapp/member/MemberSQL.xml</value>
-            </list>
-        </property>
-    </bean>
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
-        <constructor-arg ref="sqlSessionFactory"/>
-    </bean>
-    <bean id="cryptography" class="com.yunson.config.Cryptography"/>
+	<!-- Config DB Connection Pool : Original Class - org.springframework.jdbc.datasource.DriverManagerDataSource -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<!--
+		<property name="cryptography" ref="cryptography"/>
+		<property name="url"
+				  value="rVICEAa3vncsxfy1QXNYjxObbxm6eeqmVm4jsVUYVMeLqSbXjSrDFo1QMo1y3kA6QznmahYNa9p1M8nYFKD/dmCoS4VaeJ4AJABlobEGrO1KRXAHs22hkHXVr6UvbM5T"/>
+		-->
+		<property name="driverClassName" value="org.postgresql.Driver"/>
+		<property name="url" value="jdbc:postgresql://localhost:5432/blog"/>
+		<property name="username" value="blogger"/>
+		<property name="password" value="blogger1"/>
+	</bean>
+	<context:annotation-config/>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:com/yunson/firstapp/api/ApiSQL.xml</value>
+				<value>classpath:com/yunson/firstapp/member/MemberSQL.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory"/>
+	</bean>
+	<bean id="cryptography" class="com.yunson.config.Cryptography"/>
 
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.yunson.firstapp" />
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-    </bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yunson.firstapp"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>
 
-    <!-- Transaction Management Config -->
-    <tx:annotation-driven/>
+	<!-- Transaction Management Config -->
+	<tx:annotation-driven/>
 
-    <aop:config>
-        <aop:advisor advice-ref="transactionAdvice" pointcut="bean(*Dao*)"/>
-    </aop:config>
-    <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="exceptionPut" propagation="REQUIRES_NEW"/>
-            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
-            <tx:method name="*"/>
-        </tx:attributes>
-    </tx:advice>
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
+	<aop:config>
+		<aop:advisor advice-ref="transactionAdvice" pointcut="bean(*Dao)"/>
+	</aop:config>
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="exceptionPut" propagation="REQUIRES_NEW"/>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager"/>
+	</bean>
 </beans>

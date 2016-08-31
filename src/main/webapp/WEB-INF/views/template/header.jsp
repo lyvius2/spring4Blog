@@ -24,7 +24,7 @@
 			</div>
 		</div>
 		<security:authorize access="isAuthenticated()">
-			<div class="item right floated"><c:out value="${sessionScope.userName}" /> 님 안녕하세요</div>
+			<div class="item right floated"><c:out value="${pageContext.request.remoteUser}"/>(<c:out value="${sessionScope.userInfo.kr_name}"/>) 님 안녕하세요.</div>
 		</security:authorize>
 	</div>
 </div>

@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:beans="http://www.springframework.org/schema/beans"
-             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:beans="http://www.springframework.org/schema/beans"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
              http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <!-- Authentication Config -->
-    <http auto-config="false" use-expressions="true" create-session="never" disable-url-rewriting="true">
-        <csrf disabled="true" />
-        <intercept-url pattern="/login" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')" />
-        <intercept-url pattern="/member/**" access="hasRole('ROLE_USER')" />
-        <form-login login-page="/login"
-                    login-processing-url="/signIn"
-                    username-parameter="username"
-                    password-parameter="password"
-                    default-target-url="/"
-                    authentication-failure-url="/login?fail=true"
-        />
-        <logout invalidate-session="true"
-                logout-url="/signOut"
-                logout-success-url="/"
-                delete-cookies="JSESSIONID, SPRING_SECURITY_REMEMBER_ME_COOKIE"
-        />
-        <session-management>
-            <concurrency-control max-sessions="1" />
-        </session-management>
-    </http>
+	<!-- Authentication Config -->
+	<http auto-config="false" use-expressions="true" create-session="never" disable-url-rewriting="true">
+		<csrf disabled="true"/>
+		<intercept-url pattern="/login" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
+		<intercept-url pattern="/member/**" access="hasRole('ROLE_USER')"/>
+		<form-login login-page="/login"
+					login-processing-url="/signIn"
+					username-parameter="username"
+					password-parameter="password"
+					authentication-success-handler-ref="signInSuccessHandler"
+					authentication-failure-handler-ref="signInFailureHandler"
+		/>
+		<logout invalidate-session="true"
+				logout-url="/signOut"
+				logout-success-url="/"
+				delete-cookies="JSESSIONID, SPRING_SECURITY_REMEMBER_ME_COOKIE"
+		/>
+		<session-management>
+			<concurrency-control max-sessions="1"/>
+		</session-management>
+	</http>
 
-    <!--<authentication-manager>
-        <authentication-provider>
-            <user-service>
-                <user name="test" password="1234" authorities="ROLE_USER" />
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>-->
+	<!--<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="test" password="1234" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>-->
 
-    <beans:bean id="passwordEncode" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
-        <beans:constructor-arg name="strength" value="512" />
-    </beans:bean>
+	<beans:bean id="passwordEncode" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+		<beans:constructor-arg name="strength" value="512"/>
+	</beans:bean>
 
-    <beans:bean id="signInUserDetailsService" class="com.yunson.config.SignInUserDetailsService" />
-    <beans:bean id="signInSuccessHandler" class="com.yunson.config.SignInSuccessHandler" />
-    <beans:bean id="signInFailureHandler" class="com.yunson.config.SignInFailureHandler" />
+	<beans:bean id="signInUserDetailsService" class="com.yunson.config.SignInUserDetailsService"/>
+	<beans:bean id="signInSuccessHandler" class="com.yunson.config.SignInSuccessHandler">
+		<beans:property name="refererUse" value="false"/>
+		<beans:property name="defaultUrl" value="/"/>
+	</beans:bean>
+	<beans:bean id="signInFailureHandler" class="com.yunson.config.SignInFailureHandler"/>
 
-    <authentication-manager>
-        <authentication-provider user-service-ref="signInUserDetailsService">
-            <password-encoder ref="passwordEncode" />
-        </authentication-provider>
-    </authentication-manager>
+	<authentication-manager>
+		<authentication-provider user-service-ref="signInUserDetailsService">
+			<password-encoder ref="passwordEncode"/>
+		</authentication-provider>
+	</authentication-manager>
 </beans:beans>
