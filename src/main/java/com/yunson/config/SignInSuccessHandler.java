@@ -32,7 +32,7 @@ public class SignInSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		MemberVO memberVO = (MemberVO)authentication.getPrincipal();
-		logger.info(new Date() + " - " + memberVO.getUsername() + " 로그인");
+		logger.info(new Date() + " - " + memberVO.getUsername() + " 사용자 로그인");
 		request.getSession().setAttribute("userInfo", memberVO);
 		redirectStrategy.sendRedirect(request, response, connectionRouteDecision(request, response));
 		//response.sendRedirect(request.getContextPath() + connectionRouteDecision(request, response));

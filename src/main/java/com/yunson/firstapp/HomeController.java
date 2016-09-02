@@ -7,7 +7,10 @@ import java.util.Locale;
 import com.yunson.firstapp.member.MemberVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +27,7 @@ import javax.servlet.http.HttpSession;
 public class HomeController {
 	
 	public static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -31,11 +35,6 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model, HttpSession httpSession) {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = auth.getPrincipal();
-		if(principal != null && principal instanceof MemberVO) {
-			httpSession.setAttribute("userName", ((MemberVO)principal).getKr_name());
-		}
 
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
@@ -44,8 +43,28 @@ public class HomeController {
 		return "index";
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping("/login")
 	public String login() {
 		return "login";
+	}
+
+	@RequestMapping("/403")
+	public String noAuthority(Model model) throws NullPointerException {
+		try {
+			model.addAttribute("message",
+					messages.getMessage("JdbcDaoImpl.noAuthority", new Object[]{this.getLoginUser().getUsername()}, "User {0} has no GrantedAuthority"));
+		} finally {
+			return "403";
+		}
+	}
+
+	private MemberVO getLoginUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = auth.getPrincipal();
+		if(principal != null && principal instanceof MemberVO) {
+			return (MemberVO)principal;
+		} else {
+			return null;
+		}
 	}
 }
