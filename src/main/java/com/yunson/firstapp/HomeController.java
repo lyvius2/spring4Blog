@@ -48,14 +48,12 @@ public class HomeController {
 		return "login";
 	}
 
-	@RequestMapping("/403")
+	@RequestMapping("/exclude/403")
 	public String noAuthority(Model model) throws NullPointerException {
-		try {
-			model.addAttribute("message",
-					messages.getMessage("JdbcDaoImpl.noAuthority", new Object[]{this.getLoginUser().getUsername()}, "User {0} has no GrantedAuthority"));
-		} finally {
-			return "403";
-		}
+		MemberVO memberVO = this.getLoginUser();
+		model.addAttribute("message",
+				messages.getMessage("JdbcDaoImpl.noAuthority", new Object[]{memberVO!=null?memberVO.getUsername():""}, "User {0} has no GrantedAuthority"));
+		return "403";
 	}
 
 	private MemberVO getLoginUser() {

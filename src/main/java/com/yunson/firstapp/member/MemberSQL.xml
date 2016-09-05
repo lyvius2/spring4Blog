@@ -3,7 +3,7 @@
 <mapper namespace="com.yunson.firstapp.member.MemberDao">
     <sql id="getMember">
         SELECT *
-              ,(SELECT cd_name FROM code WHERE up_cd = 'NAT' AND cd = member.nationality) AS "nationality_name"
+              ,fn_code_nm('NAT', nationality) AS "nationality_name"
           FROM member
     </sql>
 

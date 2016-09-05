@@ -14,32 +14,37 @@
 	<title>새로운 시작</title>
 </head>
 <body>
-	<h1 class="ui header">Hello Spring 4 & Semantic UI World!</h1>
-	<p>This is a basic fixed menu template using fixed size containers.</p>
-	<p>A text container is used for the main container, which is useful for single column layouts</p>
-	<p>Railways Hi! Current Time is ${serverTime}.</p>
-	<p>
-		<i class="jp flag"></i>
-		<i class="tw flag"></i>
-		<i class="is flag"></i>
-		<i class="fi flag"></i>
-		<i class="ee flag"></i>
-		<i class="hk flag"></i>
-		<br/>
-		<i class="kr flag"></i>
-		<i class="se flag"></i>
-		<i class="no flag"></i>
-		<i class="fr flag"></i>
-		<i class="nl flag"></i>
-		<i class="gb flag"></i>
-		<br/>
-		<i class="gb sct flag"></i>
-		<i class="dk flag"></i>
-		<i class="fo flag"></i>
-		<i class="de flag"></i>
-		<i class="sg flag"></i>
-	</p>
-	<img class="wireframe" src="${pageContext.request.contextPath}/resources/images/faroeIslands.jpg">
+	<div class="row">
+		<div class="column">
+			<h1 class="ui header">Hello Spring 4 & Semantic UI World!</h1>
+			<p>This is a basic fixed menu template using fixed size containers.</p>
+			<p>A text container is used for the main container, which is useful for single column layouts</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum in quod similique? Asperiores atque, beatae distinctio dolor eos id, iure libero nesciunt numquam officiis perspiciatis porro rem sit temporibus vitae.</p>
+			<p>Railways Hi! Current Time is ${serverTime}.</p>
+			<p>
+				<i class="jp flag"></i>
+				<i class="tw flag"></i>
+				<i class="is flag"></i>
+				<i class="fi flag"></i>
+				<i class="ee flag"></i>
+				<i class="hk flag"></i>
+				<br/>
+				<i class="kr flag"></i>
+				<i class="se flag"></i>
+				<i class="no flag"></i>
+				<i class="fr flag"></i>
+				<i class="nl flag"></i>
+				<i class="gb flag"></i>
+				<br/>
+				<i class="gb sct flag"></i>
+				<i class="dk flag"></i>
+				<i class="fo flag"></i>
+				<i class="de flag"></i>
+				<i class="sg flag"></i>
+			</p>
+			<img class="wireframe" src="${pageContext.request.contextPath}/resources/images/faroeIslands.jpg">
+		</div>
+	</div>
 	<content tag="script">
 		<script>
 			console.log('Hello! We are the world');

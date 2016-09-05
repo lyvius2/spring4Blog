@@ -29,7 +29,7 @@
 </head>
 <body ng-app="<decorator:getProperty property="body.ng-app" />">
 	<jsp:include page="header.jsp"/>
-	<div class="ui main text container">
+	<div class="ui main container">
 		<decorator:body />
 	</div>
 	<jsp:include page="footer.jsp"/>
