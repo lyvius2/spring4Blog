@@ -10,9 +10,9 @@
     </settings>
 
     <typeAliases>
-        <typeAlias type="com.yunson.firstapp.member.MemberVO" alias="Member" />
-        <typeAlias type="com.yunson.firstapp.member.RoleVO" alias="Role" />
-        <typeAlias type="com.yunson.firstapp.api.CodeVO" alias="Code" />
+        <typeAlias type="com.walter.model.MemberVO" alias="Member" />
+        <typeAlias type="com.walter.model.RoleVO" alias="Role" />
+        <typeAlias type="com.walter.model.CodeVO" alias="Code" />
     </typeAliases>
 
     <mappers>

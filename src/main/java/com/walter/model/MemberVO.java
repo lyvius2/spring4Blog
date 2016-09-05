@@ -1,4 +1,4 @@
-package com.yunson.firstapp.member;
+package com.walter.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

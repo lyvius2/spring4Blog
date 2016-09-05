@@ -1,4 +1,4 @@
-package com.yunson.config;
+package com.walter.config;
 
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 

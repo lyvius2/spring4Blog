@@ -1,4 +1,4 @@
-package com.yunson.config;
+package com.walter.config;
 
 import java.security.spec.KeySpec;
 import javax.crypto.Cipher;

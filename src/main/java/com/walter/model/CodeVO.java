@@ -1,4 +1,4 @@
-package com.yunson.firstapp.api;
+package com.walter.model;
 
 import java.util.Date;
 

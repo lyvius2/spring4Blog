@@ -27,18 +27,18 @@
 		<property name="configLocation" value="classpath:mybatis-config.xml"/>
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:com/yunson/firstapp/api/ApiSQL.xml</value>
-				<value>classpath:com/yunson/firstapp/member/MemberSQL.xml</value>
+				<value>classpath:com/walter/dao/ApiSQL.xml</value>
+				<value>classpath:com/walter/dao/MemberSQL.xml</value>
 			</list>
 		</property>
 	</bean>
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactory"/>
 	</bean>
-	<bean id="cryptography" class="com.yunson.config.Cryptography"/>
+	<bean id="cryptography" class="com.walter.config.Cryptography"/>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.yunson.firstapp"/>
+		<property name="basePackage" value="com.walter.dao"/>
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
 	</bean>
 
