@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <settings>
-        <setting name="cacheEnabled" value="false"/>
-        <setting name="useGeneratedKeys" value="true"/>
-        <setting name="lazyLoadingEnabled" value="true"/>
-        <setting name="defaultExecutorType" value="BATCH"/>
-        <setting name="defaultStatementTimeout" value="3000"/>
-    </settings>
+	<settings>
+		<setting name="cacheEnabled" value="false"/>
+		<setting name="useGeneratedKeys" value="true"/>
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<setting name="defaultExecutorType" value="BATCH"/>
+		<setting name="defaultStatementTimeout" value="3000"/>
+	</settings>
 
-    <typeAliases>
-        <typeAlias type="com.walter.model.MemberVO" alias="Member" />
-        <typeAlias type="com.walter.model.RoleVO" alias="Role" />
-        <typeAlias type="com.walter.model.CodeVO" alias="Code" />
-    </typeAliases>
+	<typeAliases>
+		<typeAlias type="com.walter.model.MemberVO" alias="Member"/>
+		<typeAlias type="com.walter.model.RoleVO" alias="Role"/>
+		<typeAlias type="com.walter.model.CodeVO" alias="Code"/>
+		<typeAlias type="com.walter.model.CategoryVO" alias="Category"/>
+	</typeAliases>
 
-    <mappers>
-        <!--
-        <mapper resource="/query/query.xml" />
-        -->
-    </mappers>
+	<mappers>
+		<!--
+		<mapper resource="/query/query.xml" />
+		-->
+	</mappers>
 </configuration>
