@@ -21,7 +21,39 @@
 				<img>
 			</div>
 			<div class="six wide column">
-				<p>어쩌고 저쩌고</p>
+				<table class="ui compact celled definition table">
+					<thead class="full-width">
+						<tr>
+							<th>No.</th>
+							<th>카테고리 명</th>
+							<th>보기 권한</th>
+							<th>활성화</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input type="checkbox" /></td>
+							<td>프로필</td>
+							<td>ROLE_ANONYMOUS</td>
+							<td class="collapsing">
+								<div class="ui fitted slider checkbox">
+									<input type="checkbox">
+									<label></label>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot class="full-width">
+						<tr>
+							<th colspan="4">
+								<div class="ui right floated small primary labeled icon button">
+									<i class="setting icon"></i>
+									설정
+								</div>
+							</th>
+						</tr>
+					</tfoot>
+				</table>
 			</div>
 			<div class="six wide column">
 				<p>아따따뚜겐</p>

@@ -2,6 +2,7 @@ package com.walter.controller;
 
 import com.google.gson.Gson;
 import com.walter.dao.ApiDao;
+import com.walter.model.CategoryVO;
 import com.walter.model.CodeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,5 +27,11 @@ public class ApiController {
 	@ResponseBody
 	public String getCodeList(@ModelAttribute CodeVO codeVO) {
 		return gson.toJson(apiDao.getCodeList(codeVO));
+	}
+
+	@RequestMapping("/categoryList")
+	@ResponseBody
+	public String getCategoryList(@ModelAttribute CategoryVO categoryVO) {
+		return gson.toJson(apiDao.getCategoryList(categoryVO));
 	}
 }

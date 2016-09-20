@@ -11,4 +11,14 @@
 		</if>
 	</select>
 
+	<select id="getCategoryList" parameterType="Category" resultType="Category">
+		SELECT *
+		  FROM category
+		 WHERE depth = #{depth}
+		 <if test="parent_category_cd != null and parent_category_cd != ''">
+		   AND parent_category_cd = #{parent_category_cd}
+		 </if>
+		 ORDER BY order_no ASC
+	</select>
+
 </mapper>

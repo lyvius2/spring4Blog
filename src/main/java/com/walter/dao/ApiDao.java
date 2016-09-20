@@ -1,5 +1,6 @@
 package com.walter.dao;
 
+import com.walter.model.CategoryVO;
 import com.walter.model.CodeVO;
 
 import java.util.List;
@@ -9,4 +10,5 @@ import java.util.List;
  */
 public interface ApiDao {
 	List<CodeVO> getCodeList(CodeVO codeVO);
+	List<CategoryVO> getCategoryList(CategoryVO categoryVO);
 }
