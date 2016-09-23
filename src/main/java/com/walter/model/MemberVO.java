@@ -234,7 +234,6 @@ public class MemberVO implements UserDetails {
 		return "MemberVO{" +
 				"seq=" + seq +
 				", username='" + username + '\'' +
-				", password='" + password + '\'' +
 				", kr_name='" + kr_name + '\'' +
 				", first_name='" + first_name + '\'' +
 				", last_name='" + last_name + '\'' +

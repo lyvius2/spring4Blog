@@ -41,7 +41,7 @@ public class SignInUserDetailsService implements UserDetailsService {
 		memberVO.setAccountNonExpired(true);
 		memberVO.setAccountNonLocked(true);
 		memberVO.setCredentialsNonExpired(memberVO.getPw_expire_dt().compareTo(new Date())>=0 ? true : false);
-		memberVO.setEnabled(memberVO.getUse_yn().equals("Y") ? true : false);
+		memberVO.setEnabled("Y".equals(memberVO.getUse_yn()) ? true : false);
 
 		return memberVO;
 	}

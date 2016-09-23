@@ -12,7 +12,12 @@
 	</select>
 
 	<select id="getCategoryList" parameterType="Category" resultType="Category">
-		SELECT *
+		SELECT category_cd
+			  ,parent_category_cd
+			  ,depth
+			  ,category_name
+			  ,fn_code_nm('ROLE', access_role) AS "access_role"
+			  ,use_yn
 		  FROM category
 		 WHERE depth = #{depth}
 		 <if test="parent_category_cd != null and parent_category_cd != ''">

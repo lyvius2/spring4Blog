@@ -12,7 +12,7 @@ public class CategoryVO {
 	private int depth;
 	private String category_name;
 	private String access_role;
-	private String use_yn;
+	private boolean use_yn;
 	private Date reg_dt;
 	private String reg_id;
 	private Date mod_dt;
@@ -59,11 +59,11 @@ public class CategoryVO {
 		this.access_role = access_role;
 	}
 
-	public String getUse_yn() {
+	public boolean isUse_yn() {
 		return use_yn;
 	}
 
-	public void setUse_yn(String use_yn) {
+	public void setUse_yn(boolean use_yn) {
 		this.use_yn = use_yn;
 	}
 
@@ -105,5 +105,22 @@ public class CategoryVO {
 
 	public void setOrder_no(int order_no) {
 		this.order_no = order_no;
+	}
+
+	@Override
+	public String toString() {
+		return "CategoryVO{" +
+				"category_cd=" + category_cd +
+				", parent_category_cd=" + parent_category_cd +
+				", depth=" + depth +
+				", category_name='" + category_name + '\'' +
+				", access_role='" + access_role + '\'' +
+				", use_yn='" + use_yn + '\'' +
+				", reg_dt=" + reg_dt +
+				", reg_id='" + reg_id + '\'' +
+				", mod_dt=" + mod_dt +
+				", mod_id='" + mod_id + '\'' +
+				", order_no=" + order_no +
+				'}';
 	}
 }

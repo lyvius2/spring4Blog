@@ -22,7 +22,7 @@ public class Cryptography {
 	private String myEncryptionScheme;
 	SecretKey key;
 
-	public Cryptography() throws Exception {
+	public Cryptography() throws Throwable {
 		myEncryptionKey = "ThisIsSpartaThisIsSparta";
 		myEncryptionScheme = DESEDE_ENCRYPTION_SCHEME;
 		arrayBytes = myEncryptionKey.getBytes(UNICODE_FORMAT);

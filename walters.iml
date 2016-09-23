@@ -16,12 +16,12 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration>
+      <configuration process_explicitly_annotated="false">
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</file>
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring/root-context.xml</file>
-          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring/appServlet/mybatis-context.xml</file>
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring/security-context.xml</file>
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/spring/mybatis-context.xml</file>
         </fileset>
       </configuration>
     </facet>

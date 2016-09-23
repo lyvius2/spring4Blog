@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.walter</groupId>
-	<artifactId>Walter's Blog By Spring 4</artifactId>
+	<artifactId>firstapp</artifactId>
 	<name>springLegacy</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
