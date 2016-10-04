@@ -16,7 +16,8 @@
 			  ,parent_category_cd
 			  ,depth
 			  ,category_name
-			  ,fn_code_nm('ROLE', access_role) AS "access_role"
+			  ,access_role
+			  ,fn_code_nm('ROLE', access_role) AS "access_role_name"
 			  ,use_yn
 		  FROM category
 		 WHERE depth = #{depth}

@@ -12,6 +12,7 @@ public class CategoryVO {
 	private int depth;
 	private String category_name;
 	private String access_role;
+	private String access_role_name;
 	private boolean use_yn;
 	private Date reg_dt;
 	private String reg_id;
@@ -57,6 +58,14 @@ public class CategoryVO {
 
 	public void setAccess_role(String access_role) {
 		this.access_role = access_role;
+	}
+
+	public String getAccess_role_name() {
+		return access_role_name;
+	}
+
+	public void setAccess_role_name(String access_role_name) {
+		this.access_role_name = access_role_name;
 	}
 
 	public boolean isUse_yn() {
@@ -115,7 +124,8 @@ public class CategoryVO {
 				", depth=" + depth +
 				", category_name='" + category_name + '\'' +
 				", access_role='" + access_role + '\'' +
-				", use_yn='" + use_yn + '\'' +
+				", access_role_name='" + access_role_name + '\'' +
+				", use_yn=" + use_yn +
 				", reg_dt=" + reg_dt +
 				", reg_id='" + reg_id + '\'' +
 				", mod_dt=" + mod_dt +

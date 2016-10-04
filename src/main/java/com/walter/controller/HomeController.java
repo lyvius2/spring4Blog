@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.walter.model.MemberVO;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -22,11 +23,8 @@ import javax.servlet.http.HttpSession;
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeController {
-	
-	public static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
-	
+public class HomeController extends BaseController {
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -48,19 +46,9 @@ public class HomeController {
 
 	@RequestMapping("/exclude/403")
 	public String noAuthority(Model model) throws NullPointerException {
-		MemberVO memberVO = this.getLoginUser();
+		MemberVO memberVO = super.getLoginUser();
 		model.addAttribute("message",
 				messages.getMessage("JdbcDaoImpl.noAuthority", new Object[]{memberVO!=null?memberVO.getUsername():""}, "User {0} has no GrantedAuthority"));
 		return "403";
-	}
-
-	private MemberVO getLoginUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = auth.getPrincipal();
-		if(principal != null && principal instanceof MemberVO) {
-			return (MemberVO)principal;
-		} else {
-			return null;
-		}
 	}
 }

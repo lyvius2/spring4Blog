@@ -15,6 +15,33 @@
 </head>
 <body ng-app="categoryApp">
 	<div class="ui internally celled grid" ng-controller="categoryCtrl">
+		<div class="ui modal small">
+			<div class="header">Update Category Settings</div>
+			<div class="content">
+				<div class="ui form">
+					<h4 class="ui dividing header" ng-bind="popupData==null?'Add':'Config'"></h4>
+					<div class="field">
+						<label>Category Name</label>
+						<div class="ui input">
+							<input type="text" id="category_name" ng-model="popupData.category_name">
+						</div>
+					</div>
+					<div class="field">
+						<label for="permission">Permission</label>
+						<select id="permission" class="ui dropdown" ng-model="popupData.access_role">
+							<option ng-repeat="role in roleList" value="{{role.cd}}">{{role.cd_name}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="actions">
+				<div class="ui negative button">Cancel</div>
+				<div class="ui positive right labeled icon button">
+					Save
+					<i class="checkmark icon"></i>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="four wide column">
 				<div class="ui list">
@@ -35,7 +62,7 @@
 				</div>
 			</div>
 			<div class="six wide column">
-				<table class="ui compact celled definition table">
+				<table class="ui compact selectable celled definition table">
 					<thead class="full-width">
 						<tr>
 							<th><div class="ui red ribbon label">1st</div></th>
@@ -45,15 +72,17 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in firstDepthCategory" ng-click="getSecondCategoryList(item.category_cd)">
+						<tr ng-repeat="item in firstDepthCategory">
 							<td class="center aligned">
-								<div class="ui checkbox">
-									<input type="checkbox"/>
-									<label></label>
+								<div class="field">
+									<div class="ui radio checkbox">
+										<input type="radio" name="1stChk" tabindex="0" class="hidden" value="{{$index}}"/>
+										<label></label>
+									</div>
 								</div>
 							</td>
-							<td ng-bind="item.category_name"></td>
-							<td ng-bind="item.access_role"></td>
+							<td ng-bind="item.category_name" ng-click="getSecondCategoryList(item.category_cd)"></td>
+							<td ng-bind="item.access_role_name" ng-click="getSecondCategoryList(item.category_cd)"></td>
 							<td class="collapsing">
 								<div class="ui fitted slider checkbox">
 									<input type="checkbox" ng-checked="item.use_yn"/>
@@ -65,7 +94,7 @@
 					<tfoot class="full-width">
 						<tr>
 							<th colspan="4">
-								<div class="ui right floated small primary labeled icon button">
+								<div class="ui right floated small primary labeled icon button" ng-click="openConfigModal('1stChk')">
 									<i class="setting icon"></i>설정
 								</div>
 							</th>
@@ -92,7 +121,7 @@
 								</div>
 							</td>
 							<td ng-bind="item.category_name"></td>
-							<td ng-bind="item.access_role"></td>
+							<td ng-bind="item.access_role_name"></td>
 							<td class="collapsing">
 								<div class="ui fitted slider checkbox">
 									<input type="checkbox" ng-checked="item.use_yn"/>
@@ -119,6 +148,8 @@
 	</div>
 	<content tag="script">
 		<script>
+			$('div.dropdown').dropdown();
+
 			var app = angular.module('categoryApp', []);
 			app.controller('categoryCtrl', ['$scope','$http','$q',function($scope, $http, $q){
 				var createParamObj = function(depth, parentCategoryCd){
@@ -133,7 +164,7 @@
 						angular.forEach(results, (item, index) => {
 							angular.extend(data[index], {children:item.data});
 						});
-						console.log('finalDATA', data);
+						angular.element('.ui.radio.checkbox').checkbox();
 						$scope.tree = data;
 					});
 				};
@@ -156,6 +187,25 @@
 						$scope.secondDepthCategory = result.data;
 					});
 				};
+
+				$scope.openConfigModal = function(chkBoxEleName){
+					var index = angular.element('input[name='+chkBoxEleName+']:checked').val();
+					$scope.popupData = $scope.firstDepthCategory[index];
+					if($scope.roleList==null){
+						$http({
+							method:'get',
+							url:'/api/codeList',
+							params:{up_cd:'ROLE'}
+						}).then(function(result){
+							$scope.roleList = result.data;
+							angular.element('.small.modal').modal('show');
+						});
+					} else {
+						angular.element('.small.modal').modal('show');
+					}
+				};
+
+
 			}]);
 		</script>
 	</content>
