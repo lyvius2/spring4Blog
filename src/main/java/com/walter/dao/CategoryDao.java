@@ -7,4 +7,5 @@ import com.walter.model.CategoryVO;
  */
 public interface CategoryDao {
 	int setCategory(CategoryVO categoryVO);
+	int setActiveOption(CategoryVO categoryVO);
 }

@@ -2,6 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.walter.dao.CategoryDao">
 	<update id="setCategory" parameterType="Category">
+		WITH upsert AS (
+			UPDATE category
+			   SET (category_name, access_role, mod_id, mod_dt) = (#{category_name}, #{access_role}, #{reg_id}, now())
+			 WHERE category_cd = #{category_cd}
+			RETURNING *)
+			INSERT INTO category (category_cd, parent_category_cd, depth, category_name, access_role, reg_id, order_no)
+			SELECT (SELECT MAX(category_cd)+1 FROM category WHERE depth = #{depth})
+				  ,#{parent_category_cd}
+				  ,#{depth}
+				  ,#{category_name}
+				  ,#{access_role}
+				  ,#{reg_id}
+				  ,(SELECT MAX(order_no)+1 FROM category WHERE parent_category_cd = #{parent_category_cd})
+			WHERE NOT EXISTS (
+				SELECT 1
+				  FROM category
+				 WHERE category_cd = #{category_cd})
+	</update>
 
+	<update id="setActiveOption" parameterType="Category">
+		UPDATE category
+		   SET (use_yn, mod_id, mod_dt) = (#{use_yn}, #{reg_id}, now())
+		 WHERE category_cd = #{category_cd}
 	</update>
 </mapper>

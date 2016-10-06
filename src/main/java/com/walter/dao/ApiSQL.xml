@@ -18,6 +18,7 @@
 			  ,category_name
 			  ,access_role
 			  ,fn_code_nm('ROLE', access_role) AS "access_role_name"
+			  ,order_no
 			  ,use_yn
 		  FROM category
 		 WHERE depth = #{depth}

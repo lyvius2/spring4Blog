@@ -36,6 +36,7 @@
     "require-dot-file": "^0.4.0",
     "run-sequence": "^1.2.2",
     "semantic-ui": "^2.2.2",
+    "underscore": "^1.8.3",
     "yamljs": "^0.2.8"
   },
   "devDependencies": {},
