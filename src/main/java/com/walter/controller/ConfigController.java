@@ -20,7 +20,7 @@ public class ConfigController extends BaseController {
 
 	@Autowired
 	private CategoryDao categoryDao;
-	private String result = "success";
+	private String result = new String();
 
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public String categoryConfigMap(Model model) {
@@ -31,18 +31,30 @@ public class ConfigController extends BaseController {
 	@ResponseBody
 	public String setCategoryConfig(@ModelAttribute("categoryVO") CategoryVO categoryVO, Model model) throws SQLException {
 		try {
-			if(categoryVO.getCategory_cd() == 0 && categoryVO.getParent_category_cd() == 0){
-				categoryVO.setDepth(1);
-			} else {
-				categoryVO.setDepth(2);
+			if(categoryVO.getCategory_cd() == 0){
+				if(categoryVO.getParent_category_cd() == 0){
+					categoryVO.setDepth(1);
+					categoryVO.setCategory_cd(categoryDao.getNewCategoryCd(1));
+				} else {
+					categoryVO.setDepth(2);
+					categoryVO.setCategory_cd(categoryDao.getNewCategoryCd(2));
+				}
 			}
 			categoryVO.setReg_id(super.getLoginUser()!=null?super.getLoginUser().getUsername():"anonymous");
 			categoryDao.setCategory(categoryVO);
+			result = "success";
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			result = "failure";
 		}
 		return gson.toJson(result);
+	}
+
+	@RequestMapping(value = "/category", method = RequestMethod.DELETE)
+	@ResponseBody
+	public String delCategory(@ModelAttribute("categoryVO") CategoryVO categoryVO, Model model) throws SQLException {
+		categoryDao.delCategory(categoryVO.getCategory_cd());
+		return gson.toJson(categoryVO.getParent_category_cd());
 	}
 
 	@RequestMapping(value = "/category/setActiveOption", method = RequestMethod.POST)
@@ -51,6 +63,7 @@ public class ConfigController extends BaseController {
 		try {
 			categoryVO.setReg_id(super.getLoginUser()!=null?super.getLoginUser().getUsername():"anonymous");
 			categoryDao.setActiveOption(categoryVO);
+			result = "success";
 		} catch(Exception e) {
 			logger.error(e.getMessage());
 			result = "failure";

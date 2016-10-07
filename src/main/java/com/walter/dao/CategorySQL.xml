@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.walter.dao.CategoryDao">
+	<select id="getNewCategoryCd" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		SELECT MAX(category_cd)+1
+		  FROM category
+		 WHERE depth = #{depth}
+	</select>
+
 	<update id="setCategory" parameterType="Category">
 		WITH upsert AS (
 			UPDATE category
-			   SET (category_name, access_role, mod_id, mod_dt) = (#{category_name}, #{access_role}, #{reg_id}, now())
+			   SET (parent_category_cd, category_name, access_role, mod_id, mod_dt) = (#{parent_category_cd}, #{category_name}, #{access_role}, #{reg_id}, now())
 			 WHERE category_cd = #{category_cd}
 			RETURNING *)
 			INSERT INTO category (category_cd, parent_category_cd, depth, category_name, access_role, reg_id, order_no)
-			SELECT (SELECT MAX(category_cd)+1 FROM category WHERE depth = #{depth})
+			SELECT #{category_cd}
 				  ,#{parent_category_cd}
 				  ,#{depth}
 				  ,#{category_name}
@@ -26,4 +32,9 @@
 		   SET (use_yn, mod_id, mod_dt) = (#{use_yn}, #{reg_id}, now())
 		 WHERE category_cd = #{category_cd}
 	</update>
+
+	<delete id="delCategory" parameterType="java.lang.Integer">
+		DELETE FROM category
+		 WHERE category_cd = #{category_cd}
+	</delete>
 </mapper>

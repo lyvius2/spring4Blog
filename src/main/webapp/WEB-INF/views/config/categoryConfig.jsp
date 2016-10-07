@@ -14,6 +14,7 @@
 	<title>메뉴 설정</title>
 </head>
 <body ng-app="categoryApp">
+	<h3 class="ui header">Category Settings</h3>
 	<div class="ui internally celled grid" ng-controller="categoryCtrl">
 		<form name="categoryForm" novalidate>
 			<div class="ui modal small">
@@ -21,15 +22,15 @@
 				<div class="content">
 					<div class="ui form">
 						<h4 class="ui dividing header" ng-bind="popupData.category_cd==null?'Add':'Config'"></h4>
-						<div class="field" ng-show="popupData.parent_category_cd>0">
+						<div class="required field" ng-show="popupData.parent_category_cd>0">
 							<label for="parent_category_cd">Parent Category</label>
-							<select name="parent_category_cd" id="parent_category_cd" class="ui dropdown" ng-model="popupData.parent_category_cd">
+							<select name="parent_category_cd" id="parent_category_cd" class="ui dropdown" ng-model="popupData.parent_category_cd" ng-required="true">
 								<option ng-repeat="item in firstDepthCategory"
 										ng-selected="popupData.parent_category_cd == item.category_cd"
 										value="{{item.category_cd}}">{{item.category_name}}</option>
 							</select>
 						</div>
-						<div class="field" ng-class="{error:categoryForm.category_name.$invalid && categoryForm.category_name.$dirty}">
+						<div class="required field" ng-class="{error:categoryForm.category_name.$invalid && categoryForm.category_name.$dirty}">
 							<label>Category Name</label>
 							<div class="ui input">
 								<input type="text" name="category_name" id="category_name" ng-minlength="2" ng-maxlength="10" ng-model="popupData.category_name" ng-required="true"/>
@@ -38,15 +39,18 @@
 						<div class="ui error message" ng-style="{'display':(categoryForm.category_name.$invalid && categoryForm.category_name.$dirty?'block':'')}">
 							<p ng-show="categoryForm.category_name.$error.required && categoryForm.category_name.$dirty">카테고리 명은 반드시 입력해야 합니다.</p>
 							<p ng-show="categoryForm.category_name.$error.minlength">2 bytes 이상 입력하세요.</p>
-							<p ng-show="categoryForm.category_name.$error.maxlength">30 bytes(한글 10자) 이하로 입력하세요.</p>
+							<p ng-show="categoryForm.category_name.$error.maxlength">48 bytes(한글 16자) 이하로 입력하세요.</p>
 						</div>
-						<div class="field">
+						<div class="required field">
 							<label for="access_role">Permission</label>
-							<select name="access_role" id="access_role" class="ui dropdown" ng-model="popupData.access_role">
+							<select name="access_role" id="access_role" class="ui dropdown" ng-model="popupData.access_role" ng-required="true">
 								<option ng-repeat="role in roleList"
 										ng-selected="popupData.access_role == role.cd"
 										value="{{role.cd}}">{{role.cd_name}}</option>
 							</select>
+						</div>
+						<div class="ui warning message" ng-style="{'display':categoryForm.access_role.$invalid?'block':''}">
+							<p>보기 권한은 반드시 선택하세요.</p>
 						</div>
 					</div>
 				</div>
@@ -83,9 +87,9 @@
 					<thead class="full-width">
 						<tr>
 							<th><div class="ui red ribbon label">1st</div></th>
-							<th>카테고리</th>
-							<th>보기 권한</th>
-							<th>활성화</th>
+							<th>Category</th>
+							<th>Role</th>
+							<th>Active</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -114,6 +118,9 @@
 								<div class="ui right floated compact positive icon button" ng-click="openConfigModal('1stChk',0)" title="설정">
 									<i class="setting icon"></i>
 								</div>
+								<div class="ui right floated compact negative icon button" ng-click="delCategory('1stChk')" title="삭제">
+									<i class="remove icon"></i>
+								</div>
 								<div class="ui right floated compact primary icon button" ng-click="openConfigModal('add',0)" title="추가">
 									<i class="plus icon"></i>
 								</div>
@@ -127,9 +134,9 @@
 					<thead class="full-width">
 						<tr>
 							<th><div class="ui orange ribbon label">2nd</div></th>
-							<th>카테고리</th>
-							<th>보기 권한</th>
-							<th>활성화</th>
+							<th>Category</th>
+							<th>Role</th>
+							<th>Active</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -161,6 +168,9 @@
 								<div class="ui right floated compact positive icon button" ng-click="openConfigModal('2ndChk',parentCategoryCd)" title="설정">
 									<i class="setting icon"></i>
 								</div>
+								<div class="ui right floated compact negative icon button" ng-click="delCategory('2ndChk')" title="삭제">
+									<i class="remove icon"></i>
+								</div>
 								<div class="ui right floated compact primary icon button" ng-click="openConfigModal('add',parentCategoryCd)" title="추가">
 									<i class="plus icon"></i>
 								</div>
@@ -173,13 +183,8 @@
 	</div>
 	<content tag="script">
 		<script>
-
-			$(document).on('.ui.radio.checkbox', () => {
-				$(this).checkbox();
-			});
-
 			var app = angular.module('categoryApp', []);
-			app.controller('categoryCtrl', ['$scope','$http','$q',function($scope, $http, $q){
+			app.controller('categoryCtrl', ['$scope','$http','$q','$timeout',function($scope, $http, $q, $timeout){
 				var createParamObj = function(depth, parentCategoryCd){
 					this.depth = depth;
 					this.parent_category_cd = parentCategoryCd;
@@ -215,6 +220,10 @@
 				var openConfigLayer = function() {
 					angular.element('.small.modal')
 							.modal({
+								onShow:function(){
+									document.getElementById('parent_category_cd').value = $scope.popupData.parent_category_cd;
+									document.getElementById('category_name').value = $scope.popupData.category_name;
+								},
 								onApprove:function(){
 									return false;
 								},
@@ -241,10 +250,17 @@
 						return;
 					}
 					//$scope.popupData = _.clone($scope.firstDepthCategory[index]);
-					if(angular.equals(chkBoxEleName, '1stChk')){
-						$scope.popupData = angular.copy($scope.firstDepthCategory[index]);
-					} else {
-						$scope.popupData = angular.copy($scope.secondDepthCategory[index]);
+					switch(chkBoxEleName){
+						case '1stChk' :
+							$scope.popupData = angular.copy($scope.firstDepthCategory[index]);
+							break;
+						case '2ndChk' :
+							$scope.popupData = angular.copy($scope.secondDepthCategory[index]);
+							break;
+						case 'add' :
+							$scope.popupData = new Object();
+							angular.extend($scope.popupData, {parent_category_cd:parentCategoryCd});
+							break;
 					}
 					if($scope.roleList==null){
 						$http({
@@ -270,6 +286,7 @@
 							if (result.data == 'success') {
 								angular.element('.small.modal').modal('hide');
 								getFirstCategoryList();
+								if(obj.parent_category_cd > 0) $scope.getSecondCategoryList(obj.parent_category_cd);
 							} else {
 								alert("시스템 오류로 인해 처리되지 못하였습니다.");
 							}
@@ -277,6 +294,7 @@
 							alert(error.statusText);
 						});
 					}
+
 				};
 
 				$scope.setActiveOption = function(obj){
@@ -288,6 +306,25 @@
 					}, function(error){
 						alert(error.statusText);
 					});
+				};
+
+				$scope.delCategory = function(chkBoxEleName){
+					if(confirm('정말로 삭제하시겠습니까? 복구할 수 없습니다.')){
+						var params;
+						var index = angular.element('input[name='+chkBoxEleName+']:checked').val();
+						var isFirst = angular.equals(chkBoxEleName, '1stChk');
+						if(isFirst) {
+							params = $scope.firstDepthCategory[index];
+						} else {
+							params = $scope.secondDepthCategory[index];
+						}
+						$http.delete('/category', {params:params}).then(function(result){
+							getFirstCategoryList();
+							if(!isFirst) $scope.getSecondCategoryList(result.data);
+						}, function(error){
+							alert(error.statusText);
+						});
+					}
 				};
 
 				getFirstCategoryList();
