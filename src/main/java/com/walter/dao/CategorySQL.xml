@@ -37,4 +37,10 @@
 		DELETE FROM category
 		 WHERE category_cd = #{category_cd}
 	</delete>
+
+	<update id="setOrder" parameterType="Category">
+		UPDATE category
+		   SET (order_no, mod_id, mod_dt) = (#{order_no}, #{reg_id}, now())
+		 WHERE category_cd = #{category_cd}
+	</update>
 </mapper>

@@ -92,7 +92,7 @@
 							<th>Active</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody ui-sortable="sortableOps" ng-model="firstDepthCategory">
 						<tr ng-repeat="item in firstDepthCategory">
 							<td class="center aligned">
 								<div class="field">
@@ -105,6 +105,7 @@
 							<td ng-bind="item.category_name" ng-click="getSecondCategoryList(item.category_cd)"></td>
 							<td ng-bind="item.access_role_name" ng-click="getSecondCategoryList(item.category_cd)"></td>
 							<td class="collapsing">
+								<input type="hidden" name="category_cd" ng-value="item.category_cd" />
 								<div class="ui fitted toggle checkbox">
 									<input type="checkbox" name="1stActive" ng-model="item.use_yn" ng-checked="item.use_yn" ng-click="setActiveOption(item)"/>
 									<label></label>
@@ -139,7 +140,7 @@
 							<th>Active</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody ui-sortable="sortableOps" ng-model="secondDepthCategory">
 						<tr ng-repeat="item in secondDepthCategory">
 							<td class="center aligned">
 								<div class="field">
@@ -152,6 +153,7 @@
 							<td ng-bind="item.category_name"></td>
 							<td ng-bind="item.access_role_name"></td>
 							<td class="collapsing">
+								<input type="hidden" name="category_cd" ng-value="item.category_cd" />
 								<div class="ui fitted toggle checkbox">
 									<input type="checkbox" name="2ndActive" ng-model="item.use_yn" ng-checked="item.use_yn" ng-click="setActiveOption(item)"/>
 									<label></label>
@@ -183,7 +185,7 @@
 	</div>
 	<content tag="script">
 		<script>
-			var app = angular.module('categoryApp', []);
+			var app = angular.module('categoryApp', ['ui.sortable']);
 			app.controller('categoryCtrl', ['$scope','$http','$q','$timeout',function($scope, $http, $q, $timeout){
 				var createParamObj = function(depth, parentCategoryCd){
 					this.depth = depth;
@@ -199,6 +201,16 @@
 						});
 						angular.element('.ui.radio.checkbox').checkbox();
 						$scope.tree = data;
+					});
+				};
+
+				var setOrder = function(param, orderNo){
+					param.order_no = orderNo;
+					return $http({
+						method:'post',
+						url:'/category/setOrder',
+						data:$.param({category_cd:param,order_no:orderNo}),
+						headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
 					});
 				};
 
@@ -259,7 +271,7 @@
 							break;
 						case 'add' :
 							$scope.popupData = new Object();
-							angular.extend($scope.popupData, {parent_category_cd:parentCategoryCd});
+							angular.extend($scope.popupData, {category_name:null,parent_category_cd:parentCategoryCd});
 							break;
 					}
 					if($scope.roleList==null){
@@ -324,6 +336,26 @@
 						}, function(error){
 							alert(error.statusText);
 						});
+					}
+				};
+
+				$scope.sortableOps = {
+					update: (e, ui) => {
+						$timeout(() => {
+							var data = angular.element(ui.item[0]).attr('ng-repeat').split(' ')[2];
+							var promises = new Array();
+							var trArray = angular.element('tbody[ng-model='+data+'] > tr input[name=category_cd]').get();
+							angular.forEach(trArray, (item, index) => {
+								promises.push(setOrder(Number(item.value), index+1))
+							});
+							$q.all(promises).then((results) => {
+								getFirstCategoryList();
+							}, (errors) => {
+								var errMsg = '';
+								errors.forEach(e => errMsg =+ e.statusText+'\n');
+								alert('오류가 발생하여 처리되지 못하였습니다.\n' + errMsg);
+							});
+						}, 500);
 					}
 				};
 

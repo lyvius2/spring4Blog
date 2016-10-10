@@ -15,7 +15,7 @@ gulp.task('start', function(){
 gulp.task('semanticUiBuild', semanticUiBuild);
 
 gulp.task('vendorJsUglify', function(){
-	return gulp.src([path+'/jquery/dist/jquery.js', path+'/angular/angular.js', path+'/underscore/underscore.js'])
+	return gulp.src([path+'/jquery/dist/jquery.js', path+'/jquery-ui/dist/jquery-ui.js', path+'/angular/angular.js', path+'/angular-ui-sortable/dist/sortable.js', path+'/underscore/underscore.js'])
 		.pipe(concat('vendor.js'))
 		.pipe(uglify())
 		.pipe(gulp.dest('./scripts'));

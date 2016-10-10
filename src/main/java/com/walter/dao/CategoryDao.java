@@ -10,4 +10,5 @@ public interface CategoryDao {
 	int setCategory(CategoryVO categoryVO);
 	int setActiveOption(CategoryVO categoryVO);
 	int delCategory(int categoryCd);
+	int setOrder(CategoryVO categoryVO);
 }

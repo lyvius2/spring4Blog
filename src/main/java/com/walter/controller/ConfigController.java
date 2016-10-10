@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by yhwang131 on 2016-09-13.
@@ -69,5 +72,13 @@ public class ConfigController extends BaseController {
 			result = "failure";
 		}
 		return gson.toJson(result);
+	}
+
+	@RequestMapping("/category/setOrder")
+	@ResponseBody
+	public String setOrder(@ModelAttribute("categoryVO") CategoryVO categoryVO, Model model) throws SQLException {
+		categoryVO.setReg_id(super.getLoginUser()!=null?super.getLoginUser().getUsername():"anonymous");
+		categoryDao.setOrder(categoryVO);
+		return gson.toJson("success");
 	}
 }
