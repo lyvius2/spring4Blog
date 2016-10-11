@@ -22,7 +22,7 @@
 			  ,use_yn
 		  FROM category
 		 WHERE depth = #{depth}
-		 <if test="parent_category_cd != null and parent_category_cd != ''">
+		 <if test="parent_category_cd != null">
 		   AND parent_category_cd = #{parent_category_cd}
 		 </if>
 		 ORDER BY order_no ASC

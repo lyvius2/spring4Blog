@@ -14,7 +14,7 @@
 	<title>메뉴 설정</title>
 </head>
 <body ng-app="categoryApp">
-	<h3 class="ui header">Category Settings</h3>
+	<h4 class="ui header">Category Settings</h4>
 	<div class="ui internally celled grid" ng-controller="categoryCtrl">
 		<form name="categoryForm" novalidate>
 			<div class="ui modal small">
@@ -36,8 +36,8 @@
 								<input type="text" name="category_name" id="category_name" ng-minlength="2" ng-maxlength="10" ng-model="popupData.category_name" ng-required="true"/>
 							</div>
 						</div>
-						<div class="ui error message" ng-style="{'display':(categoryForm.category_name.$invalid && categoryForm.category_name.$dirty?'block':'')}">
-							<p ng-show="categoryForm.category_name.$error.required && categoryForm.category_name.$dirty">카테고리 명은 반드시 입력해야 합니다.</p>
+						<div class="ui error message" ng-style="{'display':(categoryForm.category_name.$invalid && categoryForm.$dirty?'block':'')}">
+							<p ng-show="categoryForm.category_name.$error.required && categoryForm.$dirty">카테고리 명은 반드시 입력해야 합니다.</p>
 							<p ng-show="categoryForm.category_name.$error.minlength">2 bytes 이상 입력하세요.</p>
 							<p ng-show="categoryForm.category_name.$error.maxlength">48 bytes(한글 16자) 이하로 입력하세요.</p>
 						</div>
@@ -55,10 +55,11 @@
 					</div>
 				</div>
 				<div class="actions">
-					<div class="ui negative button">Cancel</div>
-					<div class="ui positive right labeled icon submit button" ng-click="categoryFormSubmit(popupData,categoryForm.$valid)">
-						Save
-						<i class="checkmark icon"></i>
+					<div class="ui compact negative labeled icon button">
+						<i class="remove icon"></i>Cancel
+					</div>
+					<div class="ui compact positive labeled icon button" ng-click="categoryFormSubmit(popupData,categoryForm.$valid)" title="저장">
+						<i class="checkmark icon"></i>Save
 					</div>
 				</div>
 			</div>
@@ -279,7 +280,7 @@
 							method:'get',
 							url:'/api/codeList',
 							params:{up_cd:'ROLE'}
-						}).then(function(result){
+						}).then((result) => {
 							$scope.roleList = result.data;
 							openConfigLayer();
 						});
@@ -294,7 +295,7 @@
 							method:'post',
 							url:'/category',
 							params:obj
-						}).then(function(result) {
+						}).then((result) => {
 							if (result.data == 'success') {
 								angular.element('.small.modal').modal('hide');
 								getFirstCategoryList();
@@ -302,11 +303,10 @@
 							} else {
 								alert("시스템 오류로 인해 처리되지 못하였습니다.");
 							}
-						}, function(error){
+						}, (error) => {
 							alert(error.statusText);
 						});
 					}
-
 				};
 
 				$scope.setActiveOption = function(obj){
@@ -314,8 +314,8 @@
 						method:'post',
 						url:'/category/setActiveOption',
 						params:obj
-					}).then(function(result) {
-					}, function(error){
+					}).then((result) => {
+					}, (error) => {
 						alert(error.statusText);
 					});
 				};
@@ -330,10 +330,10 @@
 						} else {
 							params = $scope.secondDepthCategory[index];
 						}
-						$http.delete('/category', {params:params}).then(function(result){
+						$http.delete('/category', {params:params}).then((result) => {
 							getFirstCategoryList();
 							if(!isFirst) $scope.getSecondCategoryList(result.data);
-						}, function(error){
+						}, (error) => {
 							alert(error.statusText);
 						});
 					}

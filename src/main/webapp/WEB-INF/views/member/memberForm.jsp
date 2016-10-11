@@ -72,7 +72,14 @@
 			<label for="passwordConfirm">비밀번호 확인</label>
 			<input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호 확인" required="true"/>
 		</div>
-		<button type="submit" class="ui primary button" tabindex="0">회원등록</button>
+		<div class="field">
+			<button type="submit" class="ui right floated compact positive labeled icon button" title="등록">
+				<i class="checkmark icon"></i>Register
+			</button>
+			<div class="ui right floated compact negative labeled icon button" title="취소">
+				<i class="remove icon"></i>Cancel
+			</div>
+		</div>
 	</form:form>
 	<content tag="script">
 	<script>

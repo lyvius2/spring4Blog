@@ -20,6 +20,16 @@ public class CategoryVO {
 	private String mod_id;
 	private int order_no;
 
+	public CategoryVO(){
+		super();
+	}
+
+	public CategoryVO(int depth, int parent_category_cd){
+		super();
+		this.depth = depth;
+		this.parent_category_cd = parent_category_cd;
+	}
+
 	public int getCategory_cd() {
 		return category_cd;
 	}
