@@ -30,6 +30,7 @@
 				<value>classpath:com/walter/dao/ApiSQL.xml</value>
 				<value>classpath:com/walter/dao/MemberSQL.xml</value>
 				<value>classpath:com/walter/dao/CategorySQL.xml</value>
+				<value>classpath:com/walter/dao/PostSQL.xml</value>
 			</list>
 		</property>
 	</bean>

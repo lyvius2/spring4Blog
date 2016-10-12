@@ -14,6 +14,7 @@
 		<typeAlias type="com.walter.model.RoleVO" alias="Role"/>
 		<typeAlias type="com.walter.model.CodeVO" alias="Code"/>
 		<typeAlias type="com.walter.model.CategoryVO" alias="Category"/>
+		<typeAlias type="com.walter.model.PostVO" alias="Post"/>
 	</typeAliases>
 
 	<mappers>

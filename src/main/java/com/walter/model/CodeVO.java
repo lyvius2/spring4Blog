@@ -16,6 +16,15 @@ public class CodeVO {
 	private Date mod_dt;
 	private String mod_id;
 
+	public CodeVO() {
+		super();
+	}
+
+	public CodeVO(String up_cd) {
+		super();
+		this.up_cd = up_cd;
+	}
+
 	public String getUp_cd() {
 		return up_cd;
 	}

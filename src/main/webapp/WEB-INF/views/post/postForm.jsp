@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
@@ -31,6 +32,21 @@
 				<form:input type="text" path="title" maxlength="100" placeholder="포스트 제목" required="true"/>
 				<form:errors path="title" cssClass="ui pointing red basic label"></form:errors>
 			</div>
+			<div class="four wide field">
+				<label for="trip_country">Country where writer's traveling</label>
+				<div class="ui fluid search selection dropdown">
+					<form:input type="hidden" path="trip_country" id="trip_country"/>
+					<i class="dropdown icon"></i>
+					<div class="default text">여행국가</div>
+					<div class="menu">
+						<c:forEach var="item" items="${countryList}">
+							<div class="item" data-value="${item.cd}">
+								<i class="${fn:toLowerCase(item.cd)} flag"></i><c:out value="${item.cd_name}"/>
+							</div>
+						</c:forEach>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="field">
 			<label for="content">Content</label>
@@ -50,9 +66,9 @@
 				</div>
 			</div>
 			<div class="ten wide field">
-				<div class="ui right floated compact positive labeled icon button" title="등록">
+				<button type="submit" class="ui right floated compact positive labeled icon button" title="등록">
 					<i class="checkmark icon"></i>Register
-				</div>
+				</button>
 				<div class="ui right floated compact negative labeled icon button" title="취소">
 					<i class="remove icon"></i>Cancel
 				</div>
@@ -62,6 +78,7 @@
 	<content tag="script">
 	<script>
 		$('.ui.checkbox').checkbox();
+		$('div.dropdown').dropdown();
 	</script>
 	</content>
 </body>

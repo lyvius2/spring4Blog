@@ -15,15 +15,17 @@ public class PostVO {
 	@Size(max = 100, message = "50글자 이하로 입력하십시오.")
 	private String title;
 
-	private StringBuffer content;
+	private String content;
 	private int category_cd;
+	private String category_name;
 	private Boolean use_yn;
 	private Boolean comment_yn;
 	private Date reg_dt;
 	private String reg_id;
 	private Date mod_dt;
 	private String mod_id;
-	private StringBuffer delegate_img;
+	private String delegate_img;
+	private String trip_country;
 
 	public PostVO() {
 		super();
@@ -51,11 +53,11 @@ public class PostVO {
 		this.title = title;
 	}
 
-	public StringBuffer getContent() {
+	public String getContent() {
 		return content;
 	}
 
-	public void setContent(StringBuffer content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 
@@ -65,6 +67,14 @@ public class PostVO {
 
 	public void setCategory_cd(int category_cd) {
 		this.category_cd = category_cd;
+	}
+
+	public String getCategory_name() {
+		return category_name;
+	}
+
+	public void setCategory_name(String category_name) {
+		this.category_name = category_name;
 	}
 
 	public Boolean getUse_yn() {
@@ -115,12 +125,20 @@ public class PostVO {
 		this.mod_id = mod_id;
 	}
 
-	public StringBuffer getDelegate_img() {
+	public String getDelegate_img() {
 		return delegate_img;
 	}
 
-	public void setDelegate_img(StringBuffer delegate_img) {
+	public void setDelegate_img(String delegate_img) {
 		this.delegate_img = delegate_img;
+	}
+
+	public String getTrip_country() {
+		return trip_country;
+	}
+
+	public void setTrip_country(String trip_country) {
+		this.trip_country = trip_country;
 	}
 
 	@Override
@@ -128,15 +146,17 @@ public class PostVO {
 		return "PostVO{" +
 				"post_cd=" + post_cd +
 				", title='" + title + '\'' +
-				", content=" + content +
+				", content='" + content + '\'' +
 				", category_cd=" + category_cd +
+				", category_name='" + category_name + '\'' +
 				", use_yn=" + use_yn +
 				", comment_yn=" + comment_yn +
 				", reg_dt=" + reg_dt +
 				", reg_id='" + reg_id + '\'' +
 				", mod_dt=" + mod_dt +
 				", mod_id='" + mod_id + '\'' +
-				", delegate_img=" + delegate_img +
+				", delegate_img='" + delegate_img + '\'' +
+				", trip_country='" + trip_country + '\'' +
 				'}';
 	}
 }

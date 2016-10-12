@@ -24,6 +24,10 @@
 			margin: 5em 0em 0em;
 			padding: 5em 0em;
 		}
+		.georgia {
+			font-family: Georgia, sans-serif;
+			font-size: 1em;
+		}
 	</style>
 	<decorator:head />
 </head>

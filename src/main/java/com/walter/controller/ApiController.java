@@ -19,13 +19,13 @@ public class ApiController extends BaseController {
 	@Autowired
 	private ApiDao apiDao;
 
-	@RequestMapping("/codeList")
+	@RequestMapping(value = "/codeList", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getCodeList(@ModelAttribute CodeVO codeVO) {
 		return gson.toJson(apiDao.getCodeList(codeVO));
 	}
 
-	@RequestMapping(value = "categoryList", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/categoryList", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getCategoryList(@ModelAttribute CategoryVO categoryVO) {
 		return gson.toJson(apiDao.getCategoryList(categoryVO));

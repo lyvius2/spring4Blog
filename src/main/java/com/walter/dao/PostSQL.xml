@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.walter.dao.PostDao">
+	<insert id="setPost" parameterType="Post">
+		INSERT INTO post
+		(title, content, category_cd, use_yn, comment_yn, reg_id, delegate_img, trip_country)
+		VALUES
+		(#{title}, #{content}, #{category_cd}, #{use_yn}, ${comment_yn}, #{reg_id}, #{delegate_img}, #{trip_country})
+		<selectKey keyProperty="post_cd" resultType="java.lang.Integer" order="AFTER">
+			SELECT currval('post_post_cd_seq')
+		</selectKey>
+	</insert>
+
+	<delete id="delPost" parameterType="java.lang.Integer">
+		DELETE FROM post
+		 WHERE post_cd = #{post_cd}
+	</delete>
+
+	<select id="getPost" parameterType="java.lang.Integer" resultType="Post">
+		SELECT post_cd
+			  ,title
+			  ,content
+			  ,category_cd
+			  ,fn_category_nm(category_cd) AS "category_name"
+			  ,use_yn
+			  ,comment_yn
+			  ,reg_dt
+			  ,reg_id
+			  ,mod_dt
+			  ,delegate_img
+			  ,trip_country
+		  FROM post
+		 WHERE post_cd = #{post_cd}
+	</select>
+</mapper>
