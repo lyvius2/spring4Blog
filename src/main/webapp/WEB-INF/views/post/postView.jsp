@@ -23,10 +23,15 @@
 					<c:out value="${post.category_name}"/>
 				</a>
 				<span class="georgia">${regDt}</span>
-				<h4 class="header"><c:out value="${post.title}"/></h4>
+				<h4 class="header">
+					<c:out value="${post.title}"/>
+				</h4>
 				<div class="ui divider"></div>
 				<div class="ui justified container">
-					${post.content}
+					<jsp:scriptlet>
+						pageContext.setAttribute("wrap", "\n");
+					</jsp:scriptlet>
+					<c:out value="${fn:replace(post.content, wrap, '<br/>')}" escapeXml="false"/>
 				</div>
 				<div class="ui divider"></div>
 				<%-- 댓글란은 구현 시까지 주석 처리. (MongoDB 사용 예정) --%>
