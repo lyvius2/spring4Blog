@@ -212,6 +212,13 @@
 			<version>2.7</version>
 		</dependency>
 
+		<!-- XSS Filter Util -->
+		<dependency>
+			<groupId>com.navercorp.lucy</groupId>
+			<artifactId>lucy-xss</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>

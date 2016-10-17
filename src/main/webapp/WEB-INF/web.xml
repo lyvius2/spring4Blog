@@ -13,6 +13,16 @@
 		</param-value>
 	</context-param>
 
+	<!-- XSS Filter -->
+	<filter>
+		<filter-name>xssFilter</filter-name>
+		<filter-class>com.walter.config.CrossSiteScriptingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>xssFilter</filter-name>
+		<url-pattern>/post/*</url-pattern>
+	</filter-mapping>
+
 	<!-- UTF-8 Filter -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -24,6 +34,16 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- CORS Filter -->
+	<filter>
+		<filter-name>corsFilter</filter-name>
+		<filter-class>com.walter.config.CorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>corsFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

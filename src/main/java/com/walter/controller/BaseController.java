@@ -28,8 +28,8 @@ public class BaseController {
 	protected MemberVO getLoginUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Object principal = auth.getPrincipal();
-		if(principal != null && principal instanceof MemberVO) {
-			return (MemberVO)principal;
+		if (principal != null && principal instanceof MemberVO) {
+			return (MemberVO) principal;
 		} else {
 			return null;
 		}

@@ -76,9 +76,16 @@
 		</div>
 	</form:form>
 	<content tag="script">
+	<script src="${pageContext.request.contextPath}/resources/ckeditor/ckeditor.js"></script>
 	<script>
 		$('.ui.checkbox').checkbox();
 		$('div.dropdown').dropdown();
+
+		CKEDITOR.replace('content');
+
+		$('form').on('submit', () => {
+			document.getElementById('content').value = CKEDITOR.instances.content.getData();
+		});
 	</script>
 	</content>
 </body>
