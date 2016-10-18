@@ -1,4 +1,4 @@
-package com.walter.config;
+package com.walter.config.xssfilter;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,7 +16,7 @@ public class CrossSiteScriptingFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
 		if(httpServletRequest.getMethod().equals("GET") || httpServletRequest.getMethod().equals("POST")){
-			filterChain.doFilter(new RequestWrapperForXssFiltering(httpServletRequest), httpServletResponse);
+			filterChain.doFilter(new RequestWrapper(httpServletRequest), httpServletResponse);
 		} else {
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 		}

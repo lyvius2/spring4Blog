@@ -1,4 +1,4 @@
-package com.walter.config;
+package com.walter.config.xssfilter;
 
 import com.nhncorp.lucy.security.xss.XssFilter;
 import com.nhncorp.lucy.security.xss.XssPreventer;
@@ -10,9 +10,9 @@ import java.util.Arrays;
 /**
  * Created by yhwang131 on 2016-10-17.
  */
-public class RequestWrapperForXssFiltering extends HttpServletRequestWrapper {
+public class RequestWrapper extends HttpServletRequestWrapper {
 
-	public RequestWrapperForXssFiltering(HttpServletRequest httpServletRequest) {
+	public RequestWrapper(HttpServletRequest httpServletRequest) {
 		super(httpServletRequest);
 	}
 
@@ -35,14 +35,14 @@ public class RequestWrapperForXssFiltering extends HttpServletRequestWrapper {
 	public String getHeader(String name) {
 		String value = super.getHeader(name);
 		if(value == null) return null;
-		return doFilter(value, false);
+		return doFilter(value, true);
 	}
 
 	private String doFilter(String value, boolean doPreventer) {
 		if(doPreventer) {
 			return XssPreventer.escape(value);
 		} else {
-			XssFilter xssFilter = XssFilter.getInstance();
+			XssFilter xssFilter = XssFilter.getInstance("lucy-xss-config.xml");
 			return xssFilter.doFilter(value);
 		}
 	}
