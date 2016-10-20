@@ -205,6 +205,13 @@
 			<version>2.4.2</version>
 		</dependency>
 
+		<!-- XSS Filter Util -->
+		<dependency>
+			<groupId>com.navercorp.lucy</groupId>
+			<artifactId>lucy-xss</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+
 		<!-- JSON Util -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -212,11 +219,21 @@
 			<version>2.7</version>
 		</dependency>
 
-		<!-- XSS Filter Util -->
+		<!-- Google API -->
 		<dependency>
-			<groupId>com.navercorp.lucy</groupId>
-			<artifactId>lucy-xss</artifactId>
-			<version>1.6.3</version>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client-jetty</artifactId>
+			<version>1.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-drive</artifactId>
+			<version>v3-rev46-1.22.0</version>
 		</dependency>
 
 		<!-- Test -->
