@@ -2,6 +2,7 @@
 /.sonar/
 /target/
 /src/test/java/
+/src/main/resources/client_secret.json
 /src/main/webapp/WEB-INF/classes/
 /src/main/webapp/resources/node_modules/
 /src/main/webapp/resources/semantic/
