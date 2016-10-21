@@ -14,6 +14,10 @@
 	<title>Test!</title>
 </head>
 <body>
-	Test!
+	<p>
+		file upload Complete!
+	</p>
+	<p>${fileUpload.fileId}</p>
+	<p>${fileUpload.fileName}</p>
 </body>
 </html>

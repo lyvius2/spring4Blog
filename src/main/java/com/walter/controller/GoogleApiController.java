@@ -16,9 +16,13 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -26,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,12 +93,15 @@ public class GoogleApiController extends BaseController {
 					.execute()
 					.getFiles();
 
+			//files.stream().forEach(f -> {logger.debug(f.getName() + " : " + f.getId());});
+
 			List<String> photoDicIdList = files.stream()
 					.filter(f -> f.getName().equals("Google 포토"))
 					.map(file -> file.getId()).collect(Collectors.toList());
 			String PHOTO_FOLDER_ID = photoDicIdList!=null?photoDicIdList.get(0):"";
 
-			this.uploadTest(service, PHOTO_FOLDER_ID);
+			HashMap<String, String> fileUpload = this.uploadTest(service, PHOTO_FOLDER_ID);
+			model.addAttribute("fileUpload", fileUpload);
 		} catch(Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -101,7 +109,8 @@ public class GoogleApiController extends BaseController {
 		return "config/test";
 	}
 
-	private void uploadTest(Drive drive, String parentFolder) throws IOException {
+	private HashMap<String, String> uploadTest(Drive drive, String parentFolder) throws IOException {
+		HashMap<String, String> fileData = new HashMap<>();
 		try {
 			java.io.File mediaFile = new java.io.File("C:\\Users\\yhwang131\\20080913_321166.jpg");
 			String mineType = Files.probeContentType(Paths.get(mediaFile.getPath()));
@@ -116,10 +125,23 @@ public class GoogleApiController extends BaseController {
 
 			Drive.Files.Create request = drive.files().create(testFile, mediaContent);
 			request.getMediaHttpUploader().setProgressListener(driveUploader);
-			request.execute();
+			File uploadResult = request.execute();
+
+			fileData.put("fileId", uploadResult.getId());
+			fileData.put("fileName", uploadResult.getName());
 		} catch(Exception e){
 			e.printStackTrace();
 			logger.error(e.getMessage());
 		}
+		return fileData;
 	}
+
+	@RequestMapping(value = "/googleapi/{fileId}", produces = MediaType.IMAGE_JPEG_VALUE)
+	@ResponseBody
+	public byte[] viewImageFromGoogleDrive(@PathVariable String fileId) throws IOException {
+		Drive service = getDriveService();
+		InputStream inputStream = service.files().get(fileId).executeMediaAsInputStream();
+		return IOUtils.toByteArray(inputStream);
+	}
+
 }
