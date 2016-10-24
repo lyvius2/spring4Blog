@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
@@ -35,7 +36,12 @@ public class GoogleApiController extends BaseController {
 	@Autowired
 	private GoogleDriveAccessHandler driveHandler;
 
-	@RequestMapping("/googleDrive")
+	@RequestMapping(value = "/googleDrive", method = RequestMethod.GET)
+	public String driveUploadForm(Model model) throws IOException {
+		return "post/fileUpload";
+	}
+
+	@RequestMapping(value = "/googleDrive", method = RequestMethod.POST)
 	public String main(Model model) throws IOException {
 		try {
 			logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> API CONTROLLER");
