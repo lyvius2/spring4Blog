@@ -6,6 +6,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 
 import com.walter.config.drive.GoogleDriveAccessHandler;
+import com.walter.model.FileVO;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,6 +39,7 @@ public class GoogleApiController extends BaseController {
 
 	@RequestMapping(value = "/googleDrive", method = RequestMethod.GET)
 	public String driveUploadForm(Model model) throws IOException {
+		model.addAttribute("fileVO", new FileVO());
 		return "post/fileUpload";
 	}
 
