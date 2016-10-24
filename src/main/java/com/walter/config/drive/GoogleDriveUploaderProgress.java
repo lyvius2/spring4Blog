@@ -4,6 +4,8 @@ import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.Drive;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedInputStream;
@@ -14,23 +16,25 @@ import java.io.IOException;
 /**
  * Created by yhwang131 on 2016-10-20.
  */
-@Component("driveUploader")
-public class GoogleDriveUploader implements MediaHttpUploaderProgressListener {
+@Component
+public class GoogleDriveUploaderProgress implements MediaHttpUploaderProgressListener {
+
+	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void progressChanged(MediaHttpUploader mediaHttpUploader) throws IOException {
 		switch (mediaHttpUploader.getUploadState()) {
 			case INITIATION_STARTED:
-				System.out.println("Initiation has started!");
+				logger.debug("Initiation has started!");
 				break;
 			case INITIATION_COMPLETE:
-				System.out.println("Initiation is complete!");
+				logger.debug("Initiation is complete!");
 				break;
 			case MEDIA_IN_PROGRESS:
-				System.out.println(mediaHttpUploader.getProgress());
+				logger.info(String.valueOf(mediaHttpUploader.getProgress()));
 				break;
 			case MEDIA_COMPLETE:
-				System.out.println("Upload is complete!");
+				logger.info("Upload is complete!");
 		}
 	}
 }
