@@ -7,7 +7,6 @@ import com.google.api.services.drive.model.File;
 
 import com.walter.config.drive.GoogleDriveAccessHandler;
 import com.walter.config.drive.GoogleDriveUploaderProgress;
-import com.walter.model.FileVO;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -40,14 +39,14 @@ public class GoogleApiController extends BaseController {
 
 	@RequestMapping(value = "/googleDrive", method = RequestMethod.GET)
 	public String driveUploadForm(Model model) throws IOException {
-		model.addAttribute("fileVO", new FileVO());
+		//model.addAttribute("fileVO", new FileVO());
 		return "post/fileUpload";
 	}
 
-	@RequestMapping(value = "/googleDrive2", method = RequestMethod.GET)
+	@RequestMapping(value = "/googleDrive", method = RequestMethod.POST)
 	public String main(Model model) throws IOException {
 		try {
-			logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> API CONTROLLER + " + uploaderProgress.getUploadFolderName());
+			logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> API CONTROLLER");
 			Drive service = driveHandler.getDriveInstance();
 			List<File> files = service.files().list()
 					//.setPageSize(100)
@@ -82,8 +81,8 @@ public class GoogleApiController extends BaseController {
 					.map(file -> file.getId()).collect(Collectors.toList());
 			String PHOTO_FOLDER_ID = photoDicIdList!=null?photoDicIdList.get(0):"";
 
-			//HashMap<String, String> fileUpload = this.uploadTest(service, PHOTO_FOLDER_ID);
-			//model.addAttribute("fileUpload", fileUpload);
+			HashMap<String, String> fileUpload = this.uploadTest(service, PHOTO_FOLDER_ID);
+			model.addAttribute("fileUpload", fileUpload);
 		} catch(Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
