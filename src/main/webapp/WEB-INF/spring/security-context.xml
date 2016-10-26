@@ -11,7 +11,7 @@
 		<access-denied-handler error-page="/exclude/403"/>
 		<intercept-url pattern="/login" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
 		<intercept-url pattern="/member/list" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/member/register" access="hasRole('ROLE_USER')"/>
+		<intercept-url pattern="/member/register" access="hasRole('ROLE_ANONYMOUS')"/>
 		<form-login login-page="/login"
 					login-processing-url="/signIn"
 					username-parameter="username"
@@ -27,6 +27,9 @@
 		<session-management>
 			<concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
 		</session-management>
+		<headers>
+			<frame-options policy="SAMEORIGIN"/>
+		</headers>
 	</http>
 
 	<beans:bean id="passwordEncode" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">

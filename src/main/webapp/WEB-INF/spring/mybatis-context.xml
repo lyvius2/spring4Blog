@@ -27,10 +27,16 @@
 		<property name="configLocation" value="classpath:mybatis-config.xml"/>
 		<property name="mapperLocations">
 			<list>
+				<!--
 				<value>classpath:com/walter/dao/ApiSQL.xml</value>
 				<value>classpath:com/walter/dao/MemberSQL.xml</value>
 				<value>classpath:com/walter/dao/CategorySQL.xml</value>
 				<value>classpath:com/walter/dao/PostSQL.xml</value>
+				-->
+				<value>classpath:query/ApiSQL.xml</value>
+				<value>classpath:query/MemberSQL.xml</value>
+				<value>classpath:query/CategorySQL.xml</value>
+				<value>classpath:query/PostSQL.xml</value>
 			</list>
 		</property>
 	</bean>

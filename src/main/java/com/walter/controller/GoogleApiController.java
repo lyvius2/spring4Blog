@@ -6,6 +6,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 
 import com.walter.config.drive.GoogleDriveAccessHandler;
+import com.walter.config.drive.GoogleDriveUploaderProgress;
 import com.walter.model.FileVO;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 public class GoogleApiController extends BaseController {
 
 	@Autowired
-	private MediaHttpUploaderProgressListener uploaderProgress;
+	private GoogleDriveUploaderProgress uploaderProgress;
 
 	@Autowired
 	private GoogleDriveAccessHandler driveHandler;
@@ -43,16 +44,36 @@ public class GoogleApiController extends BaseController {
 		return "post/fileUpload";
 	}
 
-	@RequestMapping(value = "/googleDrive", method = RequestMethod.POST)
+	@RequestMapping(value = "/googleDrive2", method = RequestMethod.GET)
 	public String main(Model model) throws IOException {
 		try {
-			logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> API CONTROLLER");
+			logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>> API CONTROLLER + " + uploaderProgress.getUploadFolderName());
 			Drive service = driveHandler.getDriveInstance();
 			List<File> files = service.files().list()
 					//.setPageSize(100)
 					.setFields("nextPageToken, files(id, name)")
 					.execute()
 					.getFiles();
+
+			List<File> test = service.files()
+					.list()
+					.setQ("name = 'blog images' and mimeType = 'application/vnd.google-apps.folder'")
+					.execute()
+					.getFiles();
+			test.stream().forEach(f -> logger.info(f.getName() + " / " + f.getId() + " / " + f.getMimeType()));
+
+			if(test.size() == 0) {
+				File fileMetadata = new File();
+				fileMetadata.setName("blog images");
+				fileMetadata.setMimeType("application/vnd.google-apps.folder");
+
+				File createdFile = service.files().create(fileMetadata)
+						.setFields("id")
+						.execute();
+				logger.info("create : " + createdFile.getName() + " / " + createdFile.getId());
+			} else {
+				logger.info("exists : " + test.get(0).getName() + " / " + test.get(0).getId());
+			}
 
 			//files.stream().forEach(f -> {logger.debug(f.getName() + " : " + f.getId());});
 
@@ -61,8 +82,8 @@ public class GoogleApiController extends BaseController {
 					.map(file -> file.getId()).collect(Collectors.toList());
 			String PHOTO_FOLDER_ID = photoDicIdList!=null?photoDicIdList.get(0):"";
 
-			HashMap<String, String> fileUpload = this.uploadTest(service, PHOTO_FOLDER_ID);
-			model.addAttribute("fileUpload", fileUpload);
+			//HashMap<String, String> fileUpload = this.uploadTest(service, PHOTO_FOLDER_ID);
+			//model.addAttribute("fileUpload", fileUpload);
 		} catch(Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());

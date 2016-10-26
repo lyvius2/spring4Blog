@@ -81,7 +81,10 @@
 		$('.ui.checkbox').checkbox();
 		$('div.dropdown').dropdown();
 
-		CKEDITOR.replace('content');
+		CKEDITOR.replace('content', {
+			//filebrowserBrowseUrl:'/googleDrive',
+			filebrowserUploadUrl:'/api/upload'
+		});
 
 		$('form').on('submit', () => {
 			document.getElementById('content').value = CKEDITOR.instances.content.getData();

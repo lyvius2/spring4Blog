@@ -16,10 +16,19 @@ import java.io.IOException;
 /**
  * Created by yhwang131 on 2016-10-20.
  */
-@Component
 public class GoogleDriveUploaderProgress implements MediaHttpUploaderProgressListener {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private String uploadFolderName;
+
+	public String getUploadFolderName() {
+		return uploadFolderName;
+	}
+
+	public void setUploadFolderName(String uploadFolderName) {
+		this.uploadFolderName = uploadFolderName;
+	}
 
 	@Override
 	public void progressChanged(MediaHttpUploader mediaHttpUploader) throws IOException {
