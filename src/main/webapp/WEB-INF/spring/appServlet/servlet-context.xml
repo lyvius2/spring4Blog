@@ -14,7 +14,6 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-	<resources mapping="/crossdomain.xml*" location="/WEB-INF/crossdomain.xml" />
 
 	<!-- tiles3 Layout Engine Framework : change to Sitemesh2 -->
 	<!--
