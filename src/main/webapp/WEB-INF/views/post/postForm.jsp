@@ -82,7 +82,16 @@
 		$('div.dropdown').dropdown();
 
 		CKEDITOR.replace('content', {
-			filebrowserUploadUrl:'/post/imageUpload'
+			extraPlugins:'uploadimage,image2',
+			uploadUrl:'/post/dragAndDropUpload',
+			filebrowserImageUploadUrl:'/post/imageUpload',
+			stylesSet: [
+				{ name: 'Narrow image', type: 'widget', widget: 'image', attributes: { 'class': 'image-narrow' } },
+				{ name: 'Wide image', type: 'widget', widget: 'image', attributes: { 'class': 'image-wide' } }
+			],
+			contentsCss: [ CKEDITOR.basePath + 'contents.css', CKEDITOR.basePath + 'widgetstyles.css' ],
+			image2_alignClasses: [ 'image-align-left', 'image-align-center', 'image-align-right' ],
+			image2_disableResizer: true
 		});
 
 		$('form').on('submit', () => {

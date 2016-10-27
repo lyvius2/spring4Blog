@@ -93,6 +93,23 @@ public class PostController extends BaseController {
 		return "post/imgUpload";
 	}
 
+	@RequestMapping(value = "/dragAndDropUpload", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String dragAndDropUpload(@RequestParam("upload")MultipartFile file) throws IOException {
+		HashMap<String, Object> resultMap = new HashMap<>();
+		try {
+			File resultFile = googleDriveImageService.createFile(file);
+			resultMap.put("uploaded", 1);
+			resultMap.put("fileName", resultFile.getName());
+			resultMap.put("url", "/post/images/" + resultFile.getId());
+		} catch(IOException ioe) {
+			ioe.printStackTrace();
+			resultMap.put("uploaded", 0);
+			resultMap.put("error", new HashMap<String, Object>().put("message", ioe.getMessage()));
+		}
+		return gson.toJson(resultMap);
+	}
+
 	@RequestMapping(value = "/images/{file_id}", method = RequestMethod.GET)
 	public void imgView(@PathVariable String file_id, HttpServletResponse httpServletResponse) throws IOException {
 		HashMap<String, Object> hashMap = googleDriveImageService.openFile(file_id);

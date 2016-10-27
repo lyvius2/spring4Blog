@@ -28,10 +28,14 @@
 				</h4>
 				<div class="ui divider"></div>
 				<div class="ui justified container">
+					<%--
+					에디터(CKEditor) 도입으로 주석 처리
 					<jsp:scriptlet>
 						pageContext.setAttribute("wrap", "\n");
 					</jsp:scriptlet>
 					<c:out value="${fn:replace(post.content, wrap, '<br/>')}" escapeXml="false"/>
+					--%>
+					<c:out value="${post.content}" escapeXml="false"/>
 				</div>
 				<div class="ui divider"></div>
 				<%-- 댓글란은 구현 시까지 주석 처리. (MongoDB 사용 예정) --%>
