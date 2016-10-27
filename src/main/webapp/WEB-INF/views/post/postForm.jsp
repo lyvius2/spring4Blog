@@ -82,8 +82,7 @@
 		$('div.dropdown').dropdown();
 
 		CKEDITOR.replace('content', {
-			//filebrowserBrowseUrl:'/googleDrive',
-			filebrowserUploadUrl:'/api/upload'
+			filebrowserUploadUrl:'/post/imageUpload'
 		});
 
 		$('form').on('submit', () => {

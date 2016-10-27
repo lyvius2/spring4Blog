@@ -6,17 +6,13 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.walter.config.drive.GoogleDriveAccessHandler;
 import com.walter.config.drive.GoogleDriveUploaderProgress;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Created by yhwang131 on 2016-10-26.
@@ -25,6 +21,7 @@ import java.util.Collections;
 public class GoogleDriveServiceImageImpl implements GoogleDriveService {
 
 	private static String UPLOAD_FOLDER_ID;
+	private static Drive DRIVE;
 
 	@Autowired
 	private GoogleDriveUploaderProgress uploaderProgress;
@@ -33,20 +30,23 @@ public class GoogleDriveServiceImageImpl implements GoogleDriveService {
 	private GoogleDriveAccessHandler driveHandler;
 
 	@Override
-	public File createFile(java.io.File file) throws IOException {
+	public File createFile(MultipartFile multipartFile) throws IOException {
 		String uploadPath = uploaderProgress.getUploadFolderName();
-		Drive service = driveHandler.getDriveInstance();
+		Drive service = this.getDriveService();
 
-		if(UPLOAD_FOLDER_ID.equals(null)){
+		if(UPLOAD_FOLDER_ID == null){
 			UPLOAD_FOLDER_ID = this.getUploadFolderId(service, uploadPath);
 		}
-
+		/*
 		String mimeType = Files.probeContentType(Paths.get(file.getPath()));
 		InputStreamContent mediaContent = new InputStreamContent(mimeType, new BufferedInputStream(new FileInputStream(file)));
 		mediaContent.setLength(file.length());
+		*/
+		InputStreamContent mediaContent = new InputStreamContent(multipartFile.getContentType(), multipartFile.getInputStream());
+		mediaContent.setLength(multipartFile.getSize());
 
 		File targetFile = new File();
-		targetFile.setName(file.getName());
+		targetFile.setName(multipartFile.getOriginalFilename());
 		targetFile.setParents(Collections.singletonList(UPLOAD_FOLDER_ID));
 
 		Drive.Files.Create request = service.files().create(targetFile, mediaContent);
@@ -55,10 +55,14 @@ public class GoogleDriveServiceImageImpl implements GoogleDriveService {
 	}
 
 	@Override
-	public byte[] openFile(String fileId) throws IOException {
-		Drive service = driveHandler.getDriveInstance();
-		InputStream inputStream = service.files().get(fileId).executeMediaAsInputStream();
-		return IOUtils.toByteArray(inputStream);
+	public HashMap<String, Object> openFile(String fileId) throws IOException {
+		Drive service = this.getDriveService();
+		Drive.Files.Get get = service.files().get(fileId);
+
+		HashMap<String, Object> resultMap = new HashMap<>();
+		resultMap.put("mimeType", get.execute().getMimeType());
+		resultMap.put("data", get.executeMediaAsInputStream());
+		return resultMap;
 	}
 
 	private String getUploadFolderId(Drive service, String uploadPath) throws IOException {
@@ -78,5 +82,12 @@ public class GoogleDriveServiceImageImpl implements GoogleDriveService {
 			result = test.getFiles().get(0).getId();
 		}
 		return result;
+	}
+
+	private Drive getDriveService() throws IOException {
+		if(DRIVE == null) {
+			DRIVE = driveHandler.getDriveInstance();
+		}
+		return DRIVE;
 	}
 }

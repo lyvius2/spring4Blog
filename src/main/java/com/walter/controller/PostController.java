@@ -7,19 +7,23 @@ import com.walter.model.CategoryVO;
 import com.walter.model.CodeVO;
 import com.walter.model.PostVO;
 import com.walter.service.GoogleDriveService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,8 +39,8 @@ public class PostController extends BaseController {
 	@Autowired
 	private PostDao postDao;
 
-	@Autowired
-	private GoogleDriveService googleDriveService;
+	@Resource(name = "googleDriveServiceImageImpl")
+	private GoogleDriveService googleDriveImageService;
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPostForm(Model model) {
@@ -81,25 +85,18 @@ public class PostController extends BaseController {
 		return "post/fileUpload";
 	}
 
-	@RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
-	public String fileUpload(@RequestPart("byteData") byte[] uploadFile, Model model, HttpServletResponse httpServletResponse) throws IOException, ClassNotFoundException {
-		try {
-			logger.debug("------------------->> " + uploadFile.length);
-			MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest)httpServletResponse;
-			logger.debug("====>> " + multipartHttpServletRequest.getPathInfo());
-			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(uploadFile);
-			ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-			File file = googleDriveService.createFile((java.io.File) objectInputStream.readObject());
-			//byteArrayInputStream.close();
-			//objectInputStream.close();
+	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
+	public String imgUpload(@RequestParam("upload")MultipartFile file, Model model, HttpServletRequest httpServletRequest) throws IOException {
+		File resultFile = googleDriveImageService.createFile(file);
+		model.addAttribute("CKEditorFuncNum", httpServletRequest.getParameter("CKEditorFuncNum"));
+		model.addAttribute("fileURL", "\\/post\\/images\\/" + resultFile.getId());
+		return "post/imgUpload";
+	}
 
-			model.addAttribute("fileName", file.getName());
-			model.addAttribute("fileId", file.getId());
-		} catch(IOException ioe) {
-			ioe.printStackTrace();
-		} catch(ClassNotFoundException cnfe) {
-			cnfe.printStackTrace();
-		}
-		return "post/fileUpload";
+	@RequestMapping(value = "/images/{file_id}", method = RequestMethod.GET)
+	public void imgView(@PathVariable String file_id, HttpServletResponse httpServletResponse) throws IOException {
+		HashMap<String, Object> hashMap = googleDriveImageService.openFile(file_id);
+		httpServletResponse.setContentType(hashMap.get("mimeType").toString());
+		httpServletResponse.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
 	}
 }

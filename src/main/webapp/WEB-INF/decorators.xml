@@ -5,6 +5,7 @@
         <pattern>/exclude/*</pattern>
         <pattern>/api/*</pattern>
         <pattern>/login*</pattern>
+        <pattern>/post/images/*</pattern>
     </excludes>
 
     <decorator name="mainTheme" page="template/layout.jsp">
