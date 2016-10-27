@@ -21,8 +21,10 @@ public class PostVO {
 	private Boolean use_yn;
 	private Boolean comment_yn;
 	private Date reg_dt;
+	private String df_reg_dt;
 	private String reg_id;
 	private Date mod_dt;
+	private String df_mod_dt;
 	private String mod_id;
 	private String delegate_img;
 	private String trip_country;
@@ -101,6 +103,14 @@ public class PostVO {
 		this.reg_dt = reg_dt;
 	}
 
+	public String getDf_reg_dt() {
+		return df_reg_dt;
+	}
+
+	public void setDf_reg_dt(String df_reg_dt) {
+		this.df_reg_dt = df_reg_dt;
+	}
+
 	public String getReg_id() {
 		return reg_id;
 	}
@@ -115,6 +125,14 @@ public class PostVO {
 
 	public void setMod_dt(Date mod_dt) {
 		this.mod_dt = mod_dt;
+	}
+
+	public String getDf_mod_dt() {
+		return df_mod_dt;
+	}
+
+	public void setDf_mod_dt(String df_mod_dt) {
+		this.df_mod_dt = df_mod_dt;
 	}
 
 	public String getMod_id() {
@@ -152,8 +170,10 @@ public class PostVO {
 				", use_yn=" + use_yn +
 				", comment_yn=" + comment_yn +
 				", reg_dt=" + reg_dt +
+				", df_reg_dt='" + df_reg_dt + '\'' +
 				", reg_id='" + reg_id + '\'' +
 				", mod_dt=" + mod_dt +
+				", df_mod_dt='" + df_mod_dt + '\'' +
 				", mod_id='" + mod_id + '\'' +
 				", delegate_img='" + delegate_img + '\'' +
 				", trip_country='" + trip_country + '\'' +

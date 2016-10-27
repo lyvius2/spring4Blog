@@ -3,10 +3,9 @@ package com.walter.controller;
 import com.google.api.services.drive.model.File;
 import com.walter.dao.ApiDao;
 import com.walter.dao.PostDao;
-import com.walter.model.CategoryVO;
-import com.walter.model.CodeVO;
 import com.walter.model.PostVO;
 import com.walter.service.GoogleDriveService;
+import com.walter.service.PostService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by yhwang131 on 2016-10-11.
@@ -34,30 +29,15 @@ import java.util.List;
 public class PostController extends BaseController {
 
 	@Autowired
-	private ApiDao apiDao;
+	private PostService service;
 
-	@Autowired
-	private PostDao postDao;
-
-	@Resource(name = "googleDriveServiceImageImpl")
+	@Resource(name = "googleDriveServiceImage")
 	private GoogleDriveService googleDriveImageService;
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPostForm(Model model) {
-		try {
-			List<CategoryVO> categoryList = new ArrayList<>();
-			apiDao.getCategoryList(new CategoryVO(1,0)).stream()
-					.forEach(category -> {
-						categoryList.add(category);
-						categoryList.addAll(apiDao.getCategoryList(new CategoryVO(2,category.getCategory_cd())));
-					});
-			model.addAttribute("categoryList", categoryList);
-			model.addAttribute("countryList", apiDao.getCodeList(new CodeVO("NAT")));
-		} catch(Exception e) {
-			logger.error(e.getMessage());
-		} finally {
-			model.addAttribute("postVO", new PostVO(true, true));
-		}
+		model = service.setInputForm(model);
+		model.addAttribute("postVO", new PostVO(true, true));
 		return "post/postForm";
 	}
 
@@ -67,16 +47,13 @@ public class PostController extends BaseController {
 			return "post/postForm";
 		}
 		postVO.setReg_id(super.getLoginUser()!=null?super.getLoginUser().getUsername():"anonymous");
-		postDao.setPost(postVO);
+		service.setPost(postVO);
 		return "redirect:" + postVO.getPost_cd();
 	}
 
 	@RequestMapping(value = "/{post_cd}")
 	public String postView(@PathVariable int post_cd, Model model) {
-		PostVO postVO = postDao.getPost(post_cd);
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		model.addAttribute("post", postVO);
-		model.addAttribute("regDt", df.format(postVO.getReg_dt()));
+		model.addAttribute("post", service.getPost(post_cd));
 		return "post/postView";
 	}
 

@@ -17,7 +17,7 @@ import java.util.HashMap;
 /**
  * Created by yhwang131 on 2016-10-26.
  */
-@Service
+@Service("googleDriveServiceImage")
 public class GoogleDriveServiceImageImpl implements GoogleDriveService {
 
 	private static String UPLOAD_FOLDER_ID;
