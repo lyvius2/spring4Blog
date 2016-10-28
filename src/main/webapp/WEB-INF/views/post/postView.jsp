@@ -15,6 +15,36 @@
 	<title>포스트 - <c:out value="${post.title}"/></title>
 </head>
 <body>
+	<div class="ui very relaxed divided list">
+		<div class="item">
+			<div class="right floated content">
+				<span class="georgia">2016.12.01</span>
+			</div>
+			<i class="pointing right icon"></i>
+			<div class="content">
+				<a class="header">아이슬란드 하늘의 여행</a>
+			</div>
+		</div>
+		<div class="item">
+			<div class="right floated content">
+				<span class="georgia">2016.12.01</span>
+			</div>
+			<i class="pointing right icon"></i>
+			<div class="content">
+				<a class="header">아이슬란드 하늘의 여행</a>
+			</div>
+		</div>
+		<div class="item">
+			<div class="right floated content">
+				<span class="georgia">2016.12.01</span>
+			</div>
+			<i class="pointing right icon"></i>
+			<div class="content">
+				<a class="header">아이슬란드 하늘의 여행</a>
+			</div>
+		</div>
+		<div class="ui"></div>
+	</div>
 	<div class="ui">
 		<div class="column">
 			<div class="ui raised segment">
@@ -22,7 +52,7 @@
 					<c:if test="${post.trip_country!=null}"><i class="${fn:toLowerCase(post.trip_country)} flag"></i></c:if>
 					<c:out value="${post.category_name}"/>
 				</a>
-				<span class="georgia">${regDt}</span>
+				<span class="georgia">${post.df_reg_dt}</span>
 				<h4 class="header">
 					<c:out value="${post.title}"/>
 				</h4>
