@@ -15,36 +15,42 @@
 	<title>포스트 - <c:out value="${post.title}"/></title>
 </head>
 <body>
-	<div class="ui very relaxed divided list">
-		<div class="item">
-			<div class="right floated content">
-				<span class="georgia">2016.12.01</span>
-			</div>
-			<i class="pointing right icon"></i>
-			<div class="content">
-				<a class="header">아이슬란드 하늘의 여행</a>
-			</div>
-		</div>
-		<div class="item">
-			<div class="right floated content">
-				<span class="georgia">2016.12.01</span>
-			</div>
-			<i class="pointing right icon"></i>
-			<div class="content">
-				<a class="header">아이슬란드 하늘의 여행</a>
-			</div>
-		</div>
-		<div class="item">
-			<div class="right floated content">
-				<span class="georgia">2016.12.01</span>
-			</div>
-			<i class="pointing right icon"></i>
-			<div class="content">
-				<a class="header">아이슬란드 하늘의 여행</a>
-			</div>
-		</div>
-		<div class="ui"></div>
-	</div>
+	<h4 class="ui dividing header">
+		<i class="link list layout icon"></i>
+		<div class="content">Post List</div>
+	</h4>
+	<table class="ui compact selectable blue table">
+		<tbody>
+			<tr>
+				<td><i class="caret right icon"></i>
+					아이슬란드 하늘의 여행</td>
+				<td class="right aligned"><span class="georgia">2016.12.01</span></td>
+			</tr>
+			<tr>
+				<td><i class="caret right icon"></i>
+					아이슬란드 하늘의 여행</td>
+				<td class="right aligned"><span class="georgia">2016.12.01</span></td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<th colspan="2">
+					<div class="ui mini right floated pagination menu">
+						<a href="" class="icon item">
+							<i class="left chevron icon"></i>
+						</a>
+						<a href="" class="item">1</a>
+						<a href="" class="item">2</a>
+						<a href="" class="item">3</a>
+						<a href="" class="icon item">
+							<i class="right chevron icon"></i>
+						</a>
+					</div>
+				</th>
+			</tr>
+		</tfoot>
+	</table>
+
 	<div class="ui">
 		<div class="column">
 			<div class="ui raised segment">
@@ -164,6 +170,9 @@
 	<content tag="script">
 	<script>
 		$('.ui.dropdown').dropdown();
+		$('h4').on('click', () => {
+			$('table').toggle('blind', {}, 500);
+		});
 	</script>
 	</content>
 </body>
