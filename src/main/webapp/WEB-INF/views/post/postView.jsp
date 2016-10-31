@@ -21,7 +21,7 @@
 	</h4>
 
 	<table class="ui compact selectable blue table" id="postList" style="display:none;" ng-controller="postCtrl">
-		<tr ng-repeat="post in postList">
+		<tr ng-repeat="post in postList" ng-click="viewPost(post.post_cd)">
 			<td><i class="caret right icon"></i>
 				<span ng-bind="post.title"></span>
 			</td>
@@ -48,6 +48,10 @@
 
 	<div class="ui">
 		<div class="column">
+			<form name="viewForm" method="post" onsubmit="return false;">
+				<input type="hidden" name="currPageNo" value="<c:out value="${currPageNo}"/>"/>
+				<input type="hidden" name="category_cd" value="<c:out value="${category_cd}"/>"/>
+			</form>
 			<div class="ui raised segment">
 				<a class="ui red ribbon label">
 					<c:if test="${post.trip_country!=null}"><i class="${fn:toLowerCase(post.trip_country)} flag"></i></c:if>
@@ -190,9 +194,15 @@
 				$http.get('/post/list',{params:params}).then((result) => {
 					$scope.postList = result.data.postList;
 					$scope.paging = createPagingNumberArray(result.data.paging);
+					document.forms[0].currPageNo.value = currPageNo;
 				}, (error) => {
 					console.log(error);
 				});
+			};
+
+			$scope.viewPost = (postCd) => {
+				document.forms[0].action = '/post/' + postCd;
+				document.forms[0].submit();
 			};
 
 			$scope.getPage(currPageNo);
