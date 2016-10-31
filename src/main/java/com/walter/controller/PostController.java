@@ -1,8 +1,8 @@
 package com.walter.controller;
 
 import com.google.api.services.drive.model.File;
-import com.walter.dao.ApiDao;
-import com.walter.dao.PostDao;
+import com.walter.config.CustomStringUtils;
+import com.walter.model.PostSearchVO;
 import com.walter.model.PostVO;
 import com.walter.service.GoogleDriveService;
 import com.walter.service.PostService;
@@ -52,9 +52,21 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/{post_cd}")
-	public String postView(@PathVariable int post_cd, Model model) {
+	public String postView(@PathVariable int post_cd, Model model, HttpServletRequest request) {
+		int currPageNo
+				= CustomStringUtils.setDefaultNumber(request.getParameter("currPageNo"), 1);
+		int category_cd
+				= CustomStringUtils.setDefaultNumber(request.getParameter("category_cd"), 0);
+		model.addAttribute("currPageNo", currPageNo);
+		model.addAttribute("category_cd", category_cd);
 		model.addAttribute("post", service.getPost(post_cd));
 		return "post/postView";
+	}
+
+	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String postList(@ModelAttribute("postSearchVO") PostSearchVO postSearchVO) {
+		return gson.toJson(service.getPostList(postSearchVO));
 	}
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)

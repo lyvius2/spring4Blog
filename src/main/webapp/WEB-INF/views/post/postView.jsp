@@ -14,41 +14,36 @@
 <head>
 	<title>포스트 - <c:out value="${post.title}"/></title>
 </head>
-<body>
+<body ng-app="postApp">
 	<h4 class="ui dividing header">
 		<i class="link list layout icon"></i>
 		<div class="content">Post List</div>
 	</h4>
-	<table class="ui compact selectable blue table">
-		<tbody>
-			<tr>
-				<td><i class="caret right icon"></i>
-					아이슬란드 하늘의 여행</td>
-				<td class="right aligned"><span class="georgia">2016.12.01</span></td>
-			</tr>
-			<tr>
-				<td><i class="caret right icon"></i>
-					아이슬란드 하늘의 여행</td>
-				<td class="right aligned"><span class="georgia">2016.12.01</span></td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<th colspan="2">
-					<div class="ui mini right floated pagination menu">
-						<a href="" class="icon item">
-							<i class="left chevron icon"></i>
-						</a>
-						<a href="" class="item">1</a>
-						<a href="" class="item">2</a>
-						<a href="" class="item">3</a>
-						<a href="" class="icon item">
-							<i class="right chevron icon"></i>
-						</a>
-					</div>
-				</th>
-			</tr>
-		</tfoot>
+
+	<table class="ui compact selectable blue table" id="postList" style="display:none;" ng-controller="postCtrl">
+		<tr ng-repeat="post in postList">
+			<td><i class="caret right icon"></i>
+				<span ng-bind="post.title"></span>
+			</td>
+			<td class="right aligned"><span class="georgia" ng-bind="post.df_reg_dt"></span></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div class="ui mini right floated pagination menu">
+					<a href="" class="icon item" ng-click="getPage(paging.firstPageNo)">
+						<i class="left chevron icon"></i>
+					</a>
+					<a href="" class="item"
+					   ng-repeat="num in paging.pagingNumbers"
+					   ng-bind="num"
+					   ng-class="{active : num==paging.currPageNo}"
+					   ng-click="getPage(num)"></a>
+					<a href="" class="icon item" ng-click="getPage(paging.finalPageNo)">
+						<i class="right chevron icon"></i>
+					</a>
+				</div>
+			</td>
+		</tr>
 	</table>
 
 	<div class="ui">
@@ -170,9 +165,38 @@
 	<content tag="script">
 	<script>
 		$('.ui.dropdown').dropdown();
-		$('h4').on('click', () => {
-			$('table').toggle('blind', {}, 500);
+		$('h4.ui').on('click', () => {
+			$('#postList').toggle('blind', {}, 500);
 		});
+
+		var app = angular.module('postApp', []);
+		app.controller('postCtrl', ['$scope', '$http', ($scope, $http) => {
+			var currPageNo = '<c:out value="${currPageNo}"/>';
+			var category_cd = '<c:out value="${category_cd}"/>';
+
+			var createPagingNumberArray = (paging) => {
+				var array = new Array();
+				array.push(paging.startPageNo);
+				var len = paging.endPageNo - paging.startPageNo + 1;
+				for(var i = 1; i < len; i++) {
+					array.push(paging.startPageNo + i);
+				}
+				angular.extend(paging, {pagingNumbers:array});
+				return paging;
+			};
+
+			$scope.getPage = (currPageNo) => {
+				var params = {currPageNo:currPageNo, category_cd:this.category_cd};
+				$http.get('/post/list',{params:params}).then((result) => {
+					$scope.postList = result.data.postList;
+					$scope.paging = createPagingNumberArray(result.data.paging);
+				}, (error) => {
+					console.log(error);
+				});
+			};
+
+			$scope.getPage(currPageNo);
+		}]);
 	</script>
 	</content>
 </body>

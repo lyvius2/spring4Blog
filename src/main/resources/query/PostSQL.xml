@@ -16,7 +16,7 @@
 		 WHERE post_cd = #{post_cd}
 	</delete>
 
-	<select id="getPost" parameterType="java.lang.Integer" resultType="Post">
+	<sql id="getPostDefault">
 		SELECT post_cd
 			  ,title
 			  ,content
@@ -30,6 +30,21 @@
 			  ,delegate_img
 			  ,trip_country
 		  FROM post
+	</sql>
+	<select id="getPost" parameterType="java.lang.Integer" resultType="Post">
+		<include refid="getPostDefault"/>
 		 WHERE post_cd = #{post_cd}
 	</select>
+
+	<select id="getPostList" parameterType="PostSearch" resultType="Post">
+		<include refid="getPostDefault"/>
+		 WHERE use_yn = TRUE
+		<if test="category_cd != null and category_cd > 0 ">
+	  	   AND category_cd = #{category_cd}
+		</if>
+		<if test="searchText != null">
+		   AND (title LIKE '%'||#{searchText}||'%' OR content LIKE '%'||#{searchText}||'%')
+		</if>
+	</select>
+	<!--LIMIT #{limit} OFFSET #{offset}-->
 </mapper>
