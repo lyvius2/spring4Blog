@@ -1,5 +1,7 @@
 package com.walter.model;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +10,10 @@ import java.util.List;
  */
 public class CommentVO {
 
-	private int seq;
+	@Id
+	private String _id;
+
+	private int parentPostCd;
 
 	private String userId;
 
@@ -26,6 +31,15 @@ public class CommentVO {
 		super();
 	}
 
+	public CommentVO(int parentPostCd, String userId, String userName, String ip, Date regDt, String comment) {
+		this.parentPostCd = parentPostCd;
+		this.userId = userId;
+		this.userName = userName;
+		this.ip = ip;
+		this.regDt = regDt;
+		this.comment = comment;
+	}
+
 	public CommentVO(String userId, String userName, String ip, Date regDt, String comment) {
 		this.userId = userId;
 		this.userName = userName;
@@ -34,12 +48,12 @@ public class CommentVO {
 		this.comment = comment;
 	}
 
-	public int getSeq() {
-		return seq;
+	public String get_id() {
+		return _id;
 	}
 
-	public void setSeq(int seq) {
-		this.seq = seq;
+	public int getParentPostCd() {
+		return parentPostCd;
 	}
 
 	public String getUserId() {
@@ -69,7 +83,8 @@ public class CommentVO {
 	@Override
 	public String toString() {
 		return "CommentVO{" +
-				"seq='" + seq + '\'' +
+				"_id='" + _id + '\'' +
+				", parentPostCd=" + parentPostCd +
 				", userId='" + userId + '\'' +
 				", userName='" + userName + '\'' +
 				", ip='" + ip + '\'' +

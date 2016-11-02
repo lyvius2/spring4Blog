@@ -109,21 +109,31 @@ public class PostController extends BaseController {
 		response.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/comment/{post_cd}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String registerComment(HttpServletRequest request) {
-		String parentPostCd = request.getParameter("parentPostCd");
-		if(CustomStringUtils.isNumber(parentPostCd)) {
-			MemberVO memberVO = super.getLoginUser();
-			CommentVO commentVO
-					= new CommentVO("yhwang131"
-					, "테스트맨"
-					, request.getRemoteAddr()
-					, new Date()
-					, request.getParameter("comment"));
-			return gson.toJson(service.setComment(Integer.parseInt(parentPostCd), commentVO));
-		} else {
-			return gson.toJson("ERROR");
-		}
+	public String registerComment(@PathVariable int post_cd, HttpServletRequest request) {
+		MemberVO memberVO = super.getLoginUser();
+		CommentVO commentVO = new CommentVO(
+				post_cd,
+				"yhwang131",
+				"테스트맨",
+				request.getRemoteAddr(),
+				new Date(),
+				request.getParameter("comment"));
+		service.setComment(commentVO);
+		return gson.toJson(commentVO);
+	}
+
+	@RequestMapping(value = "/comment/{_id}", method = RequestMethod.PUT, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String registerReply(@PathVariable String _id, @ModelAttribute("commentVO")CommentVO comment) {
+		MemberVO memberVO = super.getLoginUser();
+		CommentVO commentVO = new CommentVO(
+				"yhwang131",
+				"답글맨",
+				"110.45.164.70",
+				new Date(),
+				comment.getComment());
+		return gson.toJson(service.setReply(_id, commentVO));
 	}
 }

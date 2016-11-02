@@ -4,6 +4,7 @@ import com.walter.config.CustomStringUtils;
 import com.walter.dao.ApiDao;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -88,8 +89,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostCommentVO setComment(int parentPostId, CommentVO commentVO) {
-		PostCommentVO postComment = this.getComment(parentPostId);
+	public void setComment(CommentVO commentVO) {
+		/*
 		if(postComment != null) {
 			commentVO.setSeq(postComment.getComments().size());
 			postComment = mongoOps.findAndModify(query(where("parentPostCd").is(parentPostId)),
@@ -98,14 +99,31 @@ public class PostServiceImpl implements PostService {
 					PostCommentVO.class);
 		} else {
 			commentVO.setSeq(0);
+			System.out.println("fuck");
 			postComment = new PostCommentVO(parentPostId, commentVO);
 			mongoOps.insert(postComment);
 		}
 		return postComment;
+		*/
+		mongoOps.insert(commentVO);
 	}
 
 	@Override
-	public PostCommentVO getComment(int parentPostId) {
-		return mongoOps.findOne(query(where("parentPostCd").is(parentPostId)), PostCommentVO.class);
+	public CommentVO setReply(String _id, CommentVO commentVO) {
+		CommentVO comment = mongoOps.findAndModify(query(where("_id").is(new ObjectId(_id))),
+				new Update().push("replys", commentVO),
+				new FindAndModifyOptions().returnNew(true),
+				CommentVO.class);
+		return comment;
+	}
+
+	@Override
+	public CommentVO getCommentById(String _id) {
+		return mongoOps.findById(_id, CommentVO.class);
+	}
+
+	@Override
+	public List<CommentVO> getComments(int parentPostId) {
+		return mongoOps.find(query(where("parentPostCd").is(parentPostId)), CommentVO.class);
 	}
 }

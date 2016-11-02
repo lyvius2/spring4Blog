@@ -7,6 +7,7 @@ import com.walter.model.PostVO;
 import org.springframework.ui.Model;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by yhwang131 on 2016-10-27.
@@ -19,6 +20,9 @@ public interface PostService {
 	//int updPost(PostVO postVO);
 	//int delPost(int post_cd);
 
-	PostCommentVO setComment(int parentPostId, CommentVO commentVO);
-	PostCommentVO getComment(int parentPostId);
+	void setComment(CommentVO commentVO);
+	CommentVO setReply(String _id, CommentVO commentVO);
+	CommentVO getCommentById(String _id);
+	List<CommentVO> getComments(int parentPostId);
+
 }
