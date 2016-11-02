@@ -1,7 +1,5 @@
 package com.walter.model;
 
-import org.springframework.data.annotation.Id;
-
 import java.util.Date;
 import java.util.List;
 
@@ -9,69 +7,75 @@ import java.util.List;
  * Created by yhwang131 on 2016-11-01.
  */
 public class CommentVO {
-	@Id
-	private String id;
 
-	private int parent_post_id;
-	private List<Comment> comments;
+	private int seq;
 
-	public String getId() {
-		return id;
+	private String userId;
+
+	private String userName;
+
+	private String ip;
+
+	private Date regDt;
+
+	private String comment;
+
+	private List<CommentVO> replys;
+
+	public CommentVO() {
+		super();
 	}
 
-	public int getParent_post_id() {
-		return parent_post_id;
+	public CommentVO(String userId, String userName, String ip, Date regDt, String comment) {
+		this.userId = userId;
+		this.userName = userName;
+		this.ip = ip;
+		this.regDt = regDt;
+		this.comment = comment;
 	}
 
-	public List<Comment> getComments() {
-		return comments;
+	public int getSeq() {
+		return seq;
+	}
+
+	public void setSeq(int seq) {
+		this.seq = seq;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public Date getRegDt() {
+		return regDt;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public List<CommentVO> getReplys() {
+		return replys;
 	}
 
 	@Override
 	public String toString() {
 		return "CommentVO{" +
-				"id='" + id + '\'' +
-				", parent_post_id=" + parent_post_id +
-				", comments=" + comments +
+				"seq='" + seq + '\'' +
+				", userId='" + userId + '\'' +
+				", userName='" + userName + '\'' +
+				", ip='" + ip + '\'' +
+				", regDt=" + regDt +
+				", comment='" + comment + '\'' +
+				", replys=" + replys +
 				'}';
-	}
-
-	class Comment {
-		private String user;
-		private String ip;
-		private Date reg_dt;
-		private String comment;
-		private List<Comment> replys;
-
-		public String getUser() {
-			return user;
-		}
-
-		public String getIp() {
-			return ip;
-		}
-
-		public Date getReg_dt() {
-			return reg_dt;
-		}
-
-		public String getComment() {
-			return comment;
-		}
-
-		public List<Comment> getReplys() {
-			return replys;
-		}
-
-		@Override
-		public String toString() {
-			return "Comment{" +
-					"user='" + user + '\'' +
-					", ip='" + ip + '\'' +
-					", reg_dt=" + reg_dt +
-					", comment='" + comment + '\'' +
-					", replys=" + replys +
-					'}';
-		}
 	}
 }

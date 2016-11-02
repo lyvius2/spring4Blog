@@ -1,6 +1,7 @@
 package com.walter.service;
 
-import com.walter.model.PagingVO;
+import com.walter.model.CommentVO;
+import com.walter.model.PostCommentVO;
 import com.walter.model.PostSearchVO;
 import com.walter.model.PostVO;
 import org.springframework.ui.Model;
@@ -17,4 +18,7 @@ public interface PostService {
 	HashMap<String, Object> getPostList(PostSearchVO postSearchVO);
 	//int updPost(PostVO postVO);
 	//int delPost(int post_cd);
+
+	PostCommentVO setComment(int parentPostId, CommentVO commentVO);
+	PostCommentVO getComment(int parentPostId);
 }

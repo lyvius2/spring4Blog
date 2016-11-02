@@ -5,12 +5,18 @@ import com.walter.dao.ApiDao;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 /**
  * Created by yhwang131 on 2016-10-27.
@@ -23,6 +29,9 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private ApiDao apiDao;
+
+	@Autowired
+	private MongoOperations mongoOps;
 
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
@@ -76,5 +85,27 @@ public class PostServiceImpl implements PostService {
 		hashMap.put("postList", resultList);
 		hashMap.put("paging", pagingVO);
 		return hashMap;
+	}
+
+	@Override
+	public PostCommentVO setComment(int parentPostId, CommentVO commentVO) {
+		PostCommentVO postComment = this.getComment(parentPostId);
+		if(postComment != null) {
+			commentVO.setSeq(postComment.getComments().size());
+			postComment = mongoOps.findAndModify(query(where("parentPostCd").is(parentPostId)),
+					new Update().push("comments", commentVO),
+					new FindAndModifyOptions().returnNew(true),
+					PostCommentVO.class);
+		} else {
+			commentVO.setSeq(0);
+			postComment = new PostCommentVO(parentPostId, commentVO);
+			mongoOps.insert(postComment);
+		}
+		return postComment;
+	}
+
+	@Override
+	public PostCommentVO getComment(int parentPostId) {
+		return mongoOps.findOne(query(where("parentPostCd").is(parentPostId)), PostCommentVO.class);
 	}
 }

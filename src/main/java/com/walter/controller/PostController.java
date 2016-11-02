@@ -2,6 +2,8 @@ package com.walter.controller;
 
 import com.google.api.services.drive.model.File;
 import com.walter.config.CustomStringUtils;
+import com.walter.model.CommentVO;
+import com.walter.model.MemberVO;
 import com.walter.model.PostSearchVO;
 import com.walter.model.PostVO;
 import com.walter.service.GoogleDriveService;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -65,7 +68,7 @@ public class PostController extends BaseController {
 
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String postList(@ModelAttribute("postSearchVO") PostSearchVO postSearchVO) {
+	public String postList(@ModelAttribute("postSearchVO")PostSearchVO postSearchVO) {
 		return gson.toJson(service.getPostList(postSearchVO));
 	}
 
@@ -75,9 +78,9 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
-	public String imgUpload(@RequestParam("upload")MultipartFile file, Model model, HttpServletRequest httpServletRequest) throws IOException {
+	public String imgUpload(@RequestParam("upload")MultipartFile file, Model model, HttpServletRequest request) throws IOException {
 		File resultFile = googleDriveImageService.createFile(file);
-		model.addAttribute("CKEditorFuncNum", httpServletRequest.getParameter("CKEditorFuncNum"));
+		model.addAttribute("CKEditorFuncNum",  request.getParameter("CKEditorFuncNum"));
 		model.addAttribute("fileURL", "\\/post\\/images\\/" + resultFile.getId());
 		return "post/imgUpload";
 	}
@@ -100,9 +103,27 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/images/{file_id}", method = RequestMethod.GET)
-	public void imgView(@PathVariable String file_id, HttpServletResponse httpServletResponse) throws IOException {
+	public void imgView(@PathVariable String file_id, HttpServletResponse response) throws IOException {
 		HashMap<String, Object> hashMap = googleDriveImageService.openFile(file_id);
-		httpServletResponse.setContentType(hashMap.get("mimeType").toString());
-		httpServletResponse.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
+		response.setContentType(hashMap.get("mimeType").toString());
+		response.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
+	}
+
+	@RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String registerComment(HttpServletRequest request) {
+		String parentPostCd = request.getParameter("parentPostCd");
+		if(CustomStringUtils.isNumber(parentPostCd)) {
+			MemberVO memberVO = super.getLoginUser();
+			CommentVO commentVO
+					= new CommentVO("yhwang131"
+					, "테스트맨"
+					, request.getRemoteAddr()
+					, new Date()
+					, request.getParameter("comment"));
+			return gson.toJson(service.setComment(Integer.parseInt(parentPostCd), commentVO));
+		} else {
+			return gson.toJson("ERROR");
+		}
 	}
 }
