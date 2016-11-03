@@ -74,8 +74,8 @@
 				</div>
 				<div class="ui divider"></div>
 				<%-- 댓글란은 구현 시까지 주석 처리. (MongoDB 사용 예정) --%>
-				<!--
-				<div class="ui comments">
+
+				<div class="ui comments" ng-controller="commentCtrl">
 					<%--
 					<h4 class="ui dividing header">Comments</h4>
 					--%>
@@ -97,7 +97,7 @@
 								<a class="reply">Reply</a>
 							</div>
 						</div>
-						<div class="comments">
+						<div class="comments" id="ppp">
 							<div class="comment">
 								<%--
 								<a class="avatar">
@@ -142,27 +142,30 @@
 						</div>
 					</div>
 					<div class="content ui form">
-						<div class="field">
-							<label>Comment</label>
-							<textarea rows="4"></textarea>
-						</div>
-						<div class="ui scrolling dropdown">
-							<input type="hidden" name="gender">
-							<div class="default text">Select Profile</div>
-							<i class="dropdown icon"></i>
-							<div class="menu">
-								<div class="item" data-value="fb">Facebook</div>
-								<div class="item" data-value="gp">Google Plus</div>
-								<div class="item" data-value="nv">Naver</div>
-								<div class="item" data-value="ip">Your IP</div>
+						<form name="commentForm" method="post" onsubmit="return false;">
+							<input type="hidden" name="postCd" value="${post.post_cd}"/>
+							<div class="field">
+								<label>Comment</label>
+								<textarea name="comment" rows="4"></textarea>
 							</div>
-						</div>
-						<div class="mini ui blue labeled submit icon button">
-							<i class="icon edit"></i> Add Comment
-						</div>
+							<div class="ui scrolling dropdown">
+								<%--<input type="hidden" name="gender">
+								<div class="default text">Select Profile</div>
+								<i class="dropdown icon"></i>
+								<div class="menu">
+									<div class="item" data-value="fb">Facebook</div>
+									<div class="item" data-value="gp">Google Plus</div>
+									<div class="item" data-value="nv">Naver</div>
+									<div class="item" data-value="ip">Your IP</div>
+								</div>--%>
+							</div>
+							<div class="mini ui blue labeled submit icon button" ng-click="setComment()">
+								<i class="icon edit"></i> Add Comment
+							</div>
+						</form>
 					</div>
 				</div>
-				-->
+
 			</div>
 		</div>
 	</div>
@@ -207,6 +210,43 @@
 
 			$scope.getPage(currPageNo);
 		}]);
+
+		app.controller('commentCtrl', ['$scope', '$http', ($scope, $http) => {
+			$scope.setComment = () => {
+				var data = angular.element('form[name=commentForm]').serialize();
+				console.log('data', data);
+				$http.post('/test1',data, {headers: {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+				}}).then((result) => {
+
+				});
+			}
+		}]);
+/*
+		var $commentDiv = $('<div>').addClass('comment');
+		var $contentDiv = $('<div>').addClass('content').addClass('ui').addClass('form');
+
+		var $fieldDiv = $('<div>').addClass('field');
+		var $label = $('<label>').text('Reply to Jenny Hess');
+		var $textarea = $('<textarea>').attr('rows', 2);
+		$fieldDiv.append($label, $textarea);
+
+		var $userDiv = $('<div>').addClass('ui').addClass('scrolling').addClass('dropdown');
+		var $input = $('<input>').attr('type', 'hidden').attr('name', 'gender');
+		var $defaultText = $('<div>').addClass('default').addClass('text').text('Select Profile');
+		var $i = $('<i>').addClass('dropdown').addClass('icon');
+		var $selectDiv = $('<div>').addClass('menu');
+		var $menu1 = $('<div>').addClass('item').attr('data-value', 'fb').text('Facebook');
+		$userDiv.append($input, $defaultText, $i, $selectDiv.append($menu1));
+
+		var $miniDiv = $('<div>').addClass('mini').addClass('ui').addClass('blue').addClass('labeled').addClass('submit').addClass('icon').addClass('button');
+		var $edit = $('<i>').addClass('icon').addClass('edit');
+		$miniDiv.append($edit, ' Add Reply');
+
+		$contentDiv.append($fieldDiv, $userDiv, $miniDiv);
+
+		$commentDiv.append($contentDiv).appendTo('#ppp');
+		$('.ui.dropdown').dropdown();*/
 	</script>
 	</content>
 </body>

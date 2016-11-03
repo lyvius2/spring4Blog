@@ -4,6 +4,7 @@ import com.walter.config.CustomStringUtils;
 import com.walter.dao.ApiDao;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
+import com.walter.repository.CommentRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class PostServiceImpl implements PostService {
 	private ApiDao apiDao;
 
 	@Autowired
-	private MongoOperations mongoOps;
+	private CommentRepository repository;
 
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
@@ -90,40 +92,29 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public void setComment(CommentVO commentVO) {
-		/*
-		if(postComment != null) {
-			commentVO.setSeq(postComment.getComments().size());
-			postComment = mongoOps.findAndModify(query(where("parentPostCd").is(parentPostId)),
-					new Update().push("comments", commentVO),
-					new FindAndModifyOptions().returnNew(true),
-					PostCommentVO.class);
-		} else {
-			commentVO.setSeq(0);
-			System.out.println("fuck");
-			postComment = new PostCommentVO(parentPostId, commentVO);
-			mongoOps.insert(postComment);
-		}
-		return postComment;
-		*/
-		mongoOps.insert(commentVO);
+		repository.insert(commentVO);
 	}
 
 	@Override
 	public CommentVO setReply(String _id, CommentVO commentVO) {
-		CommentVO comment = mongoOps.findAndModify(query(where("_id").is(new ObjectId(_id))),
+		/*commentVO = mongoOps.findAndModify(query(where("_id").is(new ObjectId(_id))),
 				new Update().push("replys", commentVO),
 				new FindAndModifyOptions().returnNew(true),
-				CommentVO.class);
-		return comment;
+				CommentVO.class);*/
+		/*System.out.println("_id : " + _id);
+		CommentVO comment = repository.findOne(_id);
+		comment.addReplys(commentVO);
+		repository.save(comment);*/
+		return commentVO;
 	}
 
 	@Override
 	public CommentVO getCommentById(String _id) {
-		return mongoOps.findById(_id, CommentVO.class);
+		return repository.findOne(_id);
 	}
 
 	@Override
-	public List<CommentVO> getComments(int parentPostId) {
-		return mongoOps.find(query(where("parentPostCd").is(parentPostId)), CommentVO.class);
+	public List<CommentVO> getComments(int parentPostCd) {
+		return repository.findByPostCd(parentPostCd);
 	}
 }

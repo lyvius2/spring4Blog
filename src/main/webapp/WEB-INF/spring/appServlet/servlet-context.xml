@@ -41,32 +41,12 @@
 		<beans:property name="order" value="1" />
 	</beans:bean>
 
-	<mongo:mongo id="mongo" host="localhost" port="27017">
-		<mongo:options connections-per-host="8"
-					   threads-allowed-to-block-for-connection-multiplier="4"
-					   connect-timeout="1000"
-					   max-wait-time="1500"
-					   auto-connect-retry="true"
-					   socket-keep-alive="true"
-					   socket-timeout="1500"
-					   slave-ok="true"
-					   write-number="1"
-					   write-timeout="0"
-					   write-fsync="true"/>
-	</mongo:mongo>
-	<mongo:db-factory dbname="blog" username="blogger" password="blogger1" mongo-ref="mongo"/>
-
-	<beans:bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<beans:constructor-arg ref="mongo"/>
-		<beans:constructor-arg name="databaseName" value="blog"/>
-	</beans:bean>
-
 	<beans:bean id="gson" class="com.google.gson.Gson" />
 
 	<beans:bean id="googleDriveUploaderProgress" class="com.walter.config.drive.GoogleDriveUploaderProgress">
 		<beans:property name="uploadFolderName" value="blog images"/>
 	</beans:bean>
 
-	<context:component-scan base-package="com.walter" />
+	<context:component-scan base-package="com.walter.config, com.walter.controller, com.walter.service" />
 	
 </beans:beans>

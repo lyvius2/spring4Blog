@@ -108,7 +108,7 @@ public class PostController extends BaseController {
 		response.setContentType(hashMap.get("mimeType").toString());
 		response.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
 	}
-
+	/*
 	@RequestMapping(value = "/comment/{post_cd}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String registerComment(@PathVariable int post_cd, HttpServletRequest request) {
@@ -124,7 +124,7 @@ public class PostController extends BaseController {
 		return gson.toJson(commentVO);
 	}
 
-	@RequestMapping(value = "/comment/{_id}", method = RequestMethod.PUT, produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/reply/{_id}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String registerReply(@PathVariable String _id, @ModelAttribute("commentVO")CommentVO comment) {
 		MemberVO memberVO = super.getLoginUser();
@@ -135,5 +135,5 @@ public class PostController extends BaseController {
 				new Date(),
 				comment.getComment());
 		return gson.toJson(service.setReply(_id, commentVO));
-	}
+	}*/
 }

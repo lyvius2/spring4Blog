@@ -9,6 +9,7 @@
 		<param-value>
 			/WEB-INF/spring/root-context.xml
 			/WEB-INF/spring/mybatis-context.xml
+			/WEB-INF/spring/mongo-context.xml
 			/WEB-INF/spring/security-context.xml
 		</param-value>
 	</context-param>
