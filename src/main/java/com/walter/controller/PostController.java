@@ -2,10 +2,7 @@ package com.walter.controller;
 
 import com.google.api.services.drive.model.File;
 import com.walter.config.CustomStringUtils;
-import com.walter.model.CommentVO;
-import com.walter.model.MemberVO;
-import com.walter.model.PostSearchVO;
-import com.walter.model.PostVO;
+import com.walter.model.*;
 import com.walter.service.GoogleDriveService;
 import com.walter.service.PostService;
 import org.apache.commons.io.IOUtils;
@@ -108,6 +105,46 @@ public class PostController extends BaseController {
 		response.setContentType(hashMap.get("mimeType").toString());
 		response.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
 	}
+
+	@RequestMapping(value = "/comment", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String getCommentList(HttpServletRequest request) {
+		int postCd = CustomStringUtils.setDefaultNumber(request.getParameter("postCd"), -1);
+		return gson.toJson(service.getComments(postCd));
+	}
+
+	@RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String registerComment(@ModelAttribute("commentVO")CommentVO commentVO, HttpServletRequest request) {
+		HashMap<String, Object> hashMap = new HashMap<>();
+		if(CustomStringUtils.isNotEmpty(commentVO.getComment())) {
+			commentVO.setUserData(super.getLoginUser());
+			commentVO.setIp(request.getRemoteAddr());
+			service.setComment(commentVO);
+			hashMap.put("status", true);
+			hashMap.put("comment", commentVO);
+		} else {
+			hashMap.put("status", false);
+		}
+		return gson.toJson(hashMap);
+	}
+
+	@RequestMapping(value = "/reply", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String registerReply(@ModelAttribute("replyVo")ReplyVO replyVO, HttpServletRequest request) {
+		HashMap<String, Object> hashMap = new HashMap<>();
+		if(CustomStringUtils.isNotEmpty(replyVO.getComment())) {
+			replyVO.setUserData(super.getLoginUser());
+			replyVO.setIp(request.getRemoteAddr());
+
+			hashMap.put("status", true);
+			hashMap.put("reply", replyVO);
+		} else {
+			hashMap.put("status", false);
+		}
+		return gson.toJson(hashMap);
+	}
+
 	/*
 	@RequestMapping(value = "/comment/{post_cd}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody

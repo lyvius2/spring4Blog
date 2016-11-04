@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+	<mongo:mongo id="mongo" host="localhost" port="27017">
+		<mongo:options connections-per-host="8"
+					   threads-allowed-to-block-for-connection-multiplier="4"
+					   connect-timeout="1000"
+					   max-wait-time="1500"
+					   auto-connect-retry="true"
+					   socket-keep-alive="true"
+					   socket-timeout="1500"
+					   slave-ok="true"
+					   write-number="1"
+					   write-timeout="0"
+					   write-fsync="true"/>
+	</mongo:mongo>
+	<mongo:db-factory dbname="blog" username="blogger" password="blogger1" mongo-ref="mongo"/>
+
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="mongo"/>
+		<constructor-arg name="databaseName" value="blog"/>
+	</bean>
+
+	<mongo:repositories base-package="com.walter.repository" mongo-template-ref="mongoTemplate"/>
+</beans>

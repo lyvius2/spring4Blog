@@ -36,6 +36,9 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private CommentRepository repository;
 
+	@Autowired
+	private MongoOperations mongoOps;
+
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
 	@Override
@@ -96,7 +99,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public CommentVO setReply(String _id, CommentVO commentVO) {
+	public ReplyVO setReply(String _id, ReplyVO replyVO) {
 		/*commentVO = mongoOps.findAndModify(query(where("_id").is(new ObjectId(_id))),
 				new Update().push("replys", commentVO),
 				new FindAndModifyOptions().returnNew(true),
@@ -105,7 +108,8 @@ public class PostServiceImpl implements PostService {
 		CommentVO comment = repository.findOne(_id);
 		comment.addReplys(commentVO);
 		repository.save(comment);*/
-		return commentVO;
+
+		return replyVO;
 	}
 
 	@Override
@@ -114,7 +118,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<CommentVO> getComments(int parentPostCd) {
-		return repository.findByPostCd(parentPostCd);
+	public List<CommentVO> getComments(int postCd) {
+		return repository.findByPostCd(postCd);
 	}
 }

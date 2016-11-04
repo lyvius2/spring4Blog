@@ -1,50 +1,24 @@
 package com.walter.model;
 
 import com.walter.config.CustomStringUtils;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
- * Created by yhwang131 on 2016-11-01.
+ * Created by yhwang131 on 2016-11-03.
  */
-@Document(collection = "comment")
-public class CommentVO {
+public class ReplyVO {
 
-	@Id
-	private String _id;
-	@Indexed
-	private int postCd;
 	private String userId;
 	private String userName;
 	private String ip;
 	private String regDt;
 	private String comment;
-	private List<ReplyVO> replys = new ArrayList<>();
+	private String targetUserName;
 
-	public CommentVO() {
+	public ReplyVO() {
 		super();
 		this.regDt = CustomStringUtils.dateToString(new Date(), "yyyy-MM-dd HH:mm");
-	}
-
-	public String get_id() {
-		return _id;
-	}
-
-	public void set_id(String _id) {
-		this._id = _id;
-	}
-
-	public int getPostCd() {
-		return postCd;
-	}
-
-	public void setPostCd(int postCd) {
-		this.postCd = postCd;
 	}
 
 	public String getUserId() {
@@ -87,19 +61,12 @@ public class CommentVO {
 		this.comment = comment;
 	}
 
-	public List<ReplyVO> getReplys() {
-		return replys;
+	public String getTargetUserName() {
+		return targetUserName;
 	}
 
-	public void setReplys(List<ReplyVO> replys) {
-		this.replys = replys;
-	}
-
-	public void addReplys(ReplyVO replyVO) {
-		if(this.replys == null) {
-			this.replys = new ArrayList<>();
-		}
-		this.replys.add(replyVO);
+	public void setTargetUserName(String targetUserName) {
+		this.targetUserName = targetUserName;
 	}
 
 	public void setUserData(MemberVO memberVO) {
@@ -109,15 +76,13 @@ public class CommentVO {
 
 	@Override
 	public String toString() {
-		return "CommentVO{" +
-				"_id='" + _id + '\'' +
-				", postCd=" + postCd +
-				", userId='" + userId + '\'' +
+		return "ReplyVO{" +
+				"userId='" + userId + '\'' +
 				", userName='" + userName + '\'' +
 				", ip='" + ip + '\'' +
 				", regDt='" + regDt + '\'' +
 				", comment='" + comment + '\'' +
-				", replys=" + replys +
+				", targetUserName='" + targetUserName + '\'' +
 				'}';
 	}
 }

@@ -48,6 +48,10 @@ public class MemberVO implements UserDetails {
 	private boolean enabled;
 	private Collection<? extends GrantedAuthority> authorities;
 
+	public MemberVO() {
+		super();
+	}
+
 	public int getSeq() {
 		return seq;
 	}
