@@ -99,17 +99,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public ReplyVO setReply(String _id, ReplyVO replyVO) {
-		/*commentVO = mongoOps.findAndModify(query(where("_id").is(new ObjectId(_id))),
-				new Update().push("replys", commentVO),
-				new FindAndModifyOptions().returnNew(true),
-				CommentVO.class);*/
-		/*System.out.println("_id : " + _id);
-		CommentVO comment = repository.findOne(_id);
-		comment.addReplys(commentVO);
-		repository.save(comment);*/
-
-		return replyVO;
+	public CommentVO setReply(String _id, ReplyVO replyVO) {
+		return repository.insertReply(mongoOps, _id, replyVO);
 	}
 
 	@Override

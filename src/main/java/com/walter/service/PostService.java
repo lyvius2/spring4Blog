@@ -21,7 +21,7 @@ public interface PostService {
 	//int delPost(int post_cd);
 
 	void setComment(CommentVO commentVO);
-	ReplyVO setReply(String _id, ReplyVO replyVO);
+	CommentVO setReply(String _id, ReplyVO replyVO);
 	CommentVO getCommentById(String _id);
 	List<CommentVO> getComments(int postId);
 

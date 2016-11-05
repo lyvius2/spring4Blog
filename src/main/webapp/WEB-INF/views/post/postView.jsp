@@ -115,7 +115,7 @@
 											<div class="item" data-value="ip">Your IP</div>
 										</div>--%>
 									</div>
-									<div class="mini ui blue labeled submit icon button" ng-click="setReply(reply, item._id)">
+									<div class="mini ui blue labeled submit icon button" ng-click="setReply(item, reply)">
 										<i class="icon edit"></i> Add Reply
 									</div>
 								</div>
@@ -208,7 +208,7 @@
 			$scope.getPage(currPageNo);
 		}]);
 
-		app.controller('commentCtrl', ['$scope', '$http', ($scope, $http) => {
+		app.controller('commentCtrl', ['$scope', '$http', '$timeout', ($scope, $http, $timeout) => {
 			var createReplyModel = function(_id, targetUserName){
 				this._id = _id;
 				this.targetUserName = targetUserName;
@@ -226,7 +226,6 @@
 				$http.get('/post/comment', {params:{postCd:postCd}})
 						.then((result) => {
 							$scope.commentList = result.data;
-							console.log('$scope.commentList', $scope.commentList);
 						});
 			};
 
@@ -234,7 +233,7 @@
 				var data = angular.element('form[name=commentForm]').serialize();
 				$http.post('/post/comment', data, {headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}})
 						.then((result) => {
-							if(result.data.status) $scope.commentList.push(result.data.comment);
+							if(result.data.status) getComments();
 							else { alert('댓글 내용을 입력하세요.'); }
 							return false;
 						});
@@ -248,19 +247,19 @@
 				comment.replys.push(reply);
 			};
 
-			$scope.setReply = (reply, _id) => {
+			$scope.setReply = (_id, reply) => {
 				var data = _.clone(reply);
 				angular.extend(data, {_id:_id});
 				$http.post('/post/reply', $.param(data), {headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}})
 						.then((result) => {
-							if(result.data.status) reply = result.data.reply;
+							if(result.data.status) getComments();
 							else { alert('답글 내용을 입력하세요.'); }
 							return false;
 						});
 			};
 			getComments();
 		}]);
-/*
+<%--
 		var $commentDiv = $('<div>').addClass('comment');
 		var $contentDiv = $('<div>').addClass('content').addClass('ui').addClass('form');
 
@@ -284,9 +283,7 @@
 		$contentDiv.append($fieldDiv, $userDiv, $miniDiv);
 
 		$commentDiv.append($contentDiv).appendTo('#ppp');
-		$('.ui.dropdown').dropdown();*/
-
-		//1366
+		$('.ui.dropdown').dropdown(); --%>
 
 	</script>
 	</content>

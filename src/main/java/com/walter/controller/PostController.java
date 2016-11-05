@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -122,7 +121,6 @@ public class PostController extends BaseController {
 			commentVO.setIp(request.getRemoteAddr());
 			service.setComment(commentVO);
 			hashMap.put("status", true);
-			hashMap.put("comment", commentVO);
 		} else {
 			hashMap.put("status", false);
 		}
@@ -136,41 +134,11 @@ public class PostController extends BaseController {
 		if(CustomStringUtils.isNotEmpty(replyVO.getComment())) {
 			replyVO.setUserData(super.getLoginUser());
 			replyVO.setIp(request.getRemoteAddr());
-
+			service.setReply(request.getParameter("_id"), replyVO);
 			hashMap.put("status", true);
-			hashMap.put("reply", replyVO);
 		} else {
 			hashMap.put("status", false);
 		}
 		return gson.toJson(hashMap);
 	}
-
-	/*
-	@RequestMapping(value = "/comment/{post_cd}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String registerComment(@PathVariable int post_cd, HttpServletRequest request) {
-		MemberVO memberVO = super.getLoginUser();
-		CommentVO commentVO = new CommentVO(
-				post_cd,
-				"yhwang131",
-				"테스트맨",
-				request.getRemoteAddr(),
-				new Date(),
-				request.getParameter("comment"));
-		service.setComment(commentVO);
-		return gson.toJson(commentVO);
-	}
-
-	@RequestMapping(value = "/reply/{_id}", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String registerReply(@PathVariable String _id, @ModelAttribute("commentVO")CommentVO comment) {
-		MemberVO memberVO = super.getLoginUser();
-		CommentVO commentVO = new CommentVO(
-				"yhwang131",
-				"답글맨",
-				"110.45.164.70",
-				new Date(),
-				comment.getComment());
-		return gson.toJson(service.setReply(_id, commentVO));
-	}*/
 }
