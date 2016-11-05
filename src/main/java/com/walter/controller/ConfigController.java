@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by yhwang131 on 2016-09-13.
@@ -37,7 +34,8 @@ public class ConfigController extends BaseController {
 			if(categoryVO.getCategory_cd() == 0){
 				if(categoryVO.getParent_category_cd() == 0){
 					categoryVO.setDepth(1);
-					categoryVO.setCategory_cd(categoryDao.getNewCategoryCd(1));
+					Integer initCd = categoryDao.getNewCategoryCd(1);
+					categoryVO.setCategory_cd(initCd!=null?initCd:100);
 				} else {
 					categoryVO.setDepth(2);
 					categoryVO.setCategory_cd(categoryDao.getNewCategoryCd(2));
