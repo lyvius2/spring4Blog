@@ -115,7 +115,7 @@
 											<div class="item" data-value="ip">Your IP</div>
 										</div>--%>
 									</div>
-									<div class="mini ui blue labeled submit icon button" ng-click="setReply(item, reply)">
+									<div class="mini ui blue labeled submit icon button" ng-click="setReply(item._id, reply)">
 										<i class="icon edit"></i> Add Reply
 									</div>
 								</div>
@@ -131,7 +131,10 @@
 									<div class="metadata">
 										<span class="date" ng-bind="reply.regDt"></span>
 									</div>
-									<div class="text" ng-bind="reply.comment"></div>
+									<div class="text">
+										<div class="ui horizontal label" ng-bind="'to : '+reply.targetUserName"></div>
+										<span ng-bind="reply.comment"></span>
+									</div>
 									<div class="actions" ng-click="openReplyForm(item, reply.userName)">
 										<a class="reply">Reply</a>
 									</div>
@@ -218,6 +221,7 @@
 			var replyFormDetect = (prevObject, currObject) => {
 				var nextArray;
 				if(!currObject.writer) nextArray = prevObject.concat(currObject);
+				else { nextArray = prevObject; }
 				return nextArray;
 			};
 
@@ -233,8 +237,10 @@
 				var data = angular.element('form[name=commentForm]').serialize();
 				$http.post('/post/comment', data, {headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}})
 						.then((result) => {
-							if(result.data.status) getComments();
-							else { alert('댓글 내용을 입력하세요.'); }
+							if(result.data.status) {
+								document.forms.commentForm.comment.value = '';
+								getComments();
+							} else { alert('댓글 내용을 입력하세요.'); }
 							return false;
 						});
 			};
@@ -257,6 +263,7 @@
 							return false;
 						});
 			};
+
 			getComments();
 		}]);
 <%--
