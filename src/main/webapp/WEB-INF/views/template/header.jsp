@@ -1,30 +1,61 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %><%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><div class="ui fixed inverted menu">
-	<div class="ui container">
-		<a href="#" class="header item">
-			<img class="logo" src="${pageContext.request.contextPath}/resources/images/logo.png">
-			Project Name
-		</a>
-		<a href="#" class="item">Home</a>
-		<div class="ui simple dropdown item">
-			Dropdown <i class="dropdown icon"></i>
-			<div class="menu">
-				<a class="item" href="#">Link Item</a>
-				<a class="item" href="#">Link Item</a>
-				<div class="divider"></div>
-				<div class="header">Header Item</div>
-				<div class="item">
-					<i class="dropdown icon"></i>
-					Sub Menu
-					<div class="menu">
-						<a class="item" href="#">Link Item</a>
-						<a class="item" href="#">Link Item</a>
-					</div>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %><%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><header class="header">
+	<div role="navigation" class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header"><a href="index.html" class="navbar-brand">Multi.</a>
+				<div class="navbar-buttons">
+					<button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle navbar-btn">Menu<i class="fa fa-align-justify"></i></button>
 				</div>
-				<a class="item" href="#">Link Item</a>
+			</div>
+			<div id="navigation" class="collapse navbar-collapse navbar-right">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="index.html">Home</a></li>
+					<li><a href="text.html">Text page</a></li>
+					<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Dropdown <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Dropdown item 1</a></li>
+							<li><a href="#">Dropdown item 2</a></li>
+							<li><a href="#">Dropdown item 3</a></li>
+							<li><a href="#">Dropdown item 4</a></li>
+						</ul>
+					</li>
+					<li><a href="contact.html">Contact</a></li>
+				</ul><a href="#" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost"><i class="fa fa-sign-in"></i>Log in</a>
 			</div>
 		</div>
-		<security:authorize access="isAuthenticated()">
-			<div class="item right floated"><c:out value="${pageContext.request.remoteUser}"/>(<c:out value="${sessionScope.userInfo.kr_name}"/>) 님 안녕하세요.</div>
-		</security:authorize>
+	</div>
+</header>
+
+<%--
+<security:authorize access="isAuthenticated()">
+	<div class="item right floated"><c:out value="${pageContext.request.remoteUser}"/>(<c:out value="${sessionScope.userInfo.kr_name}"/>) 님 안녕하세요.</div>
+</security:authorize>
+--%>
+
+<!-- *** LOGIN MODAL ***_________________________________________________________
+-->
+<div id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true" class="modal fade">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+				<h4 id="Login" class="modal-title">Customer login</h4>
+			</div>
+			<div class="modal-body">
+				<form action="customer-orders.html" method="post">
+					<div class="form-group">
+						<input id="email_modal" type="text" placeholder="email" class="form-control">
+					</div>
+					<div class="form-group">
+						<input id="password_modal" type="password" placeholder="password" class="form-control">
+					</div>
+					<p class="text-center">
+						<button type="button" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
+					</p>
+				</form>
+				<p class="text-center text-muted">Not registered yet?</p>
+				<p class="text-center text-muted"><a href="#"><strong>Register now</strong></a>! It is easy and done in 1 minute and gives you access to special discounts and much more!</p>
+			</div>
+		</div>
 	</div>
 </div>
+<!-- *** LOGIN MODAL END ***-->

@@ -8,37 +8,41 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><decorator:title default="Layout Page" /></title>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/semantic/dist/semantic.min.css" />
-	<style type="text/css">
-		.ui.menu .item img.logo {
-			margin-right: 1.5em;
-		}
-		.main.container {
-			margin-top: 7em;
-		}
-		.wireframe {
-			margin-top: 2em;
-		}
-		.ui.footer.segment {
-			margin: 5em 0em 0em;
-			padding: 5em 0em;
-		}
-		.georgia {
-			font-family: Georgia, sans-serif;
-			font-size: 1em;
-		}
-	</style>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="all,follow">
+	<!-- Bootstrap CSS-->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+	<!-- Font Awesome and Pixeden Icon Stroke icon fonts-->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pe-icon-7-stroke.css">
+	<!-- Google fonts - Roboto-->
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<!-- lightbox-->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/lightbox.min.css">
+	<!-- theme stylesheet-->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.default.css" id="theme-stylesheet">
+	<!-- Flags -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flag.css">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/favicon.png">
+	<!-- Tweaks for older IEs--><!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 	<decorator:head />
 </head>
 <body ng-app="<decorator:getProperty property="body.ng-app" />">
+	<!-- navbar-->
 	<jsp:include page="header.jsp"/>
-	<div class="ui main container">
-		<decorator:body />
-	</div>
+	<decorator:body />
 	<jsp:include page="footer.jsp"/>
-	<script src="${pageContext.request.contextPath}/resources/scripts/vendor.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/semantic/dist/semantic.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/jquery-3.2.1.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/jquery.cookie.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/lightbox.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/front.js"></script>
 <decorator:getProperty property="page.script" />
 </body>
 </html>

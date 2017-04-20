@@ -9,3 +9,8 @@
 /src/main/webapp/resources/index.html
 /src/main/webapp/resources/semantic.json
 /src/main/webapp/resources/ckeditor/samples/
+.externalToolBuilders/
+sonar-project.properties
+src/main/webapp/resources/images/faroeIslands.jpg
+src/main/webapp/resources/sortable.html
+walters.iml
