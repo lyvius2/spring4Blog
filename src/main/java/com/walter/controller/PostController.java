@@ -62,6 +62,11 @@ public class PostController extends BaseController {
 		return "post/postView";
 	}
 
+	@RequestMapping(value = "/test")
+	public String tempPostView(Model model) {
+		return "post/tempPostView";
+	}
+
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String postList(@ModelAttribute("postSearchVO")PostSearchVO postSearchVO) {
