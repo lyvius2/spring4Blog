@@ -59,12 +59,13 @@ public class PostController extends BaseController {
 		model.addAttribute("currPageNo", currPageNo);
 		model.addAttribute("category_cd", category_cd);
 		model.addAttribute("post", service.getPost(post_cd));
-		return "post/postView";
+		//return "post/postView";
+		return "post/tempPostView";
 	}
 
 	@RequestMapping(value = "/test")
 	public String tempPostView(Model model) {
-		return "post/tempPostView";
+		return "post/tempPostForm";
 	}
 
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
