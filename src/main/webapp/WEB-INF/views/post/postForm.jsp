@@ -14,17 +14,24 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>포스트 작성</title>
+	<title>포스트 쓰기</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+	<link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
 	<style>
 		section {
 			padding-top: 40px;
 			padding-bottom: 40px;
 		}
+		.toggle.btn {
+			min-width: 100%;
+		}
+		#travel-mode {
+			display: none;
+		}
 	</style>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
 </head>
 <body>
-<form:form cssClass="form-horizontal" action="/post/register" method="post" commandName="postVO" autocomplete="off">
+<form:form cssClass="form-horizontal" action="/post/register" method="post" commandName="postVO" autocomplete="off" enctype="multipart/form-data">
 	<section class="background-gray-lightest">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -46,6 +53,11 @@
 					<form:errors path="title" cssClass="alert alert-danger" role="alert"></form:errors>
 				</div>
 				<div class="col-md-2">
+					<input id="travel-mode-select" type="checkbox" data-toggle="toggle" data-on="Travel On" data-off="Travel Off" />
+				</div>
+			</div>
+			<div class="form-group" id="travel-mode">
+				<div class="col-md-4">
 					<form:select path="trip_country" cssClass="form-control selectpicker">
 						<option data-content="여행국가 <span class='caret'></span>" value=""></option>
 						<c:forEach var="item" items="${countryList}">
@@ -53,13 +65,16 @@
 						</c:forEach>
 					</form:select>
 				</div>
+				<div class="col-md-8">
+					<form:input type="file" cssClass="filestyle" data-buttonText="대표 이미지" data-buttonName="btn-primary" path="delegate_img_file" id="delegate_img_file"/>
+				</div>
 			</div>
 		</div>
 	</section>
 	<section class="blog-post">
 		<div class="container">
 			<div class="post-content">
-				<form:textarea path="content" rows="100"></form:textarea>
+				<form:textarea path="content" />
 			</div>
 			<div class="form-group">
 				<div class="col-md-2">
@@ -92,6 +107,8 @@
 </form:form>
 <content tag="script">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap-filestyle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/ckeditor/ckeditor.js"></script>
 	<script>
 		CKEDITOR.replace('content', {
@@ -106,11 +123,21 @@
 			image2_alignClasses: [ 'image-align-left', 'image-align-center', 'image-align-right' ],
 			image2_disableResizer: true,
 			height: 500
-		});
+		})
 
 		$('form').on('submit', function () {
-			document.getElementById('content').value = CKEDITOR.instances.content.getData();
-		});
+			document.getElementById('content').value = CKEDITOR.instances.content.getData()
+		})
+
+		$('#travel-mode-select').change(function () {
+			if ($(this).prop('checked')) $('#travel-mode').slideDown()
+			else {
+				$('#travel-mode').slideUp()
+				$('button > span.filter-option.pull-left').html('여행국가')
+				document.getElementById('trip_country').value = ''
+				document.getElementById('delegate_img_file').value = ''
+			}
+		})
 	</script>
 </content>
 </body>

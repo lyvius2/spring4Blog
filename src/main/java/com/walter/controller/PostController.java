@@ -41,9 +41,13 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerPost(@ModelAttribute("postVO") @Valid PostVO postVO, Errors errors) {
-		if(errors.hasErrors()) {
+	public String registerPost(@ModelAttribute("postVO") @Valid PostVO postVO, Errors errors) throws IOException {
+		if (errors.hasErrors()) {
 			return "post/postForm";
+		}
+		if (postVO.getDelegate_img_file() != null) {
+			File uploadFile = googleDriveImageService.createFile(postVO.getDelegate_img_file());
+			postVO.setDelegate_img(uploadFile.getId());
 		}
 		postVO.setReg_id(super.getLoginUser()!=null?super.getLoginUser().getUsername():"anonymous");
 		service.setPost(postVO);
@@ -61,11 +65,6 @@ public class PostController extends BaseController {
 		model.addAttribute("post", service.getPost(post_cd));
 		//return "post/postView";
 		return "post/tempPostView";
-	}
-
-	@RequestMapping(value = "/test")
-	public String tempPostView(Model model) {
-		return "post/tempPostForm";
 	}
 
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")

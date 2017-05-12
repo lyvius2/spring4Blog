@@ -1,5 +1,7 @@
 package com.walter.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -27,6 +29,7 @@ public class PostVO {
 	private String df_mod_dt;
 	private String mod_id;
 	private String delegate_img;
+	private MultipartFile delegate_img_file;
 	private String trip_country;
 
 	public PostVO() {
@@ -141,6 +144,14 @@ public class PostVO {
 
 	public void setMod_id(String mod_id) {
 		this.mod_id = mod_id;
+	}
+
+	public MultipartFile getDelegate_img_file() {
+		return delegate_img_file;
+	}
+
+	public void setDelegate_img_file(MultipartFile delegate_img_file) {
+		this.delegate_img_file = delegate_img_file;
 	}
 
 	public String getDelegate_img() {
