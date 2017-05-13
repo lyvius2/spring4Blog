@@ -1,10 +1,17 @@
 package com.walter.controller;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
+import com.drew.metadata.exif.*;
 import com.google.api.services.drive.model.File;
 import com.walter.config.CustomStringUtils;
 import com.walter.model.*;
 import com.walter.service.GoogleDriveService;
 import com.walter.service.PostService;
+import com.walter.util.MediaImageMetadata;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,14 +62,20 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/{post_cd}")
-	public String postView(@PathVariable int post_cd, Model model, HttpServletRequest request) {
+	public String postView(@PathVariable int post_cd, Model model, HttpServletRequest request)
+			throws IOException, ImageProcessingException {
 		int currPageNo
 				= CustomStringUtils.setDefaultNumber(request.getParameter("currPageNo"), 1);
 		int category_cd
 				= CustomStringUtils.setDefaultNumber(request.getParameter("category_cd"), 0);
+		PostVO postVO = service.getPost(post_cd);
 		model.addAttribute("currPageNo", currPageNo);
 		model.addAttribute("category_cd", category_cd);
-		model.addAttribute("post", service.getPost(post_cd));
+		model.addAttribute("post", postVO);
+		if (postVO.getDelegate_img() != null && !postVO.getDelegate_img().isEmpty()) {
+			HashMap<String, Object> hashMap = googleDriveImageService.openFile(postVO.getDelegate_img());
+			model.addAttribute("image_spec", MediaImageMetadata.getImageSpecString((InputStream)hashMap.get("data")));
+		}
 		//return "post/postView";
 		return "post/tempPostView";
 	}

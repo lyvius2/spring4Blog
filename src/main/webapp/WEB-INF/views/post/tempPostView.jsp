@@ -28,9 +28,11 @@
 			<p class="lead">This is the lead paragraph of the article. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget.</p>
 		</div>
 	</section>
-	<figure class="full-image"><img src="img/jumbotron1.jpg" alt="">
-		<figcaption>Caption of the Image </figcaption>
+	<c:if test="${post.delegate_img != ''}">
+	<figure class="full-image"><img src="/post/images/${post.delegate_img}" alt="">
+		<figcaption><c:out value="${image_spec}"/></figcaption>
 	</figure>
+	</c:if>
 	<section class="blog-post">
 		<div class="container">
 			<div class="row">
