@@ -14,7 +14,7 @@
 </head>
 <body>
 	<h3>Hello, <span>${facebookProfile.name}</span>!</h3>
-	<h4>Here is your feed:</h4>
+	<h4>Here is your feed: ${facebookProfile.link}</h4>
 	<c:forEach var="post" items="${feed}">
 	<div>
 		<b>${post.from.name} from</b> wrote:
