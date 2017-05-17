@@ -60,11 +60,12 @@
 		<beans:constructor-arg ref="connectionFactoryLocator" />
 	</beans:bean>
 
+	<!--
 	<beans:bean id="connectController" class="org.springframework.social.connect.web.ConnectController">
 		<beans:constructor-arg ref="connectionFactoryLocator" />
 		<beans:constructor-arg ref="inMemoryConnectionRepository" />
 	</beans:bean>
-
+-->
 	<context:property-placeholder location="classpath:/application.properties" />
 
 	<context:component-scan base-package="com.walter.config,
