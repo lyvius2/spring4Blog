@@ -1,5 +1,6 @@
 package com.walter.config;
 
+import com.google.gson.JsonObject;
 import com.walter.model.MemberVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 
 /**
@@ -31,11 +33,21 @@ public class SignInSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+		/*
 		MemberVO memberVO = (MemberVO)authentication.getPrincipal();
 		logger.info(new Date() + " - " + memberVO.getUsername() + " 사용자 로그인");
 		request.getSession().setAttribute("userInfo", memberVO);
 		redirectStrategy.sendRedirect(request, response, connectionRouteDecision(request, response));
 		//response.sendRedirect(request.getContextPath() + connectionRouteDecision(request, response));
+		*/
+
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("authenticated", true);
+
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println(jsonObject.toString());
 	}
 
 	/**

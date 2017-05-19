@@ -64,7 +64,7 @@ public class PostServiceImpl implements PostService {
 	public PostVO getPost(int post_cd) {
 		PostVO postVO = dao.getPost(post_cd);
 		postVO.setDf_reg_dt(CustomStringUtils.dateToString(postVO.getReg_dt(), DATE_FORMAT));
-		if(postVO.getMod_dt() != null) {
+		if (postVO.getMod_dt() != null) {
 			postVO.setDf_mod_dt(CustomStringUtils.dateToString(postVO.getMod_dt(), DATE_FORMAT));
 		}
 		return postVO;

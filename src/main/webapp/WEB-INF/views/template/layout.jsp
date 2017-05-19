@@ -28,6 +28,22 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flag.css">
 	<!-- Favicon-->
 	<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/favicon.png">
+	<style>
+		.btn-primary-invert {
+			color: #ffffff;
+			background-color: #2b90d9;
+			border-color: #1e6fa9;
+		}
+		.btn-primary-invert:hover,
+		.btn-primary-invert:focus,
+		.btn-primary-invert:active,
+		.btn-primary-invert.active,
+		.open .dropdown-toggle.btn-primary-invert {
+			color: #2b90d9;
+			background-color: #ebebeb;
+			border-color: #2b90d9;
+		}
+	</style>
 	<!-- Tweaks for older IEs--><!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -43,6 +59,16 @@
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery.cookie.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/lightbox.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/front.js"></script>
+	<script>
+		$('form#sign-in-form').on('submit', function (e) {
+			e.preventDefault()
+			$.post('/signIn', $('#sign-in-form').serialize())
+				.then(function (data) {
+					if (data['authenticated']) window.location.reload()
+					else $('#sign-in-div p.text-danger').text(data['errorMsg'])
+				})
+		})
+	</script>
 <decorator:getProperty property="page.script" />
 </body>
 </html>

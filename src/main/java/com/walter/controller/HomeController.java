@@ -32,11 +32,6 @@ public class HomeController extends BaseController {
 		return "index";
 	}
 
-	@RequestMapping("/login")
-	public String login() {
-		return "login";
-	}
-
 	@RequestMapping("/exclude/403")
 	public String noAuthority(Model model) throws NullPointerException {
 		MemberVO memberVO = super.getLoginUser();

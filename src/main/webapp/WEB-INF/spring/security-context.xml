@@ -12,7 +12,7 @@
 		<intercept-url pattern="/login" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
 		<intercept-url pattern="/member/list" access="hasRole('ROLE_ADMIN')"/>
 		<intercept-url pattern="/member/register" access="hasRole('ROLE_ANONYMOUS')"/>
-		<form-login login-page="/login"
+		<form-login login-page="/"
 					login-processing-url="/signIn"
 					username-parameter="username"
 					password-parameter="password"
@@ -45,7 +45,7 @@
 	<beans:bean id="signInFailureHandler" class="com.walter.config.SignInFailureHandler">
 		<beans:property name="id" value="username"/>
 		<beans:property name="pw" value="password"/>
-		<beans:property name="defaultFailureUrl" value="/login"/>
+		<beans:property name="defaultFailureUrl" value="/"/>
 		<beans:property name="errorMsg" value="errorMsg"/>
 	</beans:bean>
 
