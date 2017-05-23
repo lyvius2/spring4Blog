@@ -2,6 +2,7 @@ package com.walter.controller;
 
 import com.walter.dao.CategoryDao;
 import com.walter.model.CategoryVO;
+import com.walter.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,10 @@ public class ConfigController extends BaseController {
 
 	@Autowired
 	private CategoryDao categoryDao;
+
+	@Autowired
+	private ConfigService configService;
+
 	private String result = new String();
 
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
@@ -29,6 +34,7 @@ public class ConfigController extends BaseController {
 
 	@RequestMapping(value = "/config")
 	public String configView(Model model) {
+		model.addAttribute("category", configService.getCategoryList());
 		return "config/config";
 	}
 
