@@ -1,4 +1,4 @@
-package com.walter.config;
+package com.walter.config.authentication;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class SignInAuthenticationProvider implements AuthenticationProvider {
 	private UserDetailsService userDetailsService;
 
 	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException, NullPointerException {
 		UserDetails userDetails;
 
 		try {
@@ -46,9 +46,9 @@ public class SignInAuthenticationProvider implements AuthenticationProvider {
 		} catch (BadCredentialsException e) {
 			logger.error(e.toString());
 			throw new BadCredentialsException(e.getMessage());
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
 			logger.error(e.toString());
-			throw new RuntimeException(e.getMessage());
+			throw new NullPointerException(e.getMessage());
 		}
 
 		return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());

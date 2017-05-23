@@ -20,54 +20,34 @@
 		<div class="container clearfix">
 			<div class="row services">
 				<div class="col-md-12">
-					<h2 class="h1 heading">Blog Category</h2>
+					<h3 class="h3 heading">Blog Category</h3>
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-md-6 col-sm-8">
+							<table class="table">
+								<thead>
+								<th>#</th>
+								<th>카테고리명</th>
+								<th>공개설정</th>
+								</thead>
+								<tbody>
+								<c:forEach var="category" items="${categories}" varStatus="status">
+									<tr>
+										<td>${status.index}</td>
+										<td><c:out value="${category.category_name}"/></td>
+										<td><input type="checkbox" value="${category.use_yn}"/></td>
+									</tr>
+								</c:forEach>
+								</tbody>
+							</table>
 							<div class="box box-services">
-								<div class="icon"><i class="pe-7s-alarm"></i></div>
-								<h4 class="heading">Webdesign</h4>
-								<p>Fifth abundantly made Give sixth hath. Cattle creature i be don't them.</p>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="box box-services">
-								<div class="icon"><i class="pe-7s-cloud"></i></div>
-								<h4 class="heading">Print</h4>
-								<p>Advantage old had otherwise sincerity dependent additions. It in adapted natural.</p>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="box box-services">
-								<div class="icon"><i class="pe-7s-coffee"></i></div>
-								<h4 class="heading">SEO and SEM</h4>
-								<p>Am terminated it excellence invitation projection as. She graceful shy. </p>
 							</div>
 						</div>
 					</div>
-					<h2 class="h1 heading">Code</h2>
+					<%--
+					<h3 class="h3 heading">Code</h3>
 					<div class="row">
-						<div class="col-sm-4">
-							<div class="box box-services">
-								<div class="icon"><i class="pe-7s-monitor"></i></div>
-								<h4 class="heading">Consulting</h4>
-								<p>Fifth abundantly made Give sixth hath. Cattle creature i be don't them.</p>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="box box-services">
-								<div class="icon"><i class="pe-7s-signal"></i></div>
-								<h4 class="heading">Email Marketing</h4>
-								<p>Advantage old had otherwise sincerity dependent additions. It in adapted natural.</p>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="box box-services">
-								<div class="icon"><i class="pe-7s-id"></i></div>
-								<h4 class="heading">UX &amp; UI</h4>
-								<p>Am terminated it excellence invitation projection as. She graceful shy. </p>
-							</div>
-						</div>
 					</div>
+					--%>
 				</div>
 			</div>
 		</div>

@@ -1,4 +1,4 @@
-package com.walter.config;
+package com.walter.config.authentication;
 
 import com.walter.dao.MemberDao;
 import com.walter.model.MemberVO;
@@ -15,9 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.social.facebook.api.User;
-import org.springframework.web.context.request.SessionScope;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,9 +71,12 @@ public class SignInUserDetailsService implements UserDetailsService {
 		memberVO.setAuthorities(memberDao.getRoleList(username));
 		memberVO.setAccountNonExpired(true);
 		memberVO.setAccountNonLocked(true);
-		memberVO.setCredentialsNonExpired(memberVO.getPw_expire_dt().compareTo(new Date())>=0 ? true : false);
-		memberVO.setEnabled("Y".equals(memberVO.getUse_yn()) ? true : false);
-
+		memberVO.setCredentialsNonExpired(
+				memberVO.getPw_expire_dt() != null && memberVO.getPw_expire_dt().compareTo(new Date()) >= 0 ? true : false
+		);
+		memberVO.setEnabled(
+				memberVO.getUse_yn() != null && "Y".equals(memberVO.getUse_yn()) ? true : false
+		);
 		return memberVO;
 	}
 

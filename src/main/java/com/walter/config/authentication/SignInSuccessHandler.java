@@ -1,7 +1,6 @@
-package com.walter.config;
+package com.walter.config.authentication;
 
 import com.google.gson.JsonObject;
-import com.walter.model.MemberVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 
 /**
  * Created by yhwang131 on 2016-08-29.

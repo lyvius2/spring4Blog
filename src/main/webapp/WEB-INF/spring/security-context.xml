@@ -36,13 +36,13 @@
 		<beans:constructor-arg name="strength" value="512"/>
 	</beans:bean>
 
-	<beans:bean id="signInAuthenticationProvider" class="com.walter.config.SignInAuthenticationProvider"/>
-	<beans:bean id="signInUserDetailsService" class="com.walter.config.SignInUserDetailsService"/>
-	<beans:bean id="signInSuccessHandler" class="com.walter.config.SignInSuccessHandler">
+	<beans:bean id="signInAuthenticationProvider" class="com.walter.config.authentication.SignInAuthenticationProvider"/>
+	<beans:bean id="signInUserDetailsService" class="com.walter.config.authentication.SignInUserDetailsService"/>
+	<beans:bean id="signInSuccessHandler" class="com.walter.config.authentication.SignInSuccessHandler">
 		<beans:property name="refererUse" value="false"/>
 		<beans:property name="defaultUrl" value="/"/>
 	</beans:bean>
-	<beans:bean id="signInFailureHandler" class="com.walter.config.SignInFailureHandler">
+	<beans:bean id="signInFailureHandler" class="com.walter.config.authentication.SignInFailureHandler">
 		<beans:property name="id" value="username"/>
 		<beans:property name="pw" value="password"/>
 		<beans:property name="defaultFailureUrl" value="/"/>
