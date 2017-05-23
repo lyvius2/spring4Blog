@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.walter.dao.CategoryDao">
+	<sql id="getCategory">
+		SELECT category_cd,
+			   category_name,
+			   use_yn,
+			   order_no
+		  FROM category
+	</sql>
+
+	<select id="getCategoryList" resultType="Category">
+		<include refid="getCategory"/>
+		 ORDER BY order_no ASC
+	</select>
+
+	<select id="getCategoryItem" parameterType="java.lang.Integer" resultType="Category">
+		<include refid="getCategory"/>
+		 WHERE category_cd = #{category_cd}
+	</select>
+
 	<select id="getNewCategoryCd" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 		SELECT MAX(category_cd)+1
 		  FROM category

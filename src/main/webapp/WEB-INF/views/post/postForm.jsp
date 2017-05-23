@@ -53,7 +53,7 @@
 					<form:errors path="title" cssClass="alert alert-danger" role="alert"></form:errors>
 				</div>
 				<div class="col-md-2">
-					<input id="travel-mode-select" type="checkbox" data-toggle="toggle" data-on="Travel On" data-off="Travel Off" />
+					<input id="travel-mode-select" type="checkbox" data-toggle="toggle" data-on="Option" data-off="Option" />
 				</div>
 			</div>
 			<div class="form-group" id="travel-mode">

@@ -23,7 +23,7 @@
 					</li>
 					<li><a href="index.html">Home</a></li>
 					<li><a href="text.html">Profile</a></li>
-					<li><a href="contact.html">Contact</a></li>
+					<li><a href="/config">Config</a></li>
 				</ul>
 				<security:authorize access="!isAuthenticated()">
 				<a href="#" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost">
@@ -31,7 +31,7 @@
 				</a>
 				</security:authorize>
 				<security:authorize access="isAuthenticated()">
-				<a href="/signOut"  class="btn navbar-btn btn-ghost">
+				<a href="/signOut" class="btn navbar-btn btn-ghost">
 					<i class="fa fa-sign-out"></i>Sign out
 				</a>
 				</security:authorize>

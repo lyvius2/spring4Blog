@@ -27,6 +27,11 @@ public class ConfigController extends BaseController {
 		return "config/categoryConfig";
 	}
 
+	@RequestMapping(value = "/config")
+	public String configView(Model model) {
+		return "config/config";
+	}
+
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
 	@ResponseBody
 	public String setCategoryConfig(@ModelAttribute("categoryVO") CategoryVO categoryVO, Model model) throws SQLException {

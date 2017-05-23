@@ -49,7 +49,7 @@
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 	<decorator:head />
 </head>
-<body ng-app="<decorator:getProperty property="body.ng-app" />">
+<body>
 	<!-- navbar-->
 	<jsp:include page="header.jsp"/>
 	<decorator:body />
