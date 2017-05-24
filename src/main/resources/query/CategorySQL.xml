@@ -19,6 +19,21 @@
 		 WHERE category_cd = #{category_cd}
 	</select>
 
+	<update id="modCategoryItem" parameterType="Category">
+		UPDATE category
+		   SET ( mod_dt
+				,mod_id
+		   		<if test="category_name != null">,category_name</if>
+				<if test="use_yn != null">,use_yn</if>
+		   	   ) = (
+				 now()
+				,#{mod_id}
+				<if test="category_name != null">,#{category_name}</if>
+				<if test="use_yn != null">,#{use_yn}</if>
+			   )
+		 WHERE category_cd = #{category_cd}
+	</update>
+
 	<select id="getNewCategoryCd" resultType="java.lang.Integer" parameterType="java.lang.Integer">
 		SELECT MAX(category_cd)+1
 		  FROM category

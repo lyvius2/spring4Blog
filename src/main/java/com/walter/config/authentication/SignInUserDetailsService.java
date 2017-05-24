@@ -80,7 +80,7 @@ public class SignInUserDetailsService implements UserDetailsService {
 		return memberVO;
 	}
 
-	public void onAuthenticationBinding(MemberVO memberVO, User facebookUser, HttpSession httpSession) throws NullPointerException {
+	public void onAuthenticationBinding(MemberVO memberVO, User facebookUser) throws NullPointerException {
 		memberVO.setUsername(facebookUser.getId());
 		memberVO.setEmail(facebookUser.getEmail());
 		memberVO.setFirst_name(facebookUser.getFirstName());

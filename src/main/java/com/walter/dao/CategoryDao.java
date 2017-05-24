@@ -12,6 +12,7 @@ import java.util.List;
 public interface CategoryDao {
 	List<CategoryVO> getCategoryList();
 	CategoryVO getCategoryItem(int category_cd);
+	int modCategoryItem(CategoryVO categoryVO);
 
 	Integer getNewCategoryCd(int depth);
 	int setCategory(CategoryVO categoryVO);

@@ -6,10 +6,7 @@ import com.walter.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
@@ -34,8 +31,14 @@ public class ConfigController extends BaseController {
 
 	@RequestMapping(value = "/config")
 	public String configView(Model model) {
-		model.addAttribute("category", configService.getCategoryList());
+		model.addAttribute("categories", configService.getCategoryList());
 		return "config/config";
+	}
+
+	@RequestMapping(value = "/config/setCategoryUsage", produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String setCategoryUsage(@ModelAttribute("categoryVO") CategoryVO categoryVO) throws SQLException {
+		return gson.toJson(configService.modCategoryItem(categoryVO));
 	}
 
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
