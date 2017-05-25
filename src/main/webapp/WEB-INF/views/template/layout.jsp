@@ -15,6 +15,7 @@
 	<meta name="robots" content="all,follow">
 	<!-- Bootstrap CSS-->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
 	<!-- Font Awesome and Pixeden Icon Stroke icon fonts-->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pe-icon-7-stroke.css">
@@ -56,6 +57,7 @@
 	<jsp:include page="footer.jsp"/>
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery-3.2.1.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap.min.js"></script>
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery.cookie.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/lightbox.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/front.js"></script>

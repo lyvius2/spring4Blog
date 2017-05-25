@@ -18,11 +18,11 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class BaseController {
 
-	@Autowired
-	protected Gson gson;
-
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+
+	@Autowired
+	protected Gson gson;
 
 	@Nullable
 	protected MemberVO getLoginUser() {
@@ -33,5 +33,10 @@ public class BaseController {
 		} else {
 			return null;
 		}
+	}
+
+	protected String getUsername() {
+		MemberVO memberVO = this.getLoginUser();
+		return memberVO != null ? memberVO.getUsername() : "Anonymous";
 	}
 }

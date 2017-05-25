@@ -41,6 +41,7 @@ public class PostServiceImpl implements PostService {
 
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
+	/*
 	@Override
 	public Model setInputForm(Model model) {
 		List<CategoryVO> categoryList = new ArrayList<>();
@@ -54,6 +55,8 @@ public class PostServiceImpl implements PostService {
 		model.addAttribute("countryList", apiDao.getCodeList(new CodeVO("NAT")));
 		return model;
 	}
+
+	*/
 
 	@Override
 	public int setPost(PostVO postVO) {
