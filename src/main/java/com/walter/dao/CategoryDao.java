@@ -3,6 +3,7 @@ package com.walter.dao;
 import com.walter.model.CategoryVO;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
 public interface CategoryDao {
 	List<CategoryVO> getCategoryList();
 	CategoryVO getCategoryItem(int category_cd);
-	int modCategoryItem(CategoryVO categoryVO);
+	int modCategoryItem(HashMap paramMap);
 
 	Integer getNewCategoryCd(int depth);
 	int setCategory(CategoryVO categoryVO);

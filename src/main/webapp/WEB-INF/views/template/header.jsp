@@ -2,7 +2,7 @@
 	<div role="navigation" class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand">Walter's Home :
+				<a href="index.html" class="navbar-brand">Walter's Home
 					<security:authorize access="isAuthenticated()">
 						<security:authentication property="principal.kr_name"/>
 					</security:authorize>

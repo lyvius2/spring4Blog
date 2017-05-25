@@ -31,16 +31,29 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	@Override
-	public HashMap modCategoryItem(CategoryVO categoryVO) {
-		HashMap status = new HashMap();
+	public HashMap modCategoryItem(CategoryVO categoryVO, String targetAttribute) {
+		HashMap paramsMap = new HashMap();
 		try {
-			int result = categoryDao.modCategoryItem(categoryVO);
-			status.put("success", result == 1 ? true:false);
+			paramsMap.put("mod_id", categoryVO.getMod_id());
+			paramsMap.put("category_cd", categoryVO.getCategory_cd());
+			switch (targetAttribute) {
+				case "Usage" :
+					paramsMap.put("use_yn", categoryVO.isUse_yn());
+					break;
+				case "Order" :
+					paramsMap.put("order_no", categoryVO.getOrder_no());
+					break;
+				case "Name" :
+					paramsMap.put("category_name", categoryVO.getCategory_name());
+					break;
+			}
+			int result = categoryDao.modCategoryItem(paramsMap);
+			paramsMap.put("success", result == 1 ? true:false);
 		} catch (Exception e) {
 			logger.error(e.toString());
-			status.put("success", false);
-			status.put("message", e.getMessage());
+			paramsMap.put("success", false);
+			paramsMap.put("message", e.getMessage());
 		}
-		return status;
+		return paramsMap;
 	}
 }

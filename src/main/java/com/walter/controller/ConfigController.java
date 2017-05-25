@@ -6,8 +6,10 @@ import com.walter.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.SQLException;
 
 /**
@@ -35,11 +37,18 @@ public class ConfigController extends BaseController {
 		return "config/config";
 	}
 
-	@RequestMapping(value = "/config/setCategoryUsage", produces = "application/json; charset=utf-8")
+	@RequestMapping(value = "/config/setCategory{targetAttribute}", produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String setCategoryUsage(@ModelAttribute("categoryVO") CategoryVO categoryVO) throws SQLException {
-		return gson.toJson(configService.modCategoryItem(categoryVO));
+	public String setCategoryUsage(@PathVariable("targetAttribute") String targetAttribute,
+	                               @ModelAttribute("categoryVO") @Valid CategoryVO categoryVO, Errors errors) throws SQLException {
+		if (errors.hasErrors()) {
+			return gson.toJson("{'success': false}");
+		}
+		categoryVO.setMod_id(super.getUsername());
+		return gson.toJson(configService.modCategoryItem(categoryVO, targetAttribute));
 	}
+
+	/*
 
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
 	@ResponseBody
@@ -71,6 +80,8 @@ public class ConfigController extends BaseController {
 		categoryDao.delCategory(categoryVO.getCategory_cd());
 		return gson.toJson(categoryVO.getParent_category_cd());
 	}
+
+	*/
 
 	@RequestMapping(value = "/category/setActiveOption", method = RequestMethod.POST)
 	@ResponseBody

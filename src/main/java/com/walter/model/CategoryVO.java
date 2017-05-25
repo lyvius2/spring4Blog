@@ -1,5 +1,7 @@
 package com.walter.model;
 
+import javax.annotation.Nullable;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -8,11 +10,11 @@ import java.util.Date;
 public class CategoryVO {
 
 	private int category_cd;
-	private int parent_category_cd;
-	private int depth;
+
+	@Nullable
+	@Size(min = 2, max = 48, message = "2자 이상 24자 이하로 입력하세요.")
 	private String category_name;
-	private String access_role;
-	private String access_role_name;
+
 	private boolean use_yn;
 	private Date reg_dt;
 	private String reg_id;
@@ -24,12 +26,6 @@ public class CategoryVO {
 		super();
 	}
 
-	public CategoryVO(int depth, int parent_category_cd){
-		super();
-		this.depth = depth;
-		this.parent_category_cd = parent_category_cd;
-	}
-
 	public int getCategory_cd() {
 		return category_cd;
 	}
@@ -38,44 +34,12 @@ public class CategoryVO {
 		this.category_cd = category_cd;
 	}
 
-	public int getParent_category_cd() {
-		return parent_category_cd;
-	}
-
-	public void setParent_category_cd(int parent_category_cd) {
-		this.parent_category_cd = parent_category_cd;
-	}
-
-	public int getDepth() {
-		return depth;
-	}
-
-	public void setDepth(int depth) {
-		this.depth = depth;
-	}
-
 	public String getCategory_name() {
 		return category_name;
 	}
 
 	public void setCategory_name(String category_name) {
 		this.category_name = category_name;
-	}
-
-	public String getAccess_role() {
-		return access_role;
-	}
-
-	public void setAccess_role(String access_role) {
-		this.access_role = access_role;
-	}
-
-	public String getAccess_role_name() {
-		return access_role_name;
-	}
-
-	public void setAccess_role_name(String access_role_name) {
-		this.access_role_name = access_role_name;
 	}
 
 	public boolean isUse_yn() {
@@ -130,11 +94,7 @@ public class CategoryVO {
 	public String toString() {
 		return "CategoryVO{" +
 				"category_cd=" + category_cd +
-				", parent_category_cd=" + parent_category_cd +
-				", depth=" + depth +
 				", category_name='" + category_name + '\'' +
-				", access_role='" + access_role + '\'' +
-				", access_role_name='" + access_role_name + '\'' +
 				", use_yn=" + use_yn +
 				", reg_dt=" + reg_dt +
 				", reg_id='" + reg_id + '\'' +

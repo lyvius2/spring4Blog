@@ -11,5 +11,5 @@ import java.util.List;
 public interface ConfigService {
 	List<CategoryVO> getCategoryList();
 	CategoryVO getCategoryItem(int category_cd);
-	HashMap modCategoryItem(CategoryVO categoryVO);
+	HashMap modCategoryItem(CategoryVO categoryVO, String targetAttribute);
 }

@@ -19,17 +19,19 @@
 		 WHERE category_cd = #{category_cd}
 	</select>
 
-	<update id="modCategoryItem" parameterType="Category">
+	<update id="modCategoryItem" parameterType="java.util.HashMap">
 		UPDATE category
-		   SET ( mod_dt
-				,mod_id
-		   		<if test="category_name != null">,category_name</if>
-				<if test="use_yn != null">,use_yn</if>
+		   SET (mod_dt
+				, mod_id
+		   		<if test="category_name != null">, category_name</if>
+				<if test="order_no != null">, order_no</if>
+				<if test="use_yn != null">, use_yn</if>
 		   	   ) = (
-				 now()
-				,#{mod_id}
-				<if test="category_name != null">,#{category_name}</if>
-				<if test="use_yn != null">,#{use_yn}</if>
+				now()
+				, #{mod_id}
+				<if test="category_name != null">, #{category_name}</if>
+				<if test="order_no != null">, #{order_no}</if>
+				<if test="use_yn != null">, #{use_yn}</if>
 			   )
 		 WHERE category_cd = #{category_cd}
 	</update>
