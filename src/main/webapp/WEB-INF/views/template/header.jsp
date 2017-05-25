@@ -2,7 +2,7 @@
 	<div role="navigation" class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand">Walter's Home :
+				<a href="index.html" class="navbar-brand">Walter's Home
 					<security:authorize access="isAuthenticated()">
 						<security:authentication property="principal.kr_name"/>
 					</security:authorize>
@@ -11,9 +11,11 @@
 					<button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle navbar-btn">Menu<i class="fa fa-align-justify"></i></button>
 				</div>
 			</div>
+			<c:set var="path" value="${pageContext.request.servletPath}"/>
 			<div id="navigation" class="collapse navbar-collapse navbar-right">
 				<ul class="nav navbar-nav">
-					<li class="active dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Blog <b class="caret"></b></a>
+					<li <c:if test="${path == '/'}">class="active"</c:if>><a href="/">Home</a></li>
+					<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Blog <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Dropdown item 1</a></li>
 							<li><a href="#">Dropdown item 2</a></li>
@@ -21,9 +23,8 @@
 							<li><a href="#">Dropdown item 4</a></li>
 						</ul>
 					</li>
-					<li><a href="index.html">Home</a></li>
-					<li><a href="text.html">Profile</a></li>
-					<li><a href="/config">Config</a></li>
+					<li <c:if test="${path == '/profile'}">class="active"</c:if>><a href="/profile">Profile</a></li>
+					<li <c:if test="${path == '/config'}">class="active"</c:if>><a href="/config">Config</a></li>
 				</ul>
 				<security:authorize access="!isAuthenticated()">
 				<a href="#" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost">
