@@ -19,6 +19,14 @@
 		 WHERE category_cd = #{category_cd}
 	</select>
 
+	<insert id="insCategoryItem" parameterType="Category">
+		INSERT INTO category (category_cd, category_name, reg_id, order_no)
+		VALUES ((SELECT MAX(category_cd)+1 FROM category),
+				#{category_name},
+				#{reg_id},
+				(SELECT MAX(order_no)+1 FROM category))
+	</insert>
+
 	<update id="modCategoryItem" parameterType="java.util.HashMap">
 		UPDATE category
 		   SET (mod_dt
@@ -36,10 +44,9 @@
 		 WHERE category_cd = #{category_cd}
 	</update>
 
-	<select id="getNewCategoryCd" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+	<select id="getNewCategoryItemCd" resultType="java.lang.Integer">
 		SELECT MAX(category_cd)+1
 		  FROM category
-		 WHERE depth = #{depth}
 	</select>
 
 	<update id="setCategory" parameterType="Category">

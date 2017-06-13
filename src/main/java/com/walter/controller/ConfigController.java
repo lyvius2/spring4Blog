@@ -32,18 +32,25 @@ public class ConfigController extends BaseController {
 	}
 
 	@RequestMapping(value = "/config")
-	public String configView(Model model) {
+	public String configView(Model model) throws SQLException {
+		model.addAttribute("categoryVO", new CategoryVO());
 		model.addAttribute("categories", configService.getCategoryList());
 		return "config/config";
 	}
 
+	@RequestMapping(value = "/config/category", method = RequestMethod.POST)
+	public String insCategory(@ModelAttribute("categoryVO") @Valid CategoryVO categoryVO,
+	                          Model model, Errors errors) throws SQLException {
+		categoryVO.setReg_id(super.getUsername());
+		configService.insCategoryItem(categoryVO);
+		return "redirect:../config";
+	}
+
 	@RequestMapping(value = "/config/setCategory{targetAttribute}", produces = "application/json; charset=utf-8")
 	@ResponseBody
-	public String setCategoryUsage(@PathVariable("targetAttribute") String targetAttribute,
-	                               @ModelAttribute("categoryVO") @Valid CategoryVO categoryVO, Errors errors) throws SQLException {
-		if (errors.hasErrors()) {
-			return gson.toJson("{'success': false}");
-		}
+	public String setCategory(@PathVariable("targetAttribute") String targetAttribute,
+	                          @ModelAttribute("categoryVO") @Valid CategoryVO categoryVO, Errors errors) {
+		if (errors.hasErrors()) return gson.toJson("{'success': false}");
 		categoryVO.setMod_id(super.getUsername());
 		return gson.toJson(configService.modCategoryItem(categoryVO, targetAttribute));
 	}

@@ -9,6 +9,7 @@
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,13 +107,13 @@
 					<h4 class="modal-title">카테고리 추가</h4>
 				</div>
 				<div class="modal-body">
-					<input type="text" name="category_name" class="form-control input-lg" placeholder="카테고리 명을 입력하세요.">
+					<input type="text" name="category_name" class="form-control input-lg" placeholder="카테고리 명을 입력하세요." required/>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
 						<i class="fa fa-times-circle" aria-hidden="true"></i> 닫기
 					</button>
-					<button type="button" class="btn btn-sm btn-primary">
+					<button type="submit" class="btn btn-sm btn-primary">
 						<i class="fa fa-check-circle" aria-hidden="true"></i> 저장
 					</button>
 				</div>

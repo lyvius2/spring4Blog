@@ -16,7 +16,6 @@
 	<meta charset="UTF-8">
 	<title>포스트 쓰기</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-	<link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css">
 	<style>
 		section {
 			padding-top: 40px;
@@ -107,7 +106,6 @@
 </form:form>
 <content tag="script">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
-	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap-filestyle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/ckeditor/ckeditor.js"></script>
 	<script>

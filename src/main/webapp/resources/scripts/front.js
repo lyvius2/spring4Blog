@@ -241,24 +241,20 @@ function utils() {
     /* click on the box activates the link in it */
 
     $('.box.clickable').on('click', function (e) {
-
         window.location = $(this).find('a').attr('href');
     });
     /* external links in new window*/
 
     $('.external').on('click', function (e) {
-
         e.preventDefault();
         window.open($(this).attr("href"));
     });
     /* animated scrolling */
 
     $('.scroll-to, .scroll-to-top').click(function (event) {
-
         var full_url = this.href;
         var parts = full_url.split("#");
         if (parts.length > 1) {
-
             scrollTo(full_url);
             event.preventDefault();
         }
@@ -271,7 +267,6 @@ function utils() {
         if (target_top < 0) {
             target_top = 0;
         }
-
         $('html, body').animate({
             scrollTop: target_top
         }, 1000);
@@ -305,7 +300,6 @@ function productDetailGallery(confDetailSwitch) {
     }
 
     function switchImage(thumb) {
-
         $('.thumb').removeClass('active');
         var bigUrl = thumb.attr('href');
         thumb.addClass('active');
@@ -324,7 +318,6 @@ function productDetailSizes() {
         $(this).next('input').prop('checked', true);
     });
 }
-
 
 $.fn.alignElementsSameHeight = function () {
     $('.same-height-row').each(function () {
@@ -355,21 +348,24 @@ $.fn.alignElementsSameHeight = function () {
 }
 
 $(window).load(function () {
-
     windowWidth = $(window).width();
-
     $(this).alignElementsSameHeight();
-
+	$('form#sign-in-form').on('submit', function (e) {
+		e.preventDefault()
+		$.post('/signIn', $('#sign-in-form').serialize())
+			.then(function (data) {
+				if (data['authenticated']) window.location.reload()
+				else $('#sign-in-div p.text-danger').text(data['errorMsg'])
+			})
+	})
 });
+
 $(window).resize(function () {
-
     newWindowWidth = $(window).width();
-
     if (windowWidth !== newWindowWidth) {
         setTimeout(function () {
             $(this).alignElementsSameHeight();
         }, 205);
         windowWidth = newWindowWidth;
     }
-
 });

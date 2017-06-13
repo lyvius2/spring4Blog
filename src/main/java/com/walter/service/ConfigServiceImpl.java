@@ -31,6 +31,20 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	@Override
+	public HashMap insCategoryItem(CategoryVO categoryVO) {
+		HashMap paramsMap = new HashMap();
+		try {
+			int result = categoryDao.insCategoryItem(categoryVO);
+			paramsMap.put("success", result == 1 ? true:false);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			paramsMap.put("success", false);
+			paramsMap.put("message", e.getMessage());
+		}
+		return paramsMap;
+	}
+
+	@Override
 	public HashMap modCategoryItem(CategoryVO categoryVO, String targetAttribute) {
 		HashMap paramsMap = new HashMap();
 		try {

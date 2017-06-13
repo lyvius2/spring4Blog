@@ -13,9 +13,11 @@ import java.util.List;
 public interface CategoryDao {
 	List<CategoryVO> getCategoryList();
 	CategoryVO getCategoryItem(int category_cd);
+	int insCategoryItem(CategoryVO categoryVO);
 	int modCategoryItem(HashMap paramMap);
 
-	Integer getNewCategoryCd(int depth);
+	Integer getNewCategoryItemCd();
+
 	int setCategory(CategoryVO categoryVO);
 	int setActiveOption(CategoryVO categoryVO);
 	int delCategory(int categoryCd);
