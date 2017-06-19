@@ -60,7 +60,10 @@
 								<tbody>
 								<c:forEach var="category" items="${categories}" varStatus="status">
 								<tr>
-									<td><i class="fa fa-bars" aria-hidden="true"></i></td>
+									<td>
+										<i class="fa fa-bars" aria-hidden="true"></i>
+										<i class="fa fa-minus-square text-danger" aria-hidden="true" style="display:none;"></i>
+									</td>
 									<td>
 										<span><c:out value="${category.category_name}"/></span>
 										<span style="display: none;">
@@ -82,6 +85,9 @@
 									<button type="button" class="btn btn-sm btn-primary"
 									        data-toggle="modal" data-target="#newCategory">
 										<i class="fa fa-plus-circle" aria-hidden="true"> 추가</i>
+									</button>
+									<button type="button" class="btn btn-sm btn-danger" id="btn-remove">
+										<i class="fa fa-times" aria-hidden="true"> 삭제</i>
 									</button>
 								</p>
 							</div>
@@ -186,7 +192,38 @@
 				$(this).children('span:first').slideUp()
 				$(this).children('span:last').slideDown()
 			})
+
+			$('#btn-remove').on('click', function () {
+				if (!$(this).hasClass('active')) {
+					$('.fa-bars').hide()
+					$('.fa-minus-square').show()
+					$(this).addClass('active')
+				} else {
+					$('.fa-minus-square').hide()
+					$('.fa-bars').show()
+					$(this).removeClass('active')
+				}
+			})
+
+			$('i.fa-minus-square').on('click', function () {
+				let target_tr = $(this).parent().parent()
+				let category_cd = $(target_tr).find('input[name=category_cd]').val()
+				if (confirm('카테고리를 삭제하면 하위의 포스트도 모두 삭제됩니다. 계속하시겠습니까?')) {
+					$.ajax({
+						url: '/config/category?' + $.param({category_cd: category_cd}),
+						method: 'DELETE',
+						dateType: 'json'
+					}).then(function (data) {
+						if (data.success) {
+							$(target_tr).remove()
+						} else {
+							alert('오류가 발생하여 삭제되지 못하였습니다.')
+						}
+					})
+				}
+			})
 		</script>
+		${msg}
 	</content>
 </body>
 </html>

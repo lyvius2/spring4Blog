@@ -14,9 +14,15 @@
 		 ORDER BY order_no ASC
 	</select>
 
-	<select id="getCategoryItem" parameterType="java.lang.Integer" resultType="Category">
+	<select id="getCategoryItemByCd" parameterType="java.lang.Integer" resultType="Category">
 		<include refid="getCategory"/>
 		 WHERE category_cd = #{category_cd}
+	</select>
+
+	<select id="getCategoryCountByName" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		  FROM category
+		 WHERE category_name = #{category_name}
 	</select>
 
 	<insert id="insCategoryItem" parameterType="Category">
@@ -44,45 +50,8 @@
 		 WHERE category_cd = #{category_cd}
 	</update>
 
-	<select id="getNewCategoryItemCd" resultType="java.lang.Integer">
-		SELECT MAX(category_cd)+1
-		  FROM category
-	</select>
-
-	<update id="setCategory" parameterType="Category">
-		WITH upsert AS (
-			UPDATE category
-			   SET (parent_category_cd, category_name, access_role, mod_id, mod_dt) = (#{parent_category_cd}, #{category_name}, #{access_role}, #{reg_id}, now())
-			 WHERE category_cd = #{category_cd}
-			RETURNING *)
-			INSERT INTO category (category_cd, parent_category_cd, depth, category_name, access_role, reg_id, order_no)
-			SELECT #{category_cd}
-				  ,#{parent_category_cd}
-				  ,#{depth}
-				  ,#{category_name}
-				  ,#{access_role}
-				  ,#{reg_id}
-				  ,(SELECT MAX(order_no)+1 FROM category WHERE parent_category_cd = #{parent_category_cd})
-			WHERE NOT EXISTS (
-				SELECT 1
-				  FROM category
-				 WHERE category_cd = #{category_cd})
-	</update>
-
-	<update id="setActiveOption" parameterType="Category">
-		UPDATE category
-		   SET (use_yn, mod_id, mod_dt) = (#{use_yn}, #{reg_id}, now())
-		 WHERE category_cd = #{category_cd}
-	</update>
-
-	<delete id="delCategory" parameterType="java.lang.Integer">
+	<delete id="delCategoryItem" parameterType="java.lang.Integer">
 		DELETE FROM category
-		 WHERE category_cd = #{category_cd}
+		WHERE category_cd = #{category_cd}
 	</delete>
-
-	<update id="setOrder" parameterType="Category">
-		UPDATE category
-		   SET (order_no, mod_id, mod_dt) = (#{order_no}, #{reg_id}, now())
-		 WHERE category_cd = #{category_cd}
-	</update>
 </mapper>

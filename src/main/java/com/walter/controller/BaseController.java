@@ -39,4 +39,12 @@ public class BaseController {
 		MemberVO memberVO = this.getLoginUser();
 		return memberVO != null ? memberVO.getUsername() : "Anonymous";
 	}
+
+	protected String executeAlertMessage(String msg) {
+		StringBuffer str = new StringBuffer();
+		str.append("<script>alert('");
+		str.append(msg);
+		str.append("')</script>");
+		return str.toString();
+	}
 }

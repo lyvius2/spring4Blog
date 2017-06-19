@@ -10,7 +10,8 @@ import java.util.List;
  */
 public interface ConfigService {
 	List<CategoryVO> getCategoryList();
-	CategoryVO getCategoryItem(int category_cd);
+	CategoryVO getCategoryItemByCd(int category_cd);
 	HashMap insCategoryItem(CategoryVO categoryVO);
 	HashMap modCategoryItem(CategoryVO categoryVO, String targetAttribute);
+	HashMap delCategoryItem(int category_cd);
 }

@@ -12,14 +12,9 @@ import java.util.List;
 @Component
 public interface CategoryDao {
 	List<CategoryVO> getCategoryList();
-	CategoryVO getCategoryItem(int category_cd);
+	CategoryVO getCategoryItemByCd(int category_cd);
+	int getCategoryCountByName(String category_name);
 	int insCategoryItem(CategoryVO categoryVO);
 	int modCategoryItem(HashMap paramMap);
-
-	Integer getNewCategoryItemCd();
-
-	int setCategory(CategoryVO categoryVO);
-	int setActiveOption(CategoryVO categoryVO);
-	int delCategory(int categoryCd);
-	int setOrder(CategoryVO categoryVO);
+	int delCategoryItem(int categoryCd);
 }
