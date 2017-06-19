@@ -17,7 +17,7 @@
 <body>
 	<h3>Connect to Facebook</h3>
 	<form action="/connect/facebook" method="POST">
-		<input type="hidden" name="scope" value="user_posts">
+		<input type="hidden" name="scope" value="user_posts, public_profile">
 		<div class="formInfo">
 			<p>You aren't connected to Facebook yet. Click the button to connect this application with your Facebook account.</p>
 		</div>

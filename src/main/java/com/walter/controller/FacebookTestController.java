@@ -1,9 +1,7 @@
 package com.walter.controller;
 
-import com.walter.config.SignInUserDetailsService;
+import com.walter.config.authentication.SignInUserDetailsService;
 import com.walter.model.MemberVO;
-import com.walter.model.RoleVO;
-import org.jboss.logging.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
@@ -22,7 +20,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * Created by yhwang131 on 2017-05-17.
@@ -64,7 +61,7 @@ public class FacebookTestController extends ConnectController {
 			logger.error(e.toString());
 		}
 
-		signInUserDetailsService.onAuthenticationBinding(new MemberVO(), userProfile, httpServletRequest.getSession());
+		signInUserDetailsService.onAuthenticationBinding(new MemberVO(), userProfile);
 		String targetUrl = httpServletRequest.getHeader("REFERER");
 		redirectView.setUrl(targetUrl);
 		return redirectView;
