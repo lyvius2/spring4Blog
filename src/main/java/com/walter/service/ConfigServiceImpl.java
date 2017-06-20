@@ -6,6 +6,8 @@ import com.walter.util.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public class ConfigServiceImpl implements ConfigService {
 	private CategoryDao categoryDao;
 
 	@Override
+	@Cacheable(value = "categoryCache")
 	public List<CategoryVO> getCategoryList() {
 		return categoryDao.getCategoryList();
 	}
@@ -32,6 +35,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	@Override
+	@CacheEvict(value = "categoryCache", allEntries = true)
 	public HashMap insCategoryItem(CategoryVO categoryVO) {
 		HashMap resultMap = new HashMap();
 		try {
@@ -51,6 +55,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	@Override
+	@CacheEvict(value = "categoryCache", allEntries = true)
 	public HashMap modCategoryItem(CategoryVO categoryVO, String targetAttribute) {
 		HashMap paramsMap = new HashMap(), resultMap = new HashMap();
 		try {
@@ -78,6 +83,7 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	@Override
+	@CacheEvict(value = "categoryCache", allEntries = true)
 	public HashMap delCategoryItem(int category_cd) {
 		HashMap resultMap = new HashMap();
 		try {
