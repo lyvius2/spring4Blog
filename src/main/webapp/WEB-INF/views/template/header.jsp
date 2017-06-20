@@ -15,10 +15,9 @@
 				<ul class="nav navbar-nav">
 					<li class="active dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Blog <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Dropdown item 1</a></li>
-							<li><a href="#">Dropdown item 2</a></li>
-							<li><a href="#">Dropdown item 3</a></li>
-							<li><a href="#">Dropdown item 4</a></li>
+							<c:forEach var="category" items="${categories}" varStatus="status">
+							<li><a href="#" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
+							</c:forEach>
 						</ul>
 					</li>
 					<li><a href="index.html">Home</a></li>

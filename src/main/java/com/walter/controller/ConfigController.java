@@ -30,7 +30,7 @@ public class ConfigController extends BaseController {
 	@RequestMapping(value = "/config")
 	public String configView(Model model) {
 		model.addAttribute("categoryVO", new CategoryVO());
-		model.addAttribute("categories", configService.getCategoryList());
+		//model.addAttribute("categories", configService.getCategoryList());
 		return "config/config";
 	}
 

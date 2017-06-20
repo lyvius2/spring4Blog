@@ -2,12 +2,13 @@ package com.walter.model;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by yhwang131 on 2016-09-13.
  */
-public class CategoryVO {
+public class CategoryVO implements Serializable {
 
 	private int category_cd;
 
