@@ -3,11 +3,11 @@
 			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			 xmlns:beans="http://www.springframework.org/schema/beans"
 			 xmlns:context="http://www.springframework.org/schema/context"
-			 xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+			 xmlns:mvc="http://www.springframework.org/schema/mvc"
 			 xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -41,6 +41,7 @@
 		<beans:property name="order" value="1" />
 	</beans:bean>
 
+	<beans:bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
 	<beans:bean id="gson" class="com.google.gson.Gson" />
 
 	<beans:bean id="googleDriveUploaderProgress" class="com.walter.config.drive.GoogleDriveUploaderProgress">
@@ -65,10 +66,25 @@
 		<beans:constructor-arg ref="connectionFactoryLocator" />
 		<beans:constructor-arg ref="inMemoryConnectionRepository" />
 	</beans:bean>
--->
+	-->
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mapping path="/**"/>
+			<exclude-mapping path="/resources/**"/>
+			<exclude-mapping path="/exclude/**"/>
+			<exclude-mapping path="/connect/**"/>
+			<exclude-mapping path="/google*/**"/>
+			<exclude-mapping path="/api/**"/>
+			<exclude-mapping path="/fb**"/>
+			<beans:bean class="com.walter.config.interceptor.CommonInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
 	<context:property-placeholder location="classpath:/application.properties" />
 
 	<context:component-scan base-package="com.walter.config,
+			com.walter.dao,
 			com.walter.controller,
 			com.walter.service,
 			com.walter.util" />
