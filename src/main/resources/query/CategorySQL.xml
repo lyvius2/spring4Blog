@@ -9,6 +9,13 @@
 		  FROM category
 	</sql>
 
+	<sql id="getNewCategoryCd">
+		SELECT CASE WHEN (SELECT COUNT(*) FROM category) = 0 THEN 1
+					ELSE MAX(category_cd) + 1
+			   END
+		  FROM category
+	</sql>
+
 	<select id="getCategoryList" resultType="Category">
 		<include refid="getCategory"/>
 		 ORDER BY order_no ASC
@@ -27,10 +34,10 @@
 
 	<insert id="insCategoryItem" parameterType="Category">
 		INSERT INTO category (category_cd, category_name, reg_id, order_no)
-		VALUES ((SELECT MAX(category_cd)+1 FROM category),
+		VALUES ((<include refid="getNewCategoryCd"/>),
 				#{category_name},
 				#{reg_id},
-				(SELECT MAX(order_no)+1 FROM category))
+				(<include refid="getNewCategoryCd"/>))
 	</insert>
 
 	<update id="modCategoryItem" parameterType="java.util.HashMap">
