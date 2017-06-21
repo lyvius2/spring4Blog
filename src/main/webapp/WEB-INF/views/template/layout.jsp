@@ -29,22 +29,6 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flag.css">
 	<!-- Favicon-->
 	<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/favicon.png">
-	<style>
-		.btn-primary-invert {
-			color: #ffffff;
-			background-color: #2b90d9;
-			border-color: #1e6fa9;
-		}
-		.btn-primary-invert:hover,
-		.btn-primary-invert:focus,
-		.btn-primary-invert:active,
-		.btn-primary-invert.active,
-		.open .dropdown-toggle.btn-primary-invert {
-			color: #2b90d9;
-			background-color: #ebebeb;
-			border-color: #2b90d9;
-		}
-	</style>
 	<!-- Tweaks for older IEs--><!--[if lt IE 9]>
 	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -54,7 +38,9 @@
 	<!-- navbar-->
 	<jsp:include page="header.jsp"/>
 	<decorator:body />
+	<c:if test="${fn:indexOf(pageContext.request.servletPath, '/resume') != 0}">
 	<jsp:include page="footer.jsp"/>
+	</c:if>
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery-2.2.4.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap-toggle.min.js"></script>

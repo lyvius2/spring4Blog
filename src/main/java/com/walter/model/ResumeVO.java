@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,11 +26,17 @@ public class ResumeVO {
 	private String web_addr;
 	private String git_addr;
 
-	private List<ActVO> education;
-	private List<ActVO> experience;
-	private List<ActVO> project;
+	private List<ActVO> education = new ArrayList<>();
+	private List<ActVO> experience = new ArrayList<>();
+	private List<ActVO> project = new ArrayList<>();
 
-	private List<AbilityVO> skill;
+	private List<AbilityVO> skill = new ArrayList<>();
+
+	public ResumeVO() {
+		super();
+		experience.add(new ActVO());
+		project.add(new ActVO());
+	}
 
 	public String get_id() {
 		return _id;
@@ -127,10 +134,34 @@ public class ResumeVO {
 		this.skill = skill;
 	}
 
-	class ActVO {
+	public void setTech(int projectIndex, String tech) {
+		this.project.get(projectIndex).setTech(tech);
+	}
+
+	@Override
+	public String toString() {
+		return "ResumeVO{" +
+				"_id='" + _id + '\'' +
+				", name='" + name + '\'' +
+				", eng_name='" + eng_name + '\'' +
+				", photo_url='" + photo_url + '\'' +
+				", email='" + email + '\'' +
+				", real_addr='" + real_addr + '\'' +
+				", web_addr='" + web_addr + '\'' +
+				", git_addr='" + git_addr + '\'' +
+				", education=" + education +
+				", experience=" + experience +
+				", project=" + project +
+				", skill=" + skill +
+				'}';
+	}
+
+	public class ActVO {
 		private String title;
 		private String sub_title;
 		private String description;
+		private String tech;
+		private String related_site;
 		private Date start_dt;
 		private Date end_dt;
 
@@ -158,6 +189,22 @@ public class ResumeVO {
 			this.description = description;
 		}
 
+		public String getTech() {
+			return tech;
+		}
+
+		public void setTech(String tech) {
+			this.tech = tech;
+		}
+
+		public String getRelated_site() {
+			return related_site;
+		}
+
+		public void setRelated_site(String related_site) {
+			this.related_site = related_site;
+		}
+
 		public Date getStart_dt() {
 			return start_dt;
 		}
@@ -175,7 +222,7 @@ public class ResumeVO {
 		}
 	}
 
-	class AbilityVO {
+	public class AbilityVO {
 		private String title;
 		private int level;
 

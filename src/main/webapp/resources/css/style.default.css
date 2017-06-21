@@ -1491,6 +1491,24 @@ fieldset[disabled] .btn-primary.active {
   color: #ffffff;
   border: solid 1px #2b90d9;
 }
+/*----------- customizing edition -----------*/
+
+.btn-primary-invert {
+  color: #ffffff;
+  background-color: #2b90d9;
+  border-color: #1e6fa9;
+}
+.btn-primary-invert:hover,
+.btn-primary-invert:focus,
+.btn-primary-invert:active,
+.btn-primary-invert.active,
+.open .dropdown-toggle.btn-primary-invert {
+  color: #2b90d9;
+  background-color: #ebebeb;
+  border-color: #2b90d9;
+}
+
+/*----------- customizing edition -----------*/
 .btn-transparent {
   color: #555555;
   background-color: transparent;
