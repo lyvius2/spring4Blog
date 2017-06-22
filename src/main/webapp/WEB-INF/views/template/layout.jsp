@@ -42,6 +42,7 @@
 	<jsp:include page="footer.jsp"/>
 	</c:if>
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery-2.2.4.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/vue.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap-toggle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery.cookie.js"></script>

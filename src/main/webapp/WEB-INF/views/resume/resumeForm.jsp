@@ -19,7 +19,7 @@
 	<!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/resume/resume.css">
 	<style>
-		.label-primary,.label-success {
+		.label-primary,.label-success,.add-click {
 			cursor: pointer;
 		}
 	</style>
@@ -31,8 +31,8 @@
 		<!-- header -->
 		<header class="resume">
 			<h1 class="heading-container">Résumé</h1>
-			<h2 class="name-container"><form:input type="text" cssClass="form-control" path="name" placeholder="korean name"/></h2>
-			<h3 class="job-container"><form:input type="text" cssClass="form-control" path="eng_name" placeholder="english name"/></h3>
+			<h2 class="name-container"><form:input type="text" cssClass="form-control" path="name" placeholder="korean name" tabindex="5"/></h2>
+			<h3 class="job-container"><form:input type="text" cssClass="form-control" path="eng_name" placeholder="english name" tabindex="6"/></h3>
 			<div class="profile-picture">
 				<img src="${pageContext.request.contextPath}/resources/images/profile.png" alt="Profile">
 			</div>
@@ -40,25 +40,25 @@
 				<ul class="contact-list">
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="email" cssClass="form-control" path="email" placeholder="email address"/>
+							<form:input type="email" cssClass="form-control" path="email" placeholder="email address" tabindex="1"/>
 						</div>
 						<span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="text" cssClass="form-control" path="web_addr" placeholder="homepage address"/>
+							<form:input type="text" cssClass="form-control" path="web_addr" placeholder="homepage address" tabindex="2"/>
 						</div>
 						<span><i class="fa fa-globe" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="text" cssClass="form-control" path="git_addr" placeholder="github address"/>
+							<form:input type="text" cssClass="form-control" path="git_addr" placeholder="github address" tabindex="3"/>
 						</div>
 						<span><i class="fa fa-github" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="text" cssClass="form-control" path="real_addr" placeholder="location address"/>
+							<form:input type="text" cssClass="form-control" path="real_addr" placeholder="location address" tabindex="4"/>
 						</div>
 						<span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
 					</li>
@@ -71,93 +71,63 @@
 			<div class="resume-item-wrapper">
 
 				<!-- experience -->
-				<section class="resume-item experience">
+				<section class="resume-item experience" id="test">
 					<div class="inner">
 						<h2>experience</h2>
 						<div class="form-horizontal">
+							<%--
 							<c:forEach items="${resumeVO.experience}" varStatus="vs">
-							<div class="form-group">
-								<div class="col-sm-3"><h5>[${vs.index + 1}]</h5></div>
-								<div class="col-sm-9 text-right">
-									<button type="button" class="btn btn-sm btn-danger">
-										<i class="fa fa-times" aria-hidden="true"> 삭제</i>
-									</button>
+							<div id="experience_index_${vs.index}">
+								<div class="form-group">
+									<div class="col-sm-3"><h5>[${vs.index + 1}]</h5></div>
+									<div class="col-sm-9 text-right">
+										<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
+									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Title</label>
-								<div class="col-sm-9">
-									<form:input type="text" cssClass="form-control" path="experience[${vs.index}].title"/>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Title</label>
+									<div class="col-sm-9">
+										<form:input type="text" cssClass="form-control" path="experience[${vs.index}].title"/>
+									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Company, Rank</label>
-								<div class="col-sm-9">
-									<form:input type="text" cssClass="form-control" path="experience[${vs.index}].sub_title"/>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Company, Rank</label>
+									<div class="col-sm-9">
+										<form:input type="text" cssClass="form-control" path="experience[${vs.index}].sub_title"/>
+									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Period</label>
-								<div class="col-sm-4">
-									<form:input type="date" cssClass="form-control" path="experience[${vs.index}].start_dt"/>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Period</label>
+									<div class="col-sm-4">
+										<form:input type="date" cssClass="form-control" path="experience[${vs.index}].start_dt"/>
+									</div>
+									<div class="col-sm-1 text-center">~</div>
+									<div class="col-sm-4">
+										<form:input type="date" cssClass="form-control" path="experience[${vs.index}].end_dt"/>
+									</div>
 								</div>
-								<div class="col-sm-1 text-center">~</div>
-								<div class="col-sm-4">
-									<form:input type="date" cssClass="form-control" path="experience[${vs.index}].end_dt"/>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Detail</label>
-								<div class="col-sm-9">
-									<form:textarea cssClass="form-control" path="experience[${vs.index}].description" rows="3"/>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Detail</label>
+									<div class="col-sm-9">
+										<form:textarea cssClass="form-control" path="experience[${vs.index}].description" rows="3"/>
+									</div>
 								</div>
 							</div>
 							</c:forEach>
+							--%>
+							<experience-form v-for="(item, index) in items" v-bind:key="item ":seq="index"></experience-form>
+								<form:input type="text" cssClass="form-control" path="experience[3].title"/>
+								<form:input type="text" cssClass="form-control" path="experience[4].title"/>
+								<input type="text" class="form-control" name="experience[5].title" id="experience5.title"/>
+								<input type="text" class="form-control" name="experience[6].title" id="experience6.title"/>
 						</div>
-
-
-						<%--
-						<ul>
-							<!-- list example
-							<li>
-							  <h3>Your Role</h3>
-							  <h4 class="company">Your Company Name & Location</h4>
-							  <span class="date">Working Period</span>
-							  <p class="detail">
-								Details what you did at this company
-							  </p>
-							</li>
-							-->
-
-							<li>
-								<h3></h3>
-								<h4 class="company"><form:input type="text" cssClass="form-control" path="experience[0].sub_title"/></h4>
-								<span class="date">Sept 2015 - present</span>
-								<p class="detail">
-									<form:textarea path="experience[0].description" cssClass="form-control" rows="3"/>
-								</p>
-							</li>
-							<li>
-								<h3>Senior Front-End Developer<button type="submit">TEST SUBMIT</button></h3>
-								<h4 class="company">Awesome Startup Corp. in Gangnam</h4>
-								<span class="date">Feb 2015 - Jan 2016</span>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-							</li>
-							<li>
-								<h3>Junior Front-End Developer</h3>
-								<h4 class="company">Great Web Agency in Hongdae</h4>
-								<span class="date">Mar 2010 - Jan 2015</span>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-							</li>
-						</ul>
-						--%>
+						<div class="text-right">
+							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가"></i>
+						</div>
 					</div>
 				</section><!-- experience -->
 
+				<%--
 				<!-- project -->
 				<section class="resume-item project">
 					<div class="inner">
@@ -167,9 +137,7 @@
 								<div class="form-group">
 									<div class="col-sm-3"><h5>[${vs.index + 1}]</h5></div>
 									<div class="col-sm-9 text-right">
-										<button type="button" class="btn btn-sm btn-danger">
-											<i class="fa fa-times" aria-hidden="true"> 삭제</i>
-										</button>
+										<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
 									</div>
 								</div>
 								<div class="form-group">
@@ -208,47 +176,15 @@
 										</c:forEach>
 										<form:input type="hidden" path="project[${vs.index}].tech"/>
 										<span class="label label-success">
-											<i class="fa fa-plus-circle" aria-hidden="true"></i>
+											<i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i>
 										</span>
 									</div>
 								</div>
 							</c:forEach>
+							<div class="text-right">
+								<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가"></i>
+							</div>
 						</div>
-
-						<%--
-						<ul>
-							<!-- list example
-							<li>
-							  <h3><a href="#" target="_blank">Your Project Name</a></h3>
-							  <p class="detail">
-								Details what the project is
-							  </p>
-							  <p class="tags">#hash #tags</p>
-							</li>
-							-->
-							<li>
-								<h3><a href="https://github.com/dhparkdh/resume-for-web-developer" target="_blank">HTML5 Résumé template for web developer</a></h3>
-								<p class="detail">
-									Online Résumé(CV) template for web developer using HTML5 and CSS3.
-								</p>
-								<p class="tags">#HTML5 #CSS3 #Noto</p>
-							</li>
-							<li>
-								<h3><a href="#" target="_blank">Project Name</a></h3>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-								<p class="tags">#hash #tags</p>
-							</li>
-							<li>
-								<h3><a href="#" target="_blank">Project Name</a></h3>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-								<p class="tags">#hash #tags</p>
-							</li>
-						</ul>
-						--%>
 					</div>
 				</section><!-- project -->
 
@@ -256,48 +192,36 @@
 				<section class="resume-item skill">
 					<div class="inner">
 						<h2>Skill</h2>
-						<ul>
-							<!-- list example
-							<li>
-							  <h3>Your Skill Name</h3>
-							  <div class="skill-bar">
-								<span class="bar" style="width: Percentage% ;"></span>
-							  </div>
-							</li>
-							-->
-							<li>
-								<h3>Master</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 100% ;"></span>
+						<c:forEach var="skill" items="${resumeVO.skill}" varStatus="vs">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="input-group input-group-sm">
+									<form:input type="text" cssClass="form-control" path="skill[${vs.index}].title" placeholder="skill name"/>
 								</div>
-							</li>
-							<li>
-								<h3>Professional</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 80% ;"></span>
-								</div>
-							</li>
-							<li>
-								<h3>Senior</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 60% ;"></span>
-								</div>
-							</li>
-							<li>
-								<h3>Junior</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 40% ;"></span>
-								</div>
-							</li>
-							<li>
-								<h3>Rookie</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 20% ;"></span>
-								</div>
-							</li>
-						</ul>
+							</div>
+							<div class="col-sm-7">
+								<form:input type="range" cssClass="form-control" path="skill[${vs.index}].level" min="0" max="100" onchange="skill${vs.index}_level.value = value"/>
+							</div>
+							<div class="col-sm-2 text-right">
+								<output id="skill${vs.index}_level" style="display:inline-block">${skill.level}</output>
+								&nbsp;
+								<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
+							</div>
+						</div>
+						</c:forEach>
+						<div class="text-right">
+							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가"></i>
+						</div>
 					</div>
 				</section><!-- skill -->
+				--%>
+				<section class="resume-item">
+					<div style="padding-top: 20px;">
+						<button type="submit" class="btn btn-primary btn-sm">
+							<i class="fa fa-check" aria-hidden="true"> 저장</i>
+						</button>
+					</div>
+				</section>
 
 			</div>
 		</section><!-- main -->
@@ -309,5 +233,65 @@
 
 	</div>
 </form:form>
+<content tag="script">
+	<script type="text/x-template" id="experience-template">
+		<div v-bind:id="'experience_index_' + seq">
+			<div class="form-group">
+				<div class="col-sm-3"><h5>[{{seq + 1}}]</h5></div>
+				<div class="col-sm-9 text-right">
+					<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Title</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-bind:name="'experience[' + seq + '].title'"
+					       v-bind:id="'experience' + seq + '.title'"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Company, Rank</label>
+				<div class="col-sm-9">
+					<input type="text" class="form-control" v-bind:name="'experience[' + seq + '].sub_title'"
+					       v-bind:id="'experience' + seq + '.sub_title'"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Period</label>
+				<div class="col-sm-4">
+					<input type="date" class="form-control" v-bind:name="'experience[' + seq + '].start_dt'"
+					       v-bind:id="'experience' + seq + '.start_dt'"/>
+				</div>
+				<div class="col-sm-1 text-center">~</div>
+				<div class="col-sm-4">
+					<input type="date" class="form-control" v-bind:name="'experience[' + seq + '].end_dt'"
+					       v-bind:id="'experience' + seq + '.end_dt'"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">Detail</label>
+				<div class="col-sm-9">
+					<textarea class="form-control" v-bind:name="'experience[' + seq + '].description'"
+					          v-bind:id="'experience' + seq + '.description'" rows="3"/>
+				</div>
+			</div>
+		</div>
+	</script>
+	<script>
+		Vue.component('experience-form', {
+			template: '#experience-template',
+			props: {
+				seq: {type: Number, required: true}
+			}
+		})
+
+		var experience_list = new Vue({
+			el: '#test',
+			data: {
+				items: [1,2,3]
+			}
+		})
+	</script>
+</content>
 </body>
 </html>

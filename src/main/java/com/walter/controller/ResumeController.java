@@ -1,16 +1,20 @@
 package com.walter.controller;
 
+import com.walter.model.AbilityVO;
+import com.walter.model.ActVO;
 import com.walter.model.ResumeVO;
 import com.walter.repository.ResumeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,7 +40,7 @@ public class ResumeController extends BaseController {
 	}
 
 	@RequestMapping(value = "/resume", method = RequestMethod.POST)
-	public String resumeRegist(@ModelAttribute("resumeVO") ResumeVO resumeVO, Model model) {
+	public String resumeRegist(@ModelAttribute("resumeVO") ResumeVO resumeVO, Model model, BindingResult result) {
 		logger.debug("params ------->> {}", gson.toJson(resumeVO).toString());
 		return "redirect:/resume";
 	}
@@ -44,9 +48,27 @@ public class ResumeController extends BaseController {
 	@RequestMapping(value = "/resume/register")
 	public String resumeForm(Model model) {
 		ResumeVO resumeVO = new ResumeVO();
-		resumeVO.setTech(0, "#JAVA#Node.js#SQL");
+
+		/*AbilityVO abilityVO = new AbilityVO();
+		abilityVO.setTitle("JAVA");
+		abilityVO.setLevel(78);
+		List<AbilityVO> abilityVOList = new ArrayList<>();
+		abilityVOList.add(abilityVO);
+		resumeVO.setSkill(abilityVOList);*/
+		ActVO actVO = new ActVO();
+		List<ActVO> actVOList = new ArrayList<>();
+		actVOList.add(actVO);
+		resumeVO.setExperience(actVOList);
+		//resumeVO.setTech(0, "#JAVA#Node.js#SQL");
 		logger.debug("response params ------->> {}", gson.toJson(resumeVO).toString());
-		model.addAttribute("resumeVO", resumeVO);
+		model.addAttribute("resumeVO", new ResumeVO());
 		return "resume/resumeForm";
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder webDataBinder) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		simpleDateFormat.setLenient(false);
+		webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(simpleDateFormat, true));
 	}
 }
