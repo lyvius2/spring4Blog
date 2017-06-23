@@ -31,34 +31,36 @@
 		<!-- header -->
 		<header class="resume">
 			<h1 class="heading-container">Résumé</h1>
-			<h2 class="name-container"><input type="text" class="form-control" name="name" v-model="data.name" placeholder="korean name" tabindex="5"/></h2>
-			<h3 class="job-container"><input type="text" class="form-control" name="eng_name" v-model="data.eng_name" placeholder="english name" tabindex="6" /></h3>
+			<h2 class="name-container"><input type="text" class="form-control" name="name" v-model="data.name" placeholder="한글명" tabindex="5"/></h2>
+			<h3 class="job-container"><input type="text" class="form-control" name="eng_name" v-model="data.eng_name" placeholder="영문명" tabindex="6" /></h3>
 			<div class="profile-picture">
-				<img src="${pageContext.request.contextPath}/resources/images/profile.png" alt="Profile">
+				<img v-if="data.image_url != null" v-bind:src="'${pageContext.request.contextPath}/resources/images/profile/' + data.image_url" alt="Profile">
+				<input type="file" name="profile"/>
+				<input type="hidden" name="image_url" v-model="data.image_url"/>
 			</div>
 			<div class="contact-container">
 				<ul class="contact-list">
 					<li>
 						<div class="input-group input-group-sm">
-							<input type="email" class="form-control" name="email" v-model="data.email" placeholder="email address" tabindex="1"/>
+							<input type="email" class="form-control" name="email" v-model="data.email" placeholder="E-Mail" tabindex="1"/>
 						</div>
 						<span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" name="web_addr" v-model="data.web_addr" placeholder="homepage address" tabindex="2"/>
+							<input type="text" class="form-control" name="web_addr" v-model="data.web_addr" placeholder="홈페이지 URL" tabindex="2"/>
 						</div>
 						<span><i class="fa fa-globe" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" name="git_addr" v-model="data.gir_addr" placeholder="github address" tabindex="3"/>
+							<input type="text" class="form-control" name="git_addr" v-model="data.gir_addr" placeholder="GitHub URL" tabindex="3"/>
 						</div>
 						<span><i class="fa fa-github" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" name="real_addr" v-model="data.real_addr" placeholder="location address" tabindex="4"/>
+							<input type="text" class="form-control" name="real_addr" v-model="data.real_addr" placeholder="주소" tabindex="4"/>
 						</div>
 						<span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
 					</li>
@@ -105,9 +107,9 @@
 				<section class="resume-item skill">
 					<div class="inner">
 						<h2>Skill</h2>
-						<ability-form v-for="(item, index) in data.skill"
+						<act-form v-for="(item, index) in data.skill"
 						              v-bind:key="index"
-						              :seq="index" :data="item"></ability-form>
+						              :seq="index" :data="item" :flag="'skill'"></act-form>
 						<div class="text-right">
 							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가" v-on:click="item_plus('skill')"></i>
 						</div>
@@ -135,64 +137,65 @@
 <content tag="script">
 	<script type="text/x-template" id="act-form-template">
 		<div v-bind:id="flag + '_index_' + seq">
-			<div class="form-group">
-				<div class="col-sm-3"><h5>[{{seq + 1}}]</h5></div>
-				<div class="col-sm-9 text-right">
+			<div v-if="flag != 'skill'">
+				<div class="form-group">
+					<div class="col-sm-3"><h5>[{{seq + 1}}]</h5></div>
+					<div class="col-sm-9 text-right">
+						<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제" v-on:click="item_remove(flag, seq)"></i>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Title</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].title'" v-model="data.title"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">{{flag == 'experience' ? 'Company, Rank':'Work Role'}}</label>
+					<div class="col-sm-9">
+						<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].sub_title'" v-model="data.sub_title"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Period</label>
+					<div class="col-sm-4">
+						<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].start_dt'" v-model="data.str_start_dt"/>
+					</div>
+					<div class="col-sm-1 text-center">~</div>
+					<div class="col-sm-4">
+						<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].end_dt'" v-model="data.str_end_dt"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Detail</label>
+					<div class="col-sm-9">
+						<textarea class="form-control" v-bind:name="flag + '[' + seq + '].description'" v-model="data.description" rows="3"/>
+					</div>
+				</div>
+				<div class="form-group" v-if="flag == 'project'">
+					<label class="col-sm-3 control-label" style="padding-top: 0px;">Tech</label>
+					<div class="col-sm-9">
+						<span v-for="(item, index) in (data.tech || '').split('#')" v-bind:key="item" class="label label-primary">{{item}}</span>
+						<span class="label label-success"><i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i></span>
+						<input type="hidden" v-bind:name="'project[' + seq + '].tech'" v-model="data.tech"/>
+					</div>
+				</div>
+			</div>
+			<div class="row" v-if="flag == 'skill'">
+				<div class="col-sm-3">
+					<div class="input-group input-group-sm">
+						<input type="text" class="form-control" v-bind:name="'skill[' + seq + '].title'" v-model="data.title" placeholder="skill name"/>
+					</div>
+				</div>
+				<div class="col-sm-7">
+					<input type="range" class="form-control" v-bind:name="'skill[' + seq + '].level'" v-model="data.level"
+					       v-bind:onchange="'skill' + seq + '_level.value = value'" min="0" max="100"/>
+				</div>
+				<div class="col-sm-2 text-right">
+					<output v-bind:id="'skill' + seq + '_level'" style="display:inline-block">{{data.level}}</output>
+					&nbsp;
 					<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제" v-on:click="item_remove(flag, seq)"></i>
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Title</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].title'" v-model="data.title"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">{{flag == 'experience' ? 'Company, Rank':'Work Role'}}</label>
-				<div class="col-sm-9">
-					<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].sub_title'" v-model="data.sub_title"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Period</label>
-				<div class="col-sm-4">
-					<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].start_dt'" v-model="data.start_dt"/>
-				</div>
-				<div class="col-sm-1 text-center">~</div>
-				<div class="col-sm-4">
-					<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].end_dt'" v-model="data.end_dt"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">Detail</label>
-				<div class="col-sm-9">
-					<textarea class="form-control" v-bind:name="flag + '[' + seq + '].description'" v-model="data.description" rows="3"/>
-				</div>
-			</div>
-			<div class="form-group" v-if="flag == 'project'">
-				<label class="col-sm-3 control-label" style="padding-top: 0px;">Tech</label>
-				<div class="col-sm-9">
-					<span v-for="(item, index) in (data.tech || '').split('#')" v-bind:key="item" class="label label-primary">{{item}}</span>
-					<span class="label label-success"><i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i></span>
-					<input type="hidden" v-bind:name="'project[' + seq + '].tech'" v-model="data.tech"/>
-				</div>
-			</div>
-		</div>
-	</script>
-	<script type="text/x-templete" id="ability-form-template">
-		<div class="row">
-			<div class="col-sm-3">
-				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" v-bind:name="'skill[' + seq + '].title'" v-model="data.title" placeholder="skill name"/>
-				</div>
-			</div>
-			<div class="col-sm-7">
-				<input type="range" class="form-control" v-bind:name="'skill[' + seq + '].level'" v-model="data.level" min="0" max="100" v-bind:onchange="'skill' + seq + '_level.value = value'"/>
-			</div>
-			<div class="col-sm-2 text-right">
-				<output v-bind:id="'skill' + seq + '_level'" style="display:inline-block">{{data.level}}</output>
-				&nbsp;
-				<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
 			</div>
 		</div>
 	</script>
@@ -203,7 +206,7 @@
 			this.title = ''
 			switch(flag) {
 				case 'skill' :
-					this.level = 70
+					this.level = 0
 					break;
 				case 'project' :
 					this.tech = ''
@@ -215,10 +218,6 @@
 			}
 		}
 
-		function item_remove(item, index) {
-			resume.data[item].splice(index, 1)
-		}
-
 		Vue.component('act-form', {
 			template: '#act-form-template',
 			props: {
@@ -227,34 +226,24 @@
 				flag: {type: String, required: true}
 			},
 			methods: {
-				item_remove: item_remove
+				item_remove: function(item, index) {
+					resume.data[item].splice(index, 1)
+				}
 			}
 		})
 
-		Vue.component('ability-form', {
-			template: '#ability-form-template',
-			props: {
-				seq: {type: Number, required: true},
-				data: {type: Object, required: true}
-			},
-			methods: {
-				item_remove: item_remove
-			}
-		})
-
-		$.get('/resume/api')
-			.then(function (result) {
-				resume = new Vue({
-					el: '.resume-wrapper',
-					data: {data: result},
-					methods: {
-						item_plus: function(item) {
-							this.data[item].push(new createActVO(item))
-						}
+		$.get('/resume/api').then(function (result) {
+			console.log(result)
+			resume = new Vue({
+				el: '.resume-wrapper',
+				data: {data: result},
+				methods: {
+					item_plus: function(item) {
+						this.data[item].push(new createActVO(item))
 					}
-				})
-			}
-		)
+				}
+			})
+		})
 	</script>
 </content>
 </body>

@@ -20,17 +20,19 @@ public class ResumeVO {
 
 	private String name;
 	private String eng_name;
-	private String photo_url;
 	private String email;
 	private String real_addr;
 	private String web_addr;
 	private String git_addr;
+	private String image_url;
 
 	private List<ActVO> education = new ArrayList<>();
 	private List<ActVO> experience = new ArrayList<>();
 	private List<ActVO> project = new ArrayList<>();
 
 	private List<AbilityVO> skill = new ArrayList<>();
+
+	private Date last_saved_date;
 
 	public ResumeVO() {
 		super();
@@ -58,14 +60,6 @@ public class ResumeVO {
 
 	public void setEng_name(String eng_name) {
 		this.eng_name = eng_name;
-	}
-
-	public String getPhoto_url() {
-		return photo_url;
-	}
-
-	public void setPhoto_url(String photo_url) {
-		this.photo_url = photo_url;
 	}
 
 	public String getEmail() {
@@ -100,6 +94,14 @@ public class ResumeVO {
 		this.git_addr = git_addr;
 	}
 
+	public String getImage_url() {
+		return image_url;
+	}
+
+	public void setImage_url(String image_url) {
+		this.image_url = image_url;
+	}
+
 	public List<ActVO> getEducation() {
 		return education;
 	}
@@ -132,6 +134,14 @@ public class ResumeVO {
 		this.skill = skill;
 	}
 
+	public Date getLast_saved_date() {
+		return last_saved_date;
+	}
+
+	public void setLast_saved_date(Date last_saved_date) {
+		this.last_saved_date = last_saved_date;
+	}
+
 	public void setTech(int projectIndex, String tech) {
 		this.project.get(projectIndex).setTech(tech);
 	}
@@ -142,15 +152,16 @@ public class ResumeVO {
 				"_id='" + _id + '\'' +
 				", name='" + name + '\'' +
 				", eng_name='" + eng_name + '\'' +
-				", photo_url='" + photo_url + '\'' +
 				", email='" + email + '\'' +
 				", real_addr='" + real_addr + '\'' +
 				", web_addr='" + web_addr + '\'' +
 				", git_addr='" + git_addr + '\'' +
+				", image_url='" + image_url + '\'' +
 				", education=" + education +
 				", experience=" + experience +
 				", project=" + project +
 				", skill=" + skill +
+				", last_saved_date=" + last_saved_date +
 				'}';
 	}
 }

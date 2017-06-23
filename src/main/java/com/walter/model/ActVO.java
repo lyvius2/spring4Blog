@@ -1,5 +1,7 @@
 package com.walter.model;
 
+import com.walter.config.CustomStringUtils;
+
 import java.util.Date;
 
 /**
@@ -13,6 +15,8 @@ public class ActVO {
 	private String related_site;
 	private Date start_dt;
 	private Date end_dt;
+	private String str_start_dt;
+	private String str_end_dt;
 
 	public ActVO() {
 		super();
@@ -72,5 +76,15 @@ public class ActVO {
 
 	public void setEnd_dt(Date end_dt) {
 		this.end_dt = end_dt;
+	}
+
+	public String getStr_start_dt() {
+		str_start_dt = CustomStringUtils.dateToString(this.start_dt, "yyyy-MM-dd");
+		return str_start_dt;
+	}
+
+	public String getStr_end_dt() {
+		str_end_dt = CustomStringUtils.dateToString(this.end_dt, "yyyy-MM-dd");
+		return str_end_dt;
 	}
 }

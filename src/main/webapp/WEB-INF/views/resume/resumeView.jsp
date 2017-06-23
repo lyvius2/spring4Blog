@@ -23,29 +23,39 @@
 		<!-- header -->
 		<header class="resume">
 			<h1 class="heading-container">Résumé</h1>
-			<h2 class="name-container">your name</h2>
-			<h3 class="job-container">your role</h3>
+			<h2 class="name-container"><c:out value="${resume.name}"/></h2>
+			<h3 class="job-container"><c:out value="${resume.eng_name}"/></h3>
+			<c:if test="${resume.image_url != null}">
 			<div class="profile-picture">
-				<img src="${pageContext.request.contextPath}/resources/images/profile.png" alt="Profile">
+				<img src="${pageContext.request.contextPath}/resources/images/profile/${resume.image_url}" alt="Profile">
 			</div>
+			</c:if>
 			<div class="contact-container">
 				<ul class="contact-list">
+					<c:if test="${resume.email != ''}">
 					<li>
-						<a href="tel:01000000000">+82. 010. 0000. 0000</a>
-						<span><i class="fa fa-phone" aria-hidden="true"></i></span>
-					</li>
-					<li>
-						<a href="mailto:your@email.com">your@email.com</a>
+						<a href="mailto:${resume.email}"><c:out value="${resume.email}"/></a>
 						<span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
 					</li>
+					</c:if>
+					<c:if test="${resume.web_addr != ''}">
 					<li>
-						<a href="#" target="_blank">your homepage address</a>
+						<a href="#" target="_blank"><c:out value="${resume.web_addr}"/></a>
 						<span><i class="fa fa-globe" aria-hidden="true"></i></span>
 					</li>
+					</c:if>
+					<c:if test="${resume.git_addr != ''}">
 					<li>
-						<a href="https://github.com/dhparkdh/resume-for-web-developer" target="_blank">your github address</a>
+						<a href="${resume.git_addr}" target="_blank"><c:out value="${resume.git_addr}"/></a>
 						<span><i class="fa fa-github" aria-hidden="true"></i></span>
 					</li>
+					</c:if>
+					<c:if test="${resume.real_addr != ''}">
+					<li>
+						<c:out value="${resume.real_addr}"/>
+						<span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+					</li>
+					</c:if>
 				</ul>
 			</div>
 		</header><!-- header -->
@@ -59,24 +69,15 @@
 					<div class="inner">
 						<h2>experience</h2>
 						<ul>
-							<!-- list example
+							<c:forEach var="experience" items="${resume.experience}" varStatus="vs">
 							<li>
-							  <h3>Your Role</h3>
-							  <h4 class="company">Your Company Name & Location</h4>
-							  <span class="date">Working Period</span>
-							  <p class="detail">
-								Details what you did at this company
-							  </p>
+								<h3><c:out value="${experience.title}"/></h3>
+								<h4 class="company"><c:out value="${experience.sub_title}"/></h4>
+								<span class="date"><c:out value="${experience.str_start_dt}"/> - <c:out value="${experience.str_end_dt}"/></span>
+								<p class="detail"><c:out value="${experience.description}"/></p>
 							</li>
-							-->
-							<li>
-								<h3>Chief Technology Officer</h3>
-								<h4 class="company">Global Unicorn Corp. in Bundang</h4>
-								<span class="date">Sept 2015 - present</span>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-							</li>
+							</c:forEach>
+							<%--
 							<li>
 								<h3>Senior Front-End Developer</h3>
 								<h4 class="company">Awesome Startup Corp. in Gangnam</h4>
@@ -93,6 +94,7 @@
 									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
 								</p>
 							</li>
+							--%>
 						</ul>
 					</div>
 				</section><!-- experince -->
