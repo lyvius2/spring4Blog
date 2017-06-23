@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ResumeRepository extends MongoRepository<ResumeVO, String> {
 
+	ResumeVO findBy_id(String _id);
+
 }

@@ -25,14 +25,14 @@
 	</style>
 </head>
 <body>
-<form:form action="/resume" method="post" commandName="resumeVO" autocomplete="off" enctype="multipart/form-data">
+<form id="resumeVO" action="/resume" method="post" enctype="multipart/form-data" autocomplete="off">
 	<div class="resume-wrapper">
 
 		<!-- header -->
 		<header class="resume">
 			<h1 class="heading-container">Résumé</h1>
-			<h2 class="name-container"><form:input type="text" cssClass="form-control" path="name" placeholder="korean name" tabindex="5"/></h2>
-			<h3 class="job-container"><form:input type="text" cssClass="form-control" path="eng_name" placeholder="english name" tabindex="6"/></h3>
+			<h2 class="name-container"><input type="text" class="form-control" name="name" v-model="data.name" placeholder="korean name" tabindex="5"/></h2>
+			<h3 class="job-container"><input type="text" class="form-control" name="eng_name" v-model="data.eng_name" placeholder="english name" tabindex="6" /></h3>
 			<div class="profile-picture">
 				<img src="${pageContext.request.contextPath}/resources/images/profile.png" alt="Profile">
 			</div>
@@ -40,25 +40,25 @@
 				<ul class="contact-list">
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="email" cssClass="form-control" path="email" placeholder="email address" tabindex="1"/>
+							<input type="email" class="form-control" name="email" v-model="data.email" placeholder="email address" tabindex="1"/>
 						</div>
 						<span><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="text" cssClass="form-control" path="web_addr" placeholder="homepage address" tabindex="2"/>
+							<input type="text" class="form-control" name="web_addr" v-model="data.web_addr" placeholder="homepage address" tabindex="2"/>
 						</div>
 						<span><i class="fa fa-globe" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="text" cssClass="form-control" path="git_addr" placeholder="github address" tabindex="3"/>
+							<input type="text" class="form-control" name="git_addr" v-model="data.gir_addr" placeholder="github address" tabindex="3"/>
 						</div>
 						<span><i class="fa fa-github" aria-hidden="true"></i></span>
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<form:input type="text" cssClass="form-control" path="real_addr" placeholder="location address" tabindex="4"/>
+							<input type="text" class="form-control" name="real_addr" v-model="data.real_addr" placeholder="location address" tabindex="4"/>
 						</div>
 						<span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
 					</li>
@@ -71,118 +71,31 @@
 			<div class="resume-item-wrapper">
 
 				<!-- experience -->
-				<section class="resume-item experience" id="test">
+				<section class="resume-item experience">
 					<div class="inner">
 						<h2>experience</h2>
 						<div class="form-horizontal">
-							<%--
-							<c:forEach items="${resumeVO.experience}" varStatus="vs">
-							<div id="experience_index_${vs.index}">
-								<div class="form-group">
-									<div class="col-sm-3"><h5>[${vs.index + 1}]</h5></div>
-									<div class="col-sm-9 text-right">
-										<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Title</label>
-									<div class="col-sm-9">
-										<form:input type="text" cssClass="form-control" path="experience[${vs.index}].title"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Company, Rank</label>
-									<div class="col-sm-9">
-										<form:input type="text" cssClass="form-control" path="experience[${vs.index}].sub_title"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Period</label>
-									<div class="col-sm-4">
-										<form:input type="date" cssClass="form-control" path="experience[${vs.index}].start_dt"/>
-									</div>
-									<div class="col-sm-1 text-center">~</div>
-									<div class="col-sm-4">
-										<form:input type="date" cssClass="form-control" path="experience[${vs.index}].end_dt"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Detail</label>
-									<div class="col-sm-9">
-										<form:textarea cssClass="form-control" path="experience[${vs.index}].description" rows="3"/>
-									</div>
-								</div>
-							</div>
-							</c:forEach>
-							--%>
-							<experience-form v-for="(item, index) in items" v-bind:key="item ":seq="index"></experience-form>
-								<form:input type="text" cssClass="form-control" path="experience[3].title"/>
-								<form:input type="text" cssClass="form-control" path="experience[4].title"/>
-								<input type="text" class="form-control" name="experience[5].title" id="experience5.title"/>
-								<input type="text" class="form-control" name="experience[6].title" id="experience6.title"/>
+							<act-form v-for="(item, index) in data.experience"
+							                 v-bind:key="index"
+							                 :seq="index" :data="item" :flag="'experience'"></act-form>
 						</div>
 						<div class="text-right">
-							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가"></i>
+							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가" v-on:click="item_plus('experience')"></i>
 						</div>
 					</div>
 				</section><!-- experience -->
 
-				<%--
+
 				<!-- project -->
 				<section class="resume-item project">
 					<div class="inner">
 						<h2>project</h2>
 						<div class="form-horizontal">
-							<c:forEach var="project" items="${resumeVO.project}" varStatus="vs">
-								<div class="form-group">
-									<div class="col-sm-3"><h5>[${vs.index + 1}]</h5></div>
-									<div class="col-sm-9 text-right">
-										<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Title</label>
-									<div class="col-sm-9">
-										<form:input type="text" cssClass="form-control" path="project[${vs.index}].title"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Work Role</label>
-									<div class="col-sm-9">
-										<form:input type="text" cssClass="form-control" path="project[${vs.index}].sub_title"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Period</label>
-									<div class="col-sm-4">
-										<form:input type="date" cssClass="form-control" path="project[${vs.index}].start_dt"/>
-									</div>
-									<div class="col-sm-1 text-center">~</div>
-									<div class="col-sm-4">
-										<form:input type="date" cssClass="form-control" path="project[${vs.index}].end_dt"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Detail</label>
-									<div class="col-sm-9">
-										<form:textarea cssClass="form-control" path="project[${vs.index}].description" rows="3"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label" style="padding-top: 0px;">Tech</label>
-									<div class="col-sm-9">
-										<c:forEach var="tech" items="${fn:split(project.tech,'#')}" varStatus="vss">
-										<span class="label label-primary">#${tech}</span>
-										</c:forEach>
-										<form:input type="hidden" path="project[${vs.index}].tech"/>
-										<span class="label label-success">
-											<i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i>
-										</span>
-									</div>
-								</div>
-							</c:forEach>
+							<act-form v-for="(item, index) in data.project"
+							          v-bind:key="index"
+							          :seq="index" :data="item" :flag="'project'"></act-form>
 							<div class="text-right">
-								<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가"></i>
+								<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가" v-on:click="item_plus('project')"></i>
 							</div>
 						</div>
 					</div>
@@ -192,29 +105,15 @@
 				<section class="resume-item skill">
 					<div class="inner">
 						<h2>Skill</h2>
-						<c:forEach var="skill" items="${resumeVO.skill}" varStatus="vs">
-						<div class="row">
-							<div class="col-sm-3">
-								<div class="input-group input-group-sm">
-									<form:input type="text" cssClass="form-control" path="skill[${vs.index}].title" placeholder="skill name"/>
-								</div>
-							</div>
-							<div class="col-sm-7">
-								<form:input type="range" cssClass="form-control" path="skill[${vs.index}].level" min="0" max="100" onchange="skill${vs.index}_level.value = value"/>
-							</div>
-							<div class="col-sm-2 text-right">
-								<output id="skill${vs.index}_level" style="display:inline-block">${skill.level}</output>
-								&nbsp;
-								<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
-							</div>
-						</div>
-						</c:forEach>
+						<ability-form v-for="(item, index) in data.skill"
+						              v-bind:key="index"
+						              :seq="index" :data="item"></ability-form>
 						<div class="text-right">
-							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가"></i>
+							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가" v-on:click="item_plus('skill')"></i>
 						</div>
 					</div>
 				</section><!-- skill -->
-				--%>
+
 				<section class="resume-item">
 					<div style="padding-top: 20px;">
 						<button type="submit" class="btn btn-primary btn-sm">
@@ -232,65 +131,130 @@
 		</footer><!-- footer -->
 
 	</div>
-</form:form>
+</form>
 <content tag="script">
-	<script type="text/x-template" id="experience-template">
-		<div v-bind:id="'experience_index_' + seq">
+	<script type="text/x-template" id="act-form-template">
+		<div v-bind:id="flag + '_index_' + seq">
 			<div class="form-group">
 				<div class="col-sm-3"><h5>[{{seq + 1}}]</h5></div>
 				<div class="col-sm-9 text-right">
-					<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
+					<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제" v-on:click="item_remove(flag, seq)"></i>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Title</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" v-bind:name="'experience[' + seq + '].title'"
-					       v-bind:id="'experience' + seq + '.title'"/>
+					<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].title'" v-model="data.title"/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label">Company, Rank</label>
+				<label class="col-sm-3 control-label">{{flag == 'experience' ? 'Company, Rank':'Work Role'}}</label>
 				<div class="col-sm-9">
-					<input type="text" class="form-control" v-bind:name="'experience[' + seq + '].sub_title'"
-					       v-bind:id="'experience' + seq + '.sub_title'"/>
+					<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].sub_title'" v-model="data.sub_title"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Period</label>
 				<div class="col-sm-4">
-					<input type="date" class="form-control" v-bind:name="'experience[' + seq + '].start_dt'"
-					       v-bind:id="'experience' + seq + '.start_dt'"/>
+					<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].start_dt'" v-model="data.start_dt"/>
 				</div>
 				<div class="col-sm-1 text-center">~</div>
 				<div class="col-sm-4">
-					<input type="date" class="form-control" v-bind:name="'experience[' + seq + '].end_dt'"
-					       v-bind:id="'experience' + seq + '.end_dt'"/>
+					<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].end_dt'" v-model="data.end_dt"/>
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">Detail</label>
 				<div class="col-sm-9">
-					<textarea class="form-control" v-bind:name="'experience[' + seq + '].description'"
-					          v-bind:id="'experience' + seq + '.description'" rows="3"/>
+					<textarea class="form-control" v-bind:name="flag + '[' + seq + '].description'" v-model="data.description" rows="3"/>
+				</div>
+			</div>
+			<div class="form-group" v-if="flag == 'project'">
+				<label class="col-sm-3 control-label" style="padding-top: 0px;">Tech</label>
+				<div class="col-sm-9">
+					<span v-for="(item, index) in (data.tech || '').split('#')" v-bind:key="item" class="label label-primary">{{item}}</span>
+					<span class="label label-success"><i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i></span>
+					<input type="hidden" v-bind:name="'project[' + seq + '].tech'" v-model="data.tech"/>
 				</div>
 			</div>
 		</div>
 	</script>
+	<script type="text/x-templete" id="ability-form-template">
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="input-group input-group-sm">
+					<input type="text" class="form-control" v-bind:name="'skill[' + seq + '].title'" v-model="data.title" placeholder="skill name"/>
+				</div>
+			</div>
+			<div class="col-sm-7">
+				<input type="range" class="form-control" v-bind:name="'skill[' + seq + '].level'" v-model="data.level" min="0" max="100" v-bind:onchange="'skill' + seq + '_level.value = value'"/>
+			</div>
+			<div class="col-sm-2 text-right">
+				<output v-bind:id="'skill' + seq + '_level'" style="display:inline-block">{{data.level}}</output>
+				&nbsp;
+				<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제"></i>
+			</div>
+		</div>
+	</script>
 	<script>
-		Vue.component('experience-form', {
-			template: '#experience-template',
+		var resume;
+
+		function createActVO(flag) {
+			this.title = ''
+			switch(flag) {
+				case 'skill' :
+					this.level = 70
+					break;
+				case 'project' :
+					this.tech = ''
+				default :
+					this.sub_title = ''
+					this.description = ''
+					this.start_dt = ''
+					this.end_dt = ''
+			}
+		}
+
+		function item_remove(item, index) {
+			resume.data[item].splice(index, 1)
+		}
+
+		Vue.component('act-form', {
+			template: '#act-form-template',
 			props: {
-				seq: {type: Number, required: true}
+				seq: {type: Number, required: true},
+				data: {type: Object, required: true},
+				flag: {type: String, required: true}
+			},
+			methods: {
+				item_remove: item_remove
 			}
 		})
 
-		var experience_list = new Vue({
-			el: '#test',
-			data: {
-				items: [1,2,3]
+		Vue.component('ability-form', {
+			template: '#ability-form-template',
+			props: {
+				seq: {type: Number, required: true},
+				data: {type: Object, required: true}
+			},
+			methods: {
+				item_remove: item_remove
 			}
 		})
+
+		$.get('/resume/api')
+			.then(function (result) {
+				resume = new Vue({
+					el: '.resume-wrapper',
+					data: {data: result},
+					methods: {
+						item_plus: function(item) {
+							this.data[item].push(new createActVO(item))
+						}
+					}
+				})
+			}
+		)
 	</script>
 </content>
 </body>

@@ -26,17 +26,11 @@ public class ResumeVO {
 	private String web_addr;
 	private String git_addr;
 
-	private List<ActVO> education;
-	private List<ActVO> experience;
-	private List<ActVO> project;
+	private List<ActVO> education = new ArrayList<>();
+	private List<ActVO> experience = new ArrayList<>();
+	private List<ActVO> project = new ArrayList<>();
 
-	private List<AbilityVO> skill;
-
-	/*public ResumeVO() {
-		super();
-		experience.add(new ActVO());
-		project.add(new ActVO());
-	}*/
+	private List<AbilityVO> skill = new ArrayList<>();
 
 	public ResumeVO() {
 		super();
@@ -159,9 +153,6 @@ public class ResumeVO {
 				", skill=" + skill +
 				'}';
 	}
-
-
-
 }
 
 
