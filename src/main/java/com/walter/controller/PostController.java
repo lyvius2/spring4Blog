@@ -42,7 +42,7 @@ public class PostController extends BaseController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPostForm(Model model) {
-		model = service.setInputForm(model);
+		//model = service.setInputForm(model);
 		model.addAttribute("postVO", new PostVO(true, true));
 		return "post/postForm";
 	}
