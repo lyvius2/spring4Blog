@@ -47,10 +47,10 @@ public class ResumeServiceImpl implements ResumeService {
 	}
 
 	@Override
-	public void registerResume(ResumeVO resumeVO, MultipartFile file, String savePath) throws IOException {
+	public void registerResume(ResumeVO resumeVO, MultipartFile file) throws IOException {
 		if (file.getSize() > 0) {
-			String fileName = fileUtil.getRandomUniqueFileName(new File(savePath, fileUtil.PROFILE_IMAGE_PATH));
-			file.transferTo(new File(savePath, fileUtil.PROFILE_IMAGE_PATH + fileName));
+			String fileName = fileUtil.getRandomUniqueFileName(new File(fileUtil.REAL_CLASS_PATH, fileUtil.PROFILE_IMAGE_PATH));
+			file.transferTo(new File(fileUtil.REAL_CLASS_PATH, fileUtil.PROFILE_IMAGE_PATH + fileName));
 			resumeVO.setImage_url(fileName);
 		}
 		resumeVO.setLast_saved_date(new Date());

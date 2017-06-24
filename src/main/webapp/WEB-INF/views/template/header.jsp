@@ -22,7 +22,7 @@
 							</c:forEach>
 						</ul>
 					</li>
-					<li <c:if test="${path == '/profile'}">class="active"</c:if>><a href="/profile">Profile</a></li>
+					<li <c:if test="${path == '/resume'}">class="active"</c:if>><a href="/resume">Profile</a></li>
 					<li <c:if test="${path == '/config'}">class="active"</c:if>><a href="/config">Config</a></li>
 				</ul>
 				<security:authorize access="!isAuthenticated()">

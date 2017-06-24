@@ -10,5 +10,5 @@ import java.io.IOException;
  */
 public interface ResumeService {
 	ResumeVO getDefaultResume(String _id);
-	void registerResume(ResumeVO resumeVO, MultipartFile file, String savePath) throws IOException;
+	void registerResume(ResumeVO resumeVO, MultipartFile file) throws IOException;
 }

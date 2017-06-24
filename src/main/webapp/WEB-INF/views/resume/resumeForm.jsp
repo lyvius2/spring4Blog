@@ -49,7 +49,7 @@
 					</li>
 					<li>
 						<div class="input-group input-group-sm">
-							<input type="text" class="form-control" name="git_addr" v-model="data.gir_addr" placeholder="GitHub URL" tabindex="3"/>
+							<input type="text" class="form-control" name="git_addr" v-model="data.git_addr" placeholder="GitHub URL" tabindex="3"/>
 						</div>
 						<span><i class="fa fa-github" aria-hidden="true"></i></span>
 					</li>

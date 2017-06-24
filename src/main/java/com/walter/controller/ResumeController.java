@@ -42,7 +42,7 @@ public class ResumeController extends BaseController {
 	public String resumeRegist(@ModelAttribute("resumeVO") ResumeVO resumeVO,
 	                           @RequestParam("profile")MultipartFile file,
 	                           BindingResult result) throws IOException {
-		service.registerResume(resumeVO, file, fileUtil.REAL_CLASS_PATH);
+		service.registerResume(resumeVO, file);
 		return "redirect:/resume";
 	}
 

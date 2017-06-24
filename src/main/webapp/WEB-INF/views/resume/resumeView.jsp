@@ -20,6 +20,9 @@
 </head>
 <body>
 	<div class="resume-wrapper">
+		<jsp:scriptlet>
+			pageContext.setAttribute("wrap", "\n");
+		</jsp:scriptlet>
 
 		<!-- header -->
 		<header class="resume">
@@ -74,7 +77,7 @@
 								<h3><c:out value="${experience.title}"/></h3>
 								<h4 class="company"><c:out value="${experience.sub_title}"/></h4>
 								<span class="date"><c:out value="${experience.str_start_dt}"/> - <c:out value="${experience.str_end_dt}"/></span>
-								<p class="detail"><c:out value="${experience.description}"/></p>
+								<p class="detail"><c:out value="${fn:replace(experience.description, wrap, '<br/>')}" escapeXml="false"/></p>
 							</li>
 							</c:forEach>
 						</ul>
@@ -92,7 +95,7 @@
 							<li>
 								<h3>
 									<c:choose>
-										<c:when test="${project.related_site != null}">
+										<c:when test="${project.related_site != ''}">
 											<a href="${project.related_site}" target="_blank"><c:out value="${project.title}"/></a>
 										</c:when>
 										<c:otherwise>
@@ -102,7 +105,7 @@
 								</h3>
 								<p class="sub"><c:out value="${project.sub_title}"/></p>
 								<p class="date"><c:out value="${project.str_start_dt}"/> - <c:out value="${project.str_end_dt}"/></p>
-								<p class="detail"><c:out value="${project.description}"/></p>
+								<p class="detail"><c:out value="${fn:replace(project.description, wrap, '<br/>')}" escapeXml="false"/></p>
 								<p class="tags">
 									<c:forEach var="tech" items="${fn:split(project.tech, '#')}">
 										#<c:out value="${tech}"/>&nbsp;

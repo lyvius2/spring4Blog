@@ -85,6 +85,7 @@ public class ActVO {
 
 	public String getStr_end_dt() {
 		str_end_dt = CustomStringUtils.dateToString(this.end_dt, "yyyy-MM-dd");
+		if (CustomStringUtils.isEmpty(str_end_dt)) str_end_dt = "Present";
 		return str_end_dt;
 	}
 }
