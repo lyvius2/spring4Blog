@@ -24,7 +24,6 @@ import java.util.Date;
 @Controller
 public class BaseController {
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
-	final String REAL_CLASS_PATH = this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() + "../../";
 	protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
 	@Autowired

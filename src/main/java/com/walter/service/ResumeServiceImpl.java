@@ -3,6 +3,7 @@ package com.walter.service;
 import com.walter.config.CustomStringUtils;
 import com.walter.model.ResumeVO;
 import com.walter.repository.ResumeRepository;
+import com.walter.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,15 @@ import java.util.UUID;
 @Service
 public class ResumeServiceImpl implements ResumeService {
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
-	final static String PROFILE_IMAGE_PATH = "resources/images/profile/";
 
 	@Autowired
 	private ResumeRepository repository;
 
 	@Autowired
 	private MongoOperations mongoOps;
+
+	@Autowired
+	private FileUtil fileUtil;
 
 	@Override
 	public ResumeVO getDefaultResume(String _id) {
@@ -46,21 +49,11 @@ public class ResumeServiceImpl implements ResumeService {
 	@Override
 	public void registerResume(ResumeVO resumeVO, MultipartFile file, String savePath) throws IOException {
 		if (file.getSize() > 0) {
-			String fileName = getRandomUniqueFileName(new File(savePath, PROFILE_IMAGE_PATH));
-			file.transferTo(new File(savePath, PROFILE_IMAGE_PATH + fileName));
+			String fileName = fileUtil.getRandomUniqueFileName(new File(savePath, fileUtil.PROFILE_IMAGE_PATH));
+			file.transferTo(new File(savePath, fileUtil.PROFILE_IMAGE_PATH + fileName));
 			resumeVO.setImage_url(fileName);
 		}
 		resumeVO.setLast_saved_date(new Date());
 		repository.insert(resumeVO);
-	}
-
-	private String getRandomUniqueFileName(File file) {
-		String randomFileName = new String();
-		boolean isMakingFileName = true;
-		while(isMakingFileName) {
-			randomFileName = UUID.randomUUID().toString();
-			isMakingFileName = new File(file, randomFileName).exists();
-		}
-		return randomFileName;
 	}
 }
