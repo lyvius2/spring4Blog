@@ -70,6 +70,23 @@ exclude(module: 'jmxri')
     providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.1'
 }
 
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE"
+        classpath 'org.springframework:springloaded:1.2.4.RELEASE'
+    }
+}
+
+apply plugin: 'idea'
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
+}
+
 sourceSets {
     main.java.srcDirs=['src/main/java']
     main.resources.srcDirs=['src/main/resources']
