@@ -11,6 +11,7 @@ import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/connect")
 public class FacebookTestController extends ConnectController {
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private String TARGET_URL = new String();
 
 	@Resource(name="signInUserDetailsService")
 	private SignInUserDetailsService signInUserDetailsService;
@@ -38,6 +40,13 @@ public class FacebookTestController extends ConnectController {
 	@Inject
 	public FacebookTestController(ConnectionFactoryLocator connectionFactoryLocator, ConnectionRepository connectionRepository) {
 		super(connectionFactoryLocator, connectionRepository);
+	}
+
+	@RequestMapping(value="/{providerId}", method=RequestMethod.POST)
+	public RedirectView connect(@PathVariable String providerId, NativeWebRequest request) {
+		HttpServletRequest httpServletRequest = (HttpServletRequest)request.getNativeRequest();
+		TARGET_URL = httpServletRequest.getHeader("REFERER");
+		return super.connect(providerId, request);
 	}
 
 	@RequestMapping(value="/{providerId}", method= RequestMethod.GET, params="code")
@@ -62,8 +71,7 @@ public class FacebookTestController extends ConnectController {
 		}
 
 		signInUserDetailsService.onAuthenticationBinding(new MemberVO(), userProfile);
-		String targetUrl = httpServletRequest.getHeader("REFERER");
-		redirectView.setUrl(targetUrl);
+		redirectView.setUrl(TARGET_URL);
 		return redirectView;
 	}
 }

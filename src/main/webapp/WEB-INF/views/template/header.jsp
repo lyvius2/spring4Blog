@@ -18,7 +18,9 @@
 					<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Blog <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<c:forEach var="category" items="${categories}" varStatus="status">
-							<li><a href="#" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
+								<c:if test="${category.use_yn == true}">
+								<li><a href="#" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
+								</c:if>
 							</c:forEach>
 						</ul>
 					</li>
@@ -72,7 +74,7 @@
 				</div>
 				<div id="sign-in-facebook">
 					<form action="/connect/facebook" method="post" id="facebook-form">
-						<input type="hidden" name="scope" value="public_profile"/>
+						<input type="hidden" name="scope" value="public_profile, email"/>
 						<button type="submit" class="btn btn-primary-invert btn-block">
 							<i class="fa fa-facebook-square"></i> Sign In with Facebook
 						</button>
