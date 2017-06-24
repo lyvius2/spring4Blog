@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,11 +26,9 @@
 			<h1 class="heading-container">Résumé</h1>
 			<h2 class="name-container"><c:out value="${resume.name}"/></h2>
 			<h3 class="job-container"><c:out value="${resume.eng_name}"/></h3>
-			<c:if test="${resume.image_url != null}">
 			<div class="profile-picture">
-				<img src="${pageContext.request.contextPath}/resources/images/profile/${resume.image_url}" alt="Profile">
+				<img src="${pageContext.request.contextPath}/resources/images/profile/${resume.image_url != null ? resume.image_url:'rockman.gif'}" alt="Profile">
 			</div>
-			</c:if>
 			<div class="contact-container">
 				<ul class="contact-list">
 					<c:if test="${resume.email != ''}">
@@ -61,13 +60,14 @@
 		</header><!-- header -->
 
 		<!-- main -->
-		<section id="main">
+		<section id="main" style="padding-bottom: 0px;">
 			<div class="resume-item-wrapper">
 
 				<!-- experince -->
+				<c:if test="${fn:length(resume.experience) > 0}">
 				<section class="resume-item experience">
 					<div class="inner">
-						<h2>experience</h2>
+						<h2>경력</h2>
 						<ul>
 							<c:forEach var="experience" items="${resume.experience}" varStatus="vs">
 							<li>
@@ -77,113 +77,80 @@
 								<p class="detail"><c:out value="${experience.description}"/></p>
 							</li>
 							</c:forEach>
-							<%--
-							<li>
-								<h3>Senior Front-End Developer</h3>
-								<h4 class="company">Awesome Startup Corp. in Gangnam</h4>
-								<span class="date">Feb 2015 - Jan 2016</span>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-							</li>
-							<li>
-								<h3>Junior Front-End Developer</h3>
-								<h4 class="company">Great Web Agency in Hongdae</h4>
-								<span class="date">Mar 2010 - Jan 2015</span>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-							</li>
-							--%>
 						</ul>
 					</div>
-				</section><!-- experince -->
+				</section>
+				</c:if><!-- experince -->
 
 				<!-- project -->
+				<c:if test="${fn:length(resume.project) > 0}">
 				<section class="resume-item project">
 					<div class="inner">
-						<h2>project</h2>
+						<h2>프로젝트 이력</h2>
 						<ul>
-							<!-- list example
+							<c:forEach var="project" items="${resume.project}" varStatus="vs">
 							<li>
-							  <h3><a href="#" target="_blank">Your Project Name</a></h3>
-							  <p class="detail">
-								Details what the project is
-							  </p>
-							  <p class="tags">#hash #tags</p>
-							</li>
-							-->
-							<li>
-								<h3><a href="https://github.com/dhparkdh/resume-for-web-developer" target="_blank">HTML5 Résumé template for web developer</a></h3>
-								<p class="detail">
-									Online Résumé(CV) template for web developer using HTML5 and CSS3.
+								<h3>
+									<c:choose>
+										<c:when test="${project.related_site != null}">
+											<a href="${project.related_site}" target="_blank"><c:out value="${project.title}"/></a>
+										</c:when>
+										<c:otherwise>
+											<c:out value="${project.title}"/>
+										</c:otherwise>
+									</c:choose>
+								</h3>
+								<p class="sub"><c:out value="${project.sub_title}"/></p>
+								<p class="date"><c:out value="${project.str_start_dt}"/> - <c:out value="${project.str_end_dt}"/></p>
+								<p class="detail"><c:out value="${project.description}"/></p>
+								<p class="tags">
+									<c:forEach var="tech" items="${fn:split(project.tech, '#')}">
+										#<c:out value="${tech}"/>&nbsp;
+									</c:forEach>
 								</p>
-								<p class="tags">#HTML5 #CSS3 #Noto</p>
 							</li>
-							<li>
-								<h3><a href="#" target="_blank">Project Name</a></h3>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-								<p class="tags">#hash #tags</p>
-							</li>
-							<li>
-								<h3><a href="#" target="_blank">Project Name</a></h3>
-								<p class="detail">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-								</p>
-								<p class="tags">#hash #tags</p>
-							</li>
+							</c:forEach>
 						</ul>
 					</div>
-				</section><!-- project -->
+				</section>
+				</c:if><!-- project -->
 
 				<!-- skill -->
+				<c:if test="${fn:length(resume.skill) > 0}">
 				<section class="resume-item skill">
 					<div class="inner">
-						<h2>Skill</h2>
+						<h2>보유기술</h2>
 						<ul>
-							<!-- list example
+							<c:forEach var="skill" items="${resume.skill}" varStatus="vs">
 							<li>
-							  <h3>Your Skill Name</h3>
-							  <div class="skill-bar">
-								<span class="bar" style="width: Percentage% ;"></span>
-							  </div>
-							</li>
-							-->
-							<li>
-								<h3>Master</h3>
+								<h3><c:out value="${skill.title}"/></h3>
 								<div class="skill-bar">
-									<span class="bar" style="width: 100% ;"></span>
+									<span class="bar" style="width: ${skill.level}% ;"></span>
 								</div>
 							</li>
-							<li>
-								<h3>Professional</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 80% ;"></span>
-								</div>
-							</li>
-							<li>
-								<h3>Senior</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 60% ;"></span>
-								</div>
-							</li>
-							<li>
-								<h3>Junior</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 40% ;"></span>
-								</div>
-							</li>
-							<li>
-								<h3>Rookie</h3>
-								<div class="skill-bar">
-									<span class="bar" style="width: 20% ;"></span>
-								</div>
-							</li>
+							</c:forEach>
 						</ul>
 					</div>
-				</section><!-- skill -->
+				</section>
+				</c:if><!-- skill -->
+
+				<!-- education -->
+				<c:if test="${fn:length(resume.education) > 0}">
+				<section class="resume-item experience">
+					<div class="inner">
+						<h2>이수교육</h2>
+						<ul>
+							<c:forEach var="edu" items="${resume.education}" varStatus="vs">
+								<li>
+									<h3><c:out value="${edu.title}"/></h3>
+									<h4 class="company"><c:out value="${edu.sub_title}"/></h4>
+									<span class="date"><c:out value="${edu.str_start_dt}"/> - <c:out value="${edu.str_end_dt}"/></span>
+								</li>
+							</c:forEach>
+						</ul>
+					</div>
+				</section>
+				</c:if><!-- education -->
 
 			</div>
 		</section><!-- main -->
@@ -191,6 +158,7 @@
 		<!-- footer -->
 		<footer>
 			© 2016 <a href="https://github.com/dhparkdh" target="-_blank">dhpark</a>. All rights reserved.
+			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang
 		</footer><!-- footer -->
 
 	</div>

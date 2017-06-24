@@ -188,6 +188,18 @@ header.resume .contact-container .contact-list li span {
 .project h3::after {
     content: ' - ' ;
 }
+.project .sub {
+    display: inline ;
+    color: #959595 ;
+    font-size: 13px ;
+    font-weight: normal ;
+}
+.project .date {
+    top: 5px ;
+    right: 0 ;
+    color: #bbb ;
+    font-size: 12px ;
+}
 .project .detail {
     display: inline ;
     font-size: 14px ;
@@ -200,7 +212,7 @@ header.resume .contact-container .contact-list li span {
 
 /* skill */
 .skill {
-    margin-bottom: 0!important ;
+    /*margin-bottom: 0!important ;*/
 }
 .skill ul li {
     height: 15px ;
@@ -225,7 +237,6 @@ header.resume .contact-container .contact-list li span {
     height: 100% ;
     background: #666 ;
 }
-
 
 /* footer */
 footer {

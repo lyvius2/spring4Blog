@@ -1789,7 +1789,7 @@ h3,
   margin-bottom: 21px;
 }
 p {
-  margin: 0 0 21px;
+  margin: 0 0 10px;
 }
 .lead {
   margin-bottom: 21px;
@@ -1909,4 +1909,7 @@ a.list-group-item.active > .badge,
 }
 .nav-pills > li > a > .badge {
   margin-left: 3px;
+}
+.add-click {
+	cursor: pointer;
 }

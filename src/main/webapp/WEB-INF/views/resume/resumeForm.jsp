@@ -18,11 +18,6 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/resume/NotoSansKR-Hestia.css">
 	<!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/resume/resume.css">
-	<style>
-		.label-primary,.label-success,.add-click {
-			cursor: pointer;
-		}
-	</style>
 </head>
 <body>
 <form id="resumeVO" action="/resume" method="post" enctype="multipart/form-data" autocomplete="off">
@@ -69,13 +64,13 @@
 		</header><!-- header -->
 
 		<!-- main -->
-		<section id="main">
+		<section id="main" style="padding-bottom: 0px;">
 			<div class="resume-item-wrapper">
 
 				<!-- experience -->
 				<section class="resume-item experience">
 					<div class="inner">
-						<h2>experience</h2>
+						<h2>경력</h2>
 						<div class="form-horizontal">
 							<act-form v-for="(item, index) in data.experience"
 							                 v-bind:key="index"
@@ -91,7 +86,7 @@
 				<!-- project -->
 				<section class="resume-item project">
 					<div class="inner">
-						<h2>project</h2>
+						<h2>프로젝트 이력</h2>
 						<div class="form-horizontal">
 							<act-form v-for="(item, index) in data.project"
 							          v-bind:key="index"
@@ -104,9 +99,9 @@
 				</section><!-- project -->
 
 				<!-- skill -->
-				<section class="resume-item skill">
+				<section class="resume-item">
 					<div class="inner">
-						<h2>Skill</h2>
+						<h2>보유기술</h2>
 						<act-form v-for="(item, index) in data.skill"
 						              v-bind:key="index"
 						              :seq="index" :data="item" :flag="'skill'"></act-form>
@@ -115,6 +110,21 @@
 						</div>
 					</div>
 				</section><!-- skill -->
+
+				<!-- education -->
+				<section class="resume-item experience">
+					<div class="inner">
+						<h2>이수교육</h2>
+						<div class="form-horizontal">
+							<act-form v-for="(item, index) in data.education"
+							          v-bind:key="index"
+							          :seq="index" :data="item" :flag="'education'"></act-form>
+						</div>
+						<div class="text-right">
+							<i class="fa fa-plus text-success add-click" aria-hidden="true" title="추가" v-on:click="item_plus('education')"></i>
+						</div>
+					</div>
+				</section><!-- education -->
 
 				<section class="resume-item">
 					<div style="padding-top: 20px;">
@@ -130,75 +140,13 @@
 		<!-- footer -->
 		<footer>
 			© 2016 <a href="https://github.com/dhparkdh" target="-_blank">dhpark</a>. All rights reserved.
+			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang
 		</footer><!-- footer -->
 
 	</div>
 </form>
 <content tag="script">
-	<script type="text/x-template" id="act-form-template">
-		<div v-bind:id="flag + '_index_' + seq">
-			<div v-if="flag != 'skill'">
-				<div class="form-group">
-					<div class="col-sm-3"><h5>[{{seq + 1}}]</h5></div>
-					<div class="col-sm-9 text-right">
-						<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제" v-on:click="item_remove(flag, seq)"></i>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">Title</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].title'" v-model="data.title"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">{{flag == 'experience' ? 'Company, Rank':'Work Role'}}</label>
-					<div class="col-sm-9">
-						<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].sub_title'" v-model="data.sub_title"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">Period</label>
-					<div class="col-sm-4">
-						<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].start_dt'" v-model="data.str_start_dt"/>
-					</div>
-					<div class="col-sm-1 text-center">~</div>
-					<div class="col-sm-4">
-						<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].end_dt'" v-model="data.str_end_dt"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-sm-3 control-label">Detail</label>
-					<div class="col-sm-9">
-						<textarea class="form-control" v-bind:name="flag + '[' + seq + '].description'" v-model="data.description" rows="3"/>
-					</div>
-				</div>
-				<div class="form-group" v-if="flag == 'project'">
-					<label class="col-sm-3 control-label" style="padding-top: 0px;">Tech</label>
-					<div class="col-sm-9">
-						<span v-for="(item, index) in (data.tech || '').split('#')" v-bind:key="item" class="label label-primary">{{item}}</span>
-						<span class="label label-success"><i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i></span>
-						<input type="hidden" v-bind:name="'project[' + seq + '].tech'" v-model="data.tech"/>
-					</div>
-				</div>
-			</div>
-			<div class="row" v-if="flag == 'skill'">
-				<div class="col-sm-3">
-					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" v-bind:name="'skill[' + seq + '].title'" v-model="data.title" placeholder="skill name"/>
-					</div>
-				</div>
-				<div class="col-sm-7">
-					<input type="range" class="form-control" v-bind:name="'skill[' + seq + '].level'" v-model="data.level"
-					       v-bind:onchange="'skill' + seq + '_level.value = value'" min="0" max="100"/>
-				</div>
-				<div class="col-sm-2 text-right">
-					<output v-bind:id="'skill' + seq + '_level'" style="display:inline-block">{{data.level}}</output>
-					&nbsp;
-					<i class="fa fa-times text-danger add-click" aria-hidden="true" title="삭제" v-on:click="item_remove(flag, seq)"></i>
-				</div>
-			</div>
-		</div>
-	</script>
+	<jsp:include page="resumeFormTemplate.jsp"/>
 	<script>
 		var resume;
 
@@ -210,6 +158,7 @@
 					break;
 				case 'project' :
 					this.tech = ''
+					this.related_site = ''
 				default :
 					this.sub_title = ''
 					this.description = ''
