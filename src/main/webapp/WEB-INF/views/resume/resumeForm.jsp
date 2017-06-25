@@ -140,16 +140,39 @@
 		<!-- footer -->
 		<footer>
 			© 2016 <a href="https://github.com/dhparkdh" target="-_blank">dhpark</a>. All rights reserved.
-			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang
+			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang</a>
 		</footer><!-- footer -->
 
 	</div>
 </form>
+<div class="modal fade" id="newTechTag" tabindex="-1">
+	<div class="modal-dialog">
+		<form id="techTag" onsubmit="return false">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">기술태그 추가</h4>
+			</div>
+			<div class="modal-body">
+				<input type="text" name="tech_tag" class="form-control input-lg" placeholder="기술명을 입력하세요." required/>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
+					<i class="fa fa-times-circle" aria-hidden="true"></i> 닫기
+				</button>
+				<button type="submit" class="btn btn-sm btn-primary">
+					<i class="fa fa-check-circle" aria-hidden="true"></i> 등록
+				</button>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
 <content tag="script">
 	<jsp:include page="resumeFormTemplate.jsp"/>
 	<script>
-		var resume;
-
 		function createActVO(flag) {
 			this.title = ''
 			switch(flag) {
@@ -167,6 +190,14 @@
 			}
 		}
 
+		var form_titles = {
+			titles: {
+				experience: {title: '회사명', sub_title: '소속 및 직급', description: '담당업무'},
+				project: {title: '프로젝트', sub_title: '상세', description: '담당역할'},
+				education: {title: '과정명', sub_title: '교육기관'}
+			}
+		}
+
 		Vue.component('act-form', {
 			template: '#act-form-template',
 			props: {
@@ -174,24 +205,56 @@
 				data: {type: Object, required: true},
 				flag: {type: String, required: true}
 			},
+			data: function() {
+				return form_titles
+			},
 			methods: {
 				item_remove: function(item, index) {
 					resume.data[item].splice(index, 1)
+				},
+				tech_tag_remove: function(item, seq) {
+					let tech_string = resume.data.project[seq].tech
+					let start_idx = tech_string.indexOf('/' + item)
+					let item_len = item.length + 1
+					resume.data.project[seq].tech = tech_string.substring(0, start_idx) + tech_string.substring(start_idx + item_len)
+				},
+				open_tech_tag_modal: function(seq) {
+					resume.project_seq = seq
+					$('#newTechTag').modal('show')
 				}
 			}
 		})
 
+		var resume;
 		$.get('/resume/api').then(function (result) {
 			console.log(result)
 			resume = new Vue({
 				el: '.resume-wrapper',
-				data: {data: result},
+				data: {
+					data: result,
+					project_seq: 0
+				},
 				methods: {
 					item_plus: function(item) {
 						this.data[item].push(new createActVO(item))
 					}
 				}
 			})
+		})
+
+		$('#newTechTag').on('shown.bs.modal', function() {
+			$('input[name=tech_tag]').focus()
+		})
+
+		$('#newTechTag').on('hide.bs.modal', function() {
+			$('input[name=tech_tag]').val(null)
+		})
+
+		$('form#techTag').on('submit', function(e) {
+			e.preventDefault()
+			let tech_tag = $('input[name=tech_tag]').val()
+			resume.data.project[resume.project_seq].tech = resume.data.project[resume.project_seq].tech + '/' + tech_tag
+			$('#newTechTag').modal('hide')
 		})
 	</script>
 </content>

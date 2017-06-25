@@ -107,7 +107,7 @@
 								<p class="date"><c:out value="${project.str_start_dt}"/> - <c:out value="${project.str_end_dt}"/></p>
 								<p class="detail"><c:out value="${fn:replace(project.description, wrap, '<br/>')}" escapeXml="false"/></p>
 								<p class="tags">
-									<c:forEach var="tech" items="${fn:split(project.tech, '#')}">
+									<c:forEach var="tech" items="${fn:split(project.tech, '/')}">
 										#<c:out value="${tech}"/>&nbsp;
 									</c:forEach>
 								</p>

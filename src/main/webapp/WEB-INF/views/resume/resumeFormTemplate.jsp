@@ -8,13 +8,13 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label">Title</label>
+				<label class="col-sm-3 control-label">{{titles[flag].title}}</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].title'" v-model="data.title" required/>
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label">{{flag == 'experience' ? 'Company, Rank':'Work Role'}}</label>
+				<label class="col-sm-3 control-label">{{titles[flag].sub_title}}</label>
 				<div class="col-sm-9">
 					<input type="text" class="form-control" v-bind:name="flag + '[' + seq + '].sub_title'" v-model="data.sub_title" required/>
 				</div>
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label">Period</label>
+				<label class="col-sm-3 control-label">기간</label>
 				<div class="col-sm-4">
 					<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].start_dt'" v-model="data.str_start_dt"/>
 				</div>
@@ -36,17 +36,19 @@
 				</div>
 			</div>
 			<div class="form-group" v-if="flag != 'education'">
-				<label class="col-sm-3 control-label">Detail</label>
+				<label class="col-sm-3 control-label">{{titles[flag].description}}</label>
 				<div class="col-sm-9">
 					<textarea class="form-control" v-bind:name="flag + '[' + seq + '].description'" v-model="data.description" rows="3"/>
 				</div>
 			</div>
 			<div class="form-group" v-if="flag == 'project'">
-				<label class="col-sm-3 control-label" style="padding-top: 0px;">Tech</label>
+				<label class="col-sm-3 control-label" style="padding-top: 0px;">사용기술</label>
 				<div class="col-sm-9">
-						<span v-for="(item, index) in (data.tech || '').split('#')"
-						      v-bind:key="item" class="label label-primary add-click">{{item}}</span>
-					<span class="label label-success add-click"><i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i></span>
+					<span v-for="(item, index) in (data.tech || '').split('/')" v-bind:key="item" v-on:click="tech_tag_remove(item, seq)"
+					      v-if="index > 0" class="label label-primary add-click" style="margin-right: 2px;">{{item}} &times;</span>
+					<span class="label label-success add-click" v-on:click="open_tech_tag_modal(seq)">
+						<i class="fa fa-plus-circle" aria-hidden="true" title="추가"></i>
+					</span>
 					<input type="hidden" v-bind:name="'project[' + seq + '].tech'" v-model="data.tech"/>
 				</div>
 			</div>
