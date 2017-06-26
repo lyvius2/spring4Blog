@@ -1,18 +1,24 @@
 package com.walter.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.facebook.api.User;
+import org.springframework.social.google.api.plus.Person;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 /**
  * Created by yhwang131 on 2016-08-22.
  */
 public class MemberVO implements UserDetails {
+	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private int seq;
 
@@ -42,6 +48,11 @@ public class MemberVO implements UserDetails {
 	private String nationality_name;
 	private Date pw_expire_dt;
 
+	private String social_type;
+	private String id;
+	private String link;
+	private String profile_image_url;
+
 	private boolean accountNonExpired;
 	private boolean accountNonLocked;
 	private boolean credentialsNonExpired;
@@ -50,6 +61,40 @@ public class MemberVO implements UserDetails {
 
 	public MemberVO() {
 		super();
+	}
+
+	/**
+	 * Facebook 사용자 정보 매핑
+	 * @param user
+	 */
+	public MemberVO(User user) {
+		try {
+			this.username = user.getName();
+			this.first_name = user.getFirstName();
+			this.last_name = user.getLastName();
+			this.email = user.getEmail();
+			this.id = user.getId();
+			this.link = user.getLink();
+			this.social_type = "facebook";
+			this.profile_image_url = ((LinkedHashMap)((LinkedHashMap)user.getExtraData().get("picture")).get("data")).get("url").toString();
+		} catch(Exception e) {
+			logger.error(e.toString());
+		}
+	}
+
+	/**
+	 * Google 사용자 정보 매핑
+	 * @param person
+	 */
+	public MemberVO(Person person) {
+		this.username = person.getDisplayName();
+		this.first_name = person.getGivenName();
+		this.last_name = person.getFamilyName();
+		this.email = person.getAccountEmail();
+		this.id = person.getId();
+		this.link = person.getUrl();
+		this.social_type = "google";
+		this.profile_image_url = person.getImageUrl();
 	}
 
 	public int getSeq() {
@@ -186,6 +231,38 @@ public class MemberVO implements UserDetails {
 
 	public void setPw_expire_dt(Date pw_expire_dt) {
 		this.pw_expire_dt = pw_expire_dt;
+	}
+
+	public String getSocial_type() {
+		return social_type;
+	}
+
+	public void setSocial_type(String social_type) {
+		this.social_type = social_type;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public String getProfile_image_url() {
+		return profile_image_url;
+	}
+
+	public void setProfile_image_url(String profile_image_url) {
+		this.profile_image_url = profile_image_url;
 	}
 
 	public void setAccountNonExpired(boolean accountNonExpired) {

@@ -72,11 +72,17 @@
 					</form>
 					<p class="text-center text-muted text-danger"></p>
 				</div>
-				<div id="sign-in-facebook">
+				<div id="sign-in-social">
 					<form action="/connect/facebook" method="post" id="facebook-form">
 						<input type="hidden" name="scope" value="public_profile, email"/>
 						<button type="submit" class="btn btn-primary-invert btn-block">
 							<i class="fa fa-facebook-square"></i> Sign In with Facebook
+						</button>
+					</form>
+					<form action="/connect/google" method="post" id="google-form">
+						<input type="hidden" name="scope" value="email"/>
+						<button type="submit" class="btn btn-danger btn-block">
+							<i class="fa fa-google-plus"></i> Sign In with Google
 						</button>
 					</form>
 				</div>

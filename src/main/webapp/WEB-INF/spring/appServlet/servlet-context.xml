@@ -50,10 +50,16 @@
 
 	<beans:bean id="connectionFactoryLocator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">
 		<beans:property name="connectionFactories">
-			<beans:bean class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
-				<beans:constructor-arg value="${spring.social.facebook.appId}" />
-				<beans:constructor-arg value="${spring.social.facebook.appSecret}" />
-			</beans:bean>
+			<beans:list>
+				<beans:bean id="facebookConnectionFactory" class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
+					<beans:constructor-arg value="${spring.social.facebook.appId}" />
+					<beans:constructor-arg value="${spring.social.facebook.appSecret}" />
+				</beans:bean>
+				<beans:bean id="googleConnectionFactory" class="org.springframework.social.google.connect.GoogleConnectionFactory">
+					<beans:constructor-arg value="${spring.social.google.appId}" />
+					<beans:constructor-arg value="${spring.social.google.appSecret}" />
+				</beans:bean>
+			</beans:list>
 		</beans:property>
 	</beans:bean>
 

@@ -99,4 +99,16 @@ public class SignInUserDetailsService implements UserDetailsService {
 		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 	}
 
+	public void onAuthenticationWithSocial(MemberVO memberVO) throws NullPointerException {
+		memberVO.setAuthorities(ROLE.DEFAULT.getRoleList());
+		memberVO.setAccountNonExpired(true);
+		memberVO.setAccountNonLocked(true);
+		memberVO.setCredentialsNonExpired(true);
+		memberVO.setEnabled(true);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+				memberVO, null, ROLE.DEFAULT.getRoleList()
+		);
+		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+	}
+
 }
