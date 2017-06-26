@@ -4,7 +4,7 @@
 			<div class="navbar-header">
 				<a href="index.html" class="navbar-brand">Walter's Home
 					<security:authorize access="isAuthenticated()">
-						<security:authentication property="principal.kr_name"/>
+						<%--<security:authentication property="principal.kr_name"/>--%>
 					</security:authorize>
 				</a>
 				<div class="navbar-buttons">
@@ -28,12 +28,12 @@
 					<li <c:if test="${path == '/config'}">class="active"</c:if>><a href="/config">Config</a></li>
 				</ul>
 				<security:authorize access="!isAuthenticated()">
-				<a href="#" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost">
+				<a href="#" id="sign-in-headerBtn" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost">
 					<i class="fa fa-sign-in"></i>Sign in
 				</a>
 				</security:authorize>
 				<security:authorize access="isAuthenticated()">
-				<a href="/signOut" class="btn navbar-btn btn-ghost">
+				<a href="/signOut" id="sign-out-headerBtn" class="btn navbar-btn btn-ghost">
 					<i class="fa fa-sign-out"></i>Sign out
 				</a>
 				</security:authorize>
@@ -72,17 +72,19 @@
 					</form>
 					<p class="text-center text-muted text-danger"></p>
 				</div>
-				<div id="sign-in-social">
-					<form action="/connect/facebook" method="post" id="facebook-form">
+				<div id="sign-in-facebook">
+					<form action="/connect/facebook" method="post" id="facebook-form" style="margin-bottom: 5px">
 						<input type="hidden" name="scope" value="public_profile, email"/>
 						<button type="submit" class="btn btn-primary-invert btn-block">
 							<i class="fa fa-facebook-square"></i> Sign In with Facebook
 						</button>
 					</form>
+				</div>
+				<div id="sign-in-google">
 					<form action="/connect/google" method="post" id="google-form">
 						<input type="hidden" name="scope" value="email"/>
 						<button type="submit" class="btn btn-danger btn-block">
-							<i class="fa fa-google-plus"></i> Sign In with Google
+							<i class="fa fa-google-plus-square"></i> Sign In with Google+
 						</button>
 					</form>
 				</div>

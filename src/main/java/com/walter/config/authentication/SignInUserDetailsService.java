@@ -80,31 +80,13 @@ public class SignInUserDetailsService implements UserDetailsService {
 		return memberVO;
 	}
 
-	public void onAuthenticationBinding(MemberVO memberVO, User facebookUser) throws NullPointerException {
-		memberVO.setUsername(facebookUser.getId());
-		memberVO.setEmail(facebookUser.getEmail());
-		memberVO.setFirst_name(facebookUser.getFirstName());
-		memberVO.setKr_name(facebookUser.getName());
-		memberVO.setLast_name(facebookUser.getLastName());
+	public void onAuthenticationWithSocial(MemberVO memberVO) {
 		memberVO.setAuthorities(ROLE.DEFAULT.getRoleList());
 		memberVO.setAccountNonExpired(true);
 		memberVO.setAccountNonLocked(true);
 		memberVO.setCredentialsNonExpired(true);
 		memberVO.setEnabled(true);
 
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-				memberVO, null, ROLE.DEFAULT.getRoleList()
-		);
-		//authenticationToken.setDetails(memberVO);
-		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-	}
-
-	public void onAuthenticationWithSocial(MemberVO memberVO) throws NullPointerException {
-		memberVO.setAuthorities(ROLE.DEFAULT.getRoleList());
-		memberVO.setAccountNonExpired(true);
-		memberVO.setAccountNonLocked(true);
-		memberVO.setCredentialsNonExpired(true);
-		memberVO.setEnabled(true);
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 				memberVO, null, ROLE.DEFAULT.getRoleList()
 		);
