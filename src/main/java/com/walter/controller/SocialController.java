@@ -1,8 +1,10 @@
 package com.walter.controller;
 
+import com.walter.config.CustomStringUtils;
 import com.walter.config.authentication.SignInUserDetailsService;
 import com.walter.model.MemberVO;
 import com.walter.service.SocialService;
+import com.walter.util.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.inject.Inject;
@@ -47,16 +51,15 @@ public class SocialController extends ConnectController {
 
 	@RequestMapping(value="/{providerId}", method= RequestMethod.GET, params="code")
 	public RedirectView oauth2Callback(@PathVariable String providerId, NativeWebRequest request) {
-		/*
-		logger.debug("code : " + request.getParameter("code"));
-		logger.debug("state : " + request.getParameter("state"));
-		HttpServletRequest httpServletRequest = (HttpServletRequest)request.getNativeRequest();
-		httpServletRequest.getSession().setAttribute("code", request.getParameter("code"));
-		*/
 		RedirectView redirectView = super.oauth2Callback(providerId, request);
 
 		MemberVO memberVO = service.bindingSocialUserInfo(providerId);
-		signInUserDetailsService.onAuthenticationWithSocial(memberVO);
+		if (memberVO != null) signInUserDetailsService.onAuthenticationWithSocial(memberVO);
+		else {
+			HttpServletRequest httpServletRequest = (HttpServletRequest)request.getNativeRequest();
+			httpServletRequest.getSession().setAttribute("msg",
+					CustomStringUtils.executeAlertMessage(Message.ERROR_SOCIAL_API.getText()));
+		}
 		redirectView.setUrl(TARGET_URL);
 		return redirectView;
 	}

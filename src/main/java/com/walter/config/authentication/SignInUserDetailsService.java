@@ -14,9 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.social.facebook.api.User;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,7 +24,6 @@ import java.util.List;
  * Created by yhwang131 on 2016-08-26.
  */
 public class SignInUserDetailsService implements UserDetailsService {
-
 	public static final Logger logger = LoggerFactory.getLogger(SignInUserDetailsService.class);
 	protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 

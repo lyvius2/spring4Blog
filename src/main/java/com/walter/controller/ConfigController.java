@@ -1,5 +1,6 @@
 package com.walter.controller;
 
+import com.walter.config.CustomStringUtils;
 import com.walter.model.CategoryVO;
 import com.walter.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class ConfigController extends BaseController {
 		HashMap resultMap = configService.insCategoryItem(categoryVO);
 		if ((Boolean)resultMap.get("success") == false) {
 			redirectAttributes.addFlashAttribute("msg",
-					super.executeAlertMessage(resultMap.get("message").toString()));
+					CustomStringUtils.executeAlertMessage(resultMap.get("message").toString()));
 		}
 		return "redirect:../config";
 	}

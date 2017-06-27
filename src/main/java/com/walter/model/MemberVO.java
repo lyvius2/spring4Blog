@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.facebook.api.User;
+import org.springframework.social.github.api.GitHubUserProfile;
 import org.springframework.social.google.api.plus.Person;
 
 import javax.validation.constraints.NotNull;
@@ -68,18 +69,14 @@ public class MemberVO implements UserDetails {
 	 * @param user
 	 */
 	public MemberVO(User user) {
-		try {
-			this.username = user.getName();
-			this.first_name = user.getFirstName();
-			this.last_name = user.getLastName();
-			this.email = user.getEmail();
-			this.id = user.getId();
-			this.link = user.getLink();
-			this.social_type = "facebook";
-			this.profile_image_url = ((LinkedHashMap)((LinkedHashMap)user.getExtraData().get("picture")).get("data")).get("url").toString();
-		} catch(Exception e) {
-			logger.error(e.toString());
-		}
+		this.username = user.getName();
+		this.first_name = user.getFirstName();
+		this.last_name = user.getLastName();
+		this.email = user.getEmail();
+		this.id = user.getId();
+		this.link = user.getLink();
+		this.social_type = "facebook";
+		this.profile_image_url = ((LinkedHashMap)((LinkedHashMap)user.getExtraData().get("picture")).get("data")).get("url").toString();
 	}
 
 	/**
@@ -95,6 +92,19 @@ public class MemberVO implements UserDetails {
 		this.link = person.getUrl();
 		this.social_type = "google";
 		this.profile_image_url = person.getImageUrl();
+	}
+
+	/**
+	 * GitHub 사용자 정보 매핑
+	 * @param gitHubUserProfile
+	 */
+	public MemberVO(GitHubUserProfile gitHubUserProfile) {
+		this.username = gitHubUserProfile.getName();
+		this.email = gitHubUserProfile.getEmail();
+		this.id = Long.toString(gitHubUserProfile.getId());
+		this.link = "https://github.com/" + this.username;
+		this.social_type = "github";
+		this.profile_image_url = gitHubUserProfile.getAvatarUrl();
 	}
 
 	public int getSeq() {

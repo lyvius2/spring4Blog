@@ -1508,6 +1508,21 @@ fieldset[disabled] .btn-primary.active {
   border-color: #2b90d9;
 }
 
+.btn-grey {
+  color: #ffffff;
+  background-color: #444;
+  border-color: #202326;
+}
+.btn-grey:hover,
+.btn-grey:focus,
+.btn-grey:active,
+.btn-grey.active,
+.open .dropdown-toggle.btn-grey {
+  color: #202326;
+  background-color: #f2f2f2;
+  border-color: #444;
+}
+
 /*----------- customizing edition -----------*/
 .btn-transparent {
   color: #555555;

@@ -10,6 +10,7 @@ import java.util.Date;
  * Created by yhwang131 on 2016-10-31.
  */
 public final class CustomStringUtils extends StringUtils {
+
 	public static boolean isNumber(String str) {
 		boolean result;
 		try {
@@ -36,5 +37,13 @@ public final class CustomStringUtils extends StringUtils {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+
+	public static String executeAlertMessage(String msg) {
+		StringBuffer str = new StringBuffer();
+		str.append("<script>alert('");
+		str.append(msg);
+		str.append("')</script>");
+		return str.toString();
 	}
 }

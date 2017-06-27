@@ -44,7 +44,7 @@ public class ConfigServiceImpl implements ConfigService {
 				resultMap.put("success", result == 1 ? true:false);
 			} else {
 				resultMap.put("success", false);
-				resultMap.put("message", Message.DUPLE_CATEGORY.getComment());
+				resultMap.put("message", Message.DUPLE_CATEGORY.getText());
 			}
 		} catch (Exception e) {
 			logger.error(e.toString());

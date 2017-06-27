@@ -81,10 +81,18 @@
 					</form>
 				</div>
 				<div id="sign-in-google">
-					<form action="/connect/google" method="post" id="google-form">
+					<form action="/connect/google" method="post" id="google-form" style="margin-bottom: 5px">
 						<input type="hidden" name="scope" value="email"/>
 						<button type="submit" class="btn btn-danger btn-block">
 							<i class="fa fa-google-plus-square"></i> Sign In with Google+
+						</button>
+					</form>
+				</div>
+				<div id="sign-in-github">
+					<form action="/connect/github" method="post" id="github-form">
+						<input type="hidden" name="scope" value="user:email"/>
+						<button type="submit" class="btn btn-grey btn-block">
+							<i class="fa fa-github"></i> Sign In with GitHub
 						</button>
 					</form>
 				</div>

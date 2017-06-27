@@ -45,14 +45,6 @@ public class BaseController {
 		return memberVO != null ? memberVO.getUsername() : "Anonymous";
 	}
 
-	protected String executeAlertMessage(String msg) {
-		StringBuffer str = new StringBuffer();
-		str.append("<script>alert('");
-		str.append(msg);
-		str.append("')</script>");
-		return str.toString();
-	}
-
 	@InitBinder
 	public void initBinder(WebDataBinder webDataBinder) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

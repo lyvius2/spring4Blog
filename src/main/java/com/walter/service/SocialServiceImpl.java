@@ -7,13 +7,15 @@ import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.User;
+import org.springframework.social.github.api.GitHub;
+import org.springframework.social.github.api.GitHubUserProfile;
+import org.springframework.social.github.api.UserOperations;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.api.plus.Person;
 import org.springframework.social.google.api.plus.PlusOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.LinkedHashMap;
 
 /**
  * Created by yhwang131 on 2017-06-26.
@@ -40,6 +42,11 @@ public class SocialServiceImpl implements SocialService {
 					PlusOperations plusOperations = google.plusOperations();
 					Person person = plusOperations.getGoogleProfile();
 					return new MemberVO(person);
+				case "github" :
+					GitHub gitHub = this.getApi(GitHub.class);
+					UserOperations userOperations = gitHub.userOperations();
+					GitHubUserProfile gitHubUserProfile = userOperations.getUserProfile();
+					return new MemberVO(gitHubUserProfile);
 			}
 		} catch (Exception e) {
 			logger.error(e.toString());

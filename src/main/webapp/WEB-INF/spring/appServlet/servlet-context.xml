@@ -59,6 +59,10 @@
 					<beans:constructor-arg value="${spring.social.google.appId}" />
 					<beans:constructor-arg value="${spring.social.google.appSecret}" />
 				</beans:bean>
+				<beans:bean id="githubConnectionFactory" class="org.springframework.social.github.connect.GitHubConnectionFactory">
+					<beans:constructor-arg value="${spring.social.github.appId}" />
+					<beans:constructor-arg value="${spring.social.github.appSecret}" />
+				</beans:bean>
 			</beans:list>
 		</beans:property>
 	</beans:bean>
