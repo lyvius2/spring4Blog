@@ -91,8 +91,6 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
-	<context:property-placeholder location="classpath:/application.properties" />
-
 	<context:component-scan base-package="com.walter.config,
 			com.walter.dao,
 			com.walter.controller,

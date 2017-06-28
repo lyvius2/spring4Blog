@@ -9,30 +9,20 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<!-- Config DB Connection Pool : Original Class - org.springframework.jdbc.datasource.DriverManagerDataSource -->
+	<!-- Config DB Connection Pool -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<!--
-		<property name="cryptography" ref="cryptography"/>
-		<property name="url"
-				  value="rVICEAa3vncsxfy1QXNYjxObbxm6eeqmVm4jsVUYVMeLqSbXjSrDFo1QMo1y3kA6QznmahYNa9p1M8nYFKD/dmCoS4VaeJ4AJABlobEGrO1KRXAHs22hkHXVr6UvbM5T"/>
-		-->
 		<property name="driverClassName" value="org.postgresql.Driver"/>
-		<property name="url" value="jdbc:postgresql://localhost:5432/blog"/>
-		<property name="username" value="blogger"/>
-		<property name="password" value="blogger1"/>
+		<property name="url" value="${postgresql.uri}"/>
+		<property name="username" value="${postgresql.username}"/>
+		<property name="password" value="${postgresql.password}"/>
 	</bean>
 	<context:annotation-config/>
+
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="configLocation" value="classpath:mybatis-config.xml"/>
 		<property name="mapperLocations">
 			<list>
-				<!--
-				<value>classpath:com/walter/dao/ApiSQL.xml</value>
-				<value>classpath:com/walter/dao/MemberSQL.xml</value>
-				<value>classpath:com/walter/dao/CategorySQL.xml</value>
-				<value>classpath:com/walter/dao/PostSQL.xml</value>
-				-->
 				<value>classpath:query/ApiSQL.xml</value>
 				<value>classpath:query/MemberSQL.xml</value>
 				<value>classpath:query/CategorySQL.xml</value>
