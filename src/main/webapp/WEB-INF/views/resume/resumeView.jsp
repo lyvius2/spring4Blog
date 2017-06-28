@@ -9,6 +9,7 @@
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +26,7 @@
 		</jsp:scriptlet>
 
 		<!-- header -->
-		<header class="resume">
+		<section class="resume">
 			<h1 class="heading-container">Résumé</h1>
 			<h2 class="name-container"><c:out value="${resume.name}"/></h2>
 			<h3 class="job-container"><c:out value="${resume.eng_name}"/></h3>
@@ -60,7 +61,7 @@
 					</c:if>
 				</ul>
 			</div>
-		</header><!-- header -->
+		</section><!-- header -->
 
 		<!-- main -->
 		<section id="main" style="padding-bottom: 0px;">
@@ -72,11 +73,21 @@
 					<div class="inner">
 						<h2>경력</h2>
 						<ul>
+							<fmt:setLocale value="en_us" scope="session"/>
 							<c:forEach var="experience" items="${resume.experience}" varStatus="vs">
 							<li>
 								<h3><c:out value="${experience.title}"/></h3>
 								<h4 class="company"><c:out value="${experience.sub_title}"/></h4>
-								<span class="date"><c:out value="${experience.str_start_dt}"/> - <c:out value="${experience.str_end_dt}"/></span>
+								<span class="date">
+									<fmt:formatDate value="${experience.start_dt}" pattern="MMM yyyy"/>
+									-
+									<c:if test="${experience.str_end_dt != 'Present'}">
+										<fmt:formatDate value="${experience.end_dt}" pattern="MMM yyyy"/>
+									</c:if>
+									<c:if test="${experience.end_dt == ''}">
+										Present
+									</c:if>
+								</span>
 								<p class="detail"><c:out value="${fn:replace(experience.description, wrap, '<br/>')}" escapeXml="false"/></p>
 							</li>
 							</c:forEach>

@@ -2,7 +2,7 @@
 	<div role="navigation" class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand">Walter's Home
+				<a href="/" class="navbar-brand">Walter's Home
 					<security:authorize access="isAuthenticated()">
 						<%--<security:authentication property="principal.kr_name"/>--%>
 					</security:authorize>
@@ -97,8 +97,7 @@
 					</form>
 				</div>
 				<div id="sign-up-div">
-					<p class="text-center text-muted">Not registered yet?</p>
-					<p class="text-center text-muted"><a href="#"><strong>Register now</strong></a>! It is easy and done in 1 minute and gives you access to special discounts and much more!</p>
+					<p class="text-center text-muted">사이트 관리자 이외 소셜 로그인만 지원합니다.<br/>개인정보는 DB에 저장하지 않습니다!</p>
 				</div>
 			</div>
 		</div>

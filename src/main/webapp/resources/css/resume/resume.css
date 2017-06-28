@@ -35,19 +35,19 @@ body {
 
 
 /* header */
-header.resume {
+.resume {
     position: relative ;
     padding: 30px ;
     border-bottom: 1px solid #ededed ;
 }
-header.resume h1 {
+.resume h1 {
     position: absolute ;
     bottom: 60px ;
     right: 180px ;
     z-index: 1 ;
     font-size: 42px ;
 }
-header.resume .name-container {
+.resume .name-container {
     position: absolute ;
     left: 770px ;
     bottom: 0 ;
@@ -58,7 +58,7 @@ header.resume .name-container {
     font-size: 18px ;
     line-height: 30px ;
 }
-header.resume .job-container {
+.resume .job-container {
     position: absolute ;
     left: 770px ;
     bottom: -20px ;
@@ -71,7 +71,7 @@ header.resume .job-container {
     font-weight: normal ;
     line-height: 20px ;
 }
-header.resume .profile-picture {
+.resume .profile-picture {
     position: absolute ;
     right : 190px ;
     bottom: -50px ;
@@ -80,18 +80,18 @@ header.resume .profile-picture {
     height: 100px ;
     border-radius: 50% ;
 }
-header.resume .profile-picture img {
+.resume .profile-picture img {
     width: 100px ;
     height: 100px ;
     border-radius: 50% ;
     border: 1px solid rgba(0, 0, 0, 0.1) ;
 }
-header.resume .contact-container {
+.resume .contact-container {
     position: relative ;
     top: 0px ;
     left: 30px ;
 }
-header.resume .contact-container .contact-list li {
+.resume .contact-container .contact-list li {
     position: relative ;
     height: 25px ;
     padding-left: 25px ;
@@ -100,7 +100,7 @@ header.resume .contact-container .contact-list li {
     line-height: 25px ;
     text-align: left ;
 }
-header.resume .contact-container .contact-list li span {
+.resume .contact-container .contact-list li span {
     position: absolute ;
     top: 0 ;
     left: 0 ;
