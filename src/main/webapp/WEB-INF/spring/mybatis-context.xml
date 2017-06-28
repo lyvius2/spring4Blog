@@ -23,9 +23,9 @@
 		<property name="configLocation" value="classpath:mybatis-config.xml"/>
 		<property name="mapperLocations">
 			<list>
-				<value>classpath:query/ApiSQL.xml</value>
-				<value>classpath:query/MemberSQL.xml</value>
 				<value>classpath:query/CategorySQL.xml</value>
+				<value>classpath:query/CodeSQL.xml</value>
+				<value>classpath:query/MemberSQL.xml</value>
 				<value>classpath:query/PostSQL.xml</value>
 			</list>
 		</property>

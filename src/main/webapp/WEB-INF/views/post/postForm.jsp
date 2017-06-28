@@ -42,8 +42,10 @@
 			<div class="form-group">
 				<div class="col-md-2">
 					<form:select path="category_cd" cssClass="form-control" required="true">
-						<c:forEach var="item" items="${categoryList}">
-							<form:option value="${item.category_cd}"><c:if test="${item.depth > 1}">└ </c:if><c:out value="${item.category_name}"/></form:option>
+						<c:forEach var="category" items="${categories}" varStatus="vs">
+							<c:if test="${category.use_yn == true}">
+								<form:option value="${category.category_cd}"><c:out value="${category.category_name}"/></form:option>
+							</c:if>
 						</c:forEach>
 					</form:select>
 				</div>

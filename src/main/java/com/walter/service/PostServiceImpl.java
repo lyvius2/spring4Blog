@@ -1,25 +1,18 @@
 package com.walter.service;
 
 import com.walter.config.CustomStringUtils;
-import com.walter.dao.ApiDao;
+import com.walter.dao.CodeDao;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
 import com.walter.repository.CommentRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static org.springframework.data.mongodb.core.query.Query.query;
 
 /**
  * Created by yhwang131 on 2016-10-27.
@@ -31,7 +24,7 @@ public class PostServiceImpl implements PostService {
 	private PostDao dao;
 
 	@Autowired
-	private ApiDao apiDao;
+	private CodeDao codeDao;
 
 	@Autowired
 	private CommentRepository repository;
@@ -40,23 +33,6 @@ public class PostServiceImpl implements PostService {
 	private MongoOperations mongoOps;
 
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
-
-	/*
-	@Override
-	public Model setInputForm(Model model) {
-		List<CategoryVO> categoryList = new ArrayList<>();
-		apiDao.getCategoryList(new CategoryVO(1,0)).stream()
-				.forEach(category -> {
-					categoryList.add(category);
-					categoryList.addAll(apiDao.getCategoryList(new CategoryVO(2,category.getCategory_cd())));
-				});
-
-		model.addAttribute("categoryList", categoryList);
-		model.addAttribute("countryList", apiDao.getCodeList(new CodeVO("NAT")));
-		return model;
-	}
-
-	*/
 
 	@Override
 	public int setPost(PostVO postVO) {

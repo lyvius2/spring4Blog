@@ -1,14 +1,10 @@
 package com.walter.controller;
 
-import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.*;
 import com.google.api.services.drive.model.File;
 import com.walter.config.CustomStringUtils;
 import com.walter.model.*;
+import com.walter.service.ConfigService;
 import com.walter.service.GoogleDriveService;
 import com.walter.service.PostService;
 import com.walter.util.MediaImageMetadata;
@@ -18,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -33,17 +30,26 @@ import java.util.HashMap;
 @Controller
 @RequestMapping("/post")
 public class PostController extends BaseController {
+	/*
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Autowired
-	private PostService service;
+	private HttpServletRequest request;
+	*/
+	@Autowired
+	private PostService postService;
+
+	@Autowired
+	private ConfigService configService;
 
 	@Resource(name = "googleDriveServiceImage")
 	private GoogleDriveService googleDriveImageService;
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPostForm(Model model) {
-		//model = service.setInputForm(model);
 		model.addAttribute("postVO", new PostVO(true, true));
+		model.addAttribute("countryList", configService.getCodeList(new CodeVO("NAT")));
 		return "post/postForm";
 	}
 
@@ -57,7 +63,7 @@ public class PostController extends BaseController {
 			postVO.setDelegate_img(uploadFile.getId());
 		}
 		postVO.setReg_id(super.getLoginUser()!=null?super.getLoginUser().getUsername():"anonymous");
-		service.setPost(postVO);
+		postService.setPost(postVO);
 		return "redirect:" + postVO.getPost_cd();
 	}
 
@@ -68,7 +74,7 @@ public class PostController extends BaseController {
 				= CustomStringUtils.setDefaultNumber(request.getParameter("currPageNo"), 1);
 		int category_cd
 				= CustomStringUtils.setDefaultNumber(request.getParameter("category_cd"), 0);
-		PostVO postVO = service.getPost(post_cd);
+		PostVO postVO = postService.getPost(post_cd);
 		model.addAttribute("currPageNo", currPageNo);
 		model.addAttribute("category_cd", category_cd);
 		model.addAttribute("post", postVO);
@@ -83,7 +89,7 @@ public class PostController extends BaseController {
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String postList(@ModelAttribute("postSearchVO")PostSearchVO postSearchVO) {
-		return gson.toJson(service.getPostList(postSearchVO));
+		return gson.toJson(postService.getPostList(postSearchVO));
 	}
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
@@ -127,7 +133,7 @@ public class PostController extends BaseController {
 	@ResponseBody
 	public String getCommentList(HttpServletRequest request) {
 		int postCd = CustomStringUtils.setDefaultNumber(request.getParameter("postCd"), -1);
-		return gson.toJson(service.getComments(postCd));
+		return gson.toJson(postService.getComments(postCd));
 	}
 
 	@RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
@@ -137,7 +143,7 @@ public class PostController extends BaseController {
 		if(CustomStringUtils.isNotEmpty(commentVO.getComment())) {
 			commentVO.setUserData(super.getLoginUser());
 			commentVO.setIp(request.getRemoteAddr());
-			service.setComment(commentVO);
+			postService.setComment(commentVO);
 			hashMap.put("status", true);
 		} else {
 			hashMap.put("status", false);
@@ -152,11 +158,45 @@ public class PostController extends BaseController {
 		if(CustomStringUtils.isNotEmpty(replyVO.getComment())) {
 			replyVO.setUserData(super.getLoginUser());
 			replyVO.setIp(request.getRemoteAddr());
-			service.setReply(request.getParameter("_id"), replyVO);
+			postService.setReply(request.getParameter("_id"), replyVO);
 			hashMap.put("status", true);
 		} else {
 			hashMap.put("status", false);
 		}
 		return gson.toJson(hashMap);
 	}
+	/*
+	@RequestMapping(value = "/http")
+	@ResponseBody
+	public String http(Model model) {
+		ResultVO resultVO = restTemplate.postForObject("http://localhost:3000/rise", new test(2, "ppp"), ResultVO.class);
+		return resultVO.toString();
+	}
+
+	class test {
+		private int key;
+		private String value;
+
+		public test (int key, String value) {
+			this.key = key;
+			this.value = value;
+		}
+
+		public int getKey() {
+			return key;
+		}
+
+		public void setKey(int key) {
+			this.key = key;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+	}
+	*/
 }

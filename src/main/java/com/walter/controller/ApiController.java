@@ -1,8 +1,8 @@
 package com.walter.controller;
 
-import com.walter.dao.ApiDao;
-import com.walter.model.CategoryVO;
+import com.walter.dao.CodeDao;
 import com.walter.model.CodeVO;
+import com.walter.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,17 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ApiController extends BaseController {
 
 	@Autowired
-	private ApiDao apiDao;
+	private ConfigService configService;
 
 	@RequestMapping(value = "/codeList", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getCodeList(@ModelAttribute CodeVO codeVO) {
-		return gson.toJson(apiDao.getCodeList(codeVO));
-	}
-
-	@RequestMapping(value = "/categoryList", produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String getCategoryList(@ModelAttribute CategoryVO categoryVO) {
-		return gson.toJson(apiDao.getCategoryList(categoryVO));
+		return gson.toJson(configService.getCodeList(codeVO));
 	}
 }

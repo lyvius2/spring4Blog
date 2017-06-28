@@ -1,6 +1,7 @@
 package com.walter.service;
 
 import com.walter.model.CategoryVO;
+import com.walter.model.CodeVO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,4 +15,6 @@ public interface ConfigService {
 	HashMap insCategoryItem(CategoryVO categoryVO);
 	HashMap modCategoryItem(CategoryVO categoryVO, String targetAttribute);
 	HashMap delCategoryItem(int category_cd);
+
+	List<CodeVO> getCodeList(CodeVO codeVO);
 }

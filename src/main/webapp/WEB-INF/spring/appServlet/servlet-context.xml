@@ -68,7 +68,7 @@
 	</beans:bean>
 
 	<beans:bean id="inMemoryConnectionRepository" class="org.springframework.social.connect.mem.InMemoryConnectionRepository">
-		<beans:constructor-arg ref="connectionFactoryLocator" />
+		<beans:constructor-arg ref="connectionFactoryLocator"/>
 	</beans:bean>
 
 	<!--
@@ -91,10 +91,12 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
+	<context:property-placeholder location="classpath:/application.properties"/>
+
 	<context:component-scan base-package="com.walter.config,
 			com.walter.dao,
 			com.walter.controller,
 			com.walter.service,
-			com.walter.util" />
+			com.walter.util"/>
 	
 </beans:beans>

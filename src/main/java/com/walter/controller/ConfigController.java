@@ -24,7 +24,7 @@ public class ConfigController extends BaseController {
 	private ConfigService configService;
 
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
-	public String categoryConfigMap(Model model) {
+	public String categoryConfigMap() {
 		return "config/categoryConfig";
 	}
 

@@ -1,7 +1,9 @@
 package com.walter.service;
 
 import com.walter.dao.CategoryDao;
+import com.walter.dao.CodeDao;
 import com.walter.model.CategoryVO;
+import com.walter.model.CodeVO;
 import com.walter.util.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,9 @@ public class ConfigServiceImpl implements ConfigService {
 
 	@Autowired
 	private CategoryDao categoryDao;
+
+	@Autowired
+	private CodeDao codeDao;
 
 	@Override
 	@Cacheable(value = "categoryCache")
@@ -95,5 +100,10 @@ public class ConfigServiceImpl implements ConfigService {
 			resultMap.put("message", e.getMessage());
 		}
 		return resultMap;
+	}
+
+	@Override
+	public List<CodeVO> getCodeList(CodeVO codeVO) {
+		return codeDao.getCodeList(codeVO);
 	}
 }
