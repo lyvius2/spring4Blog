@@ -94,11 +94,23 @@ idea {
 }
 
 sourceSets {
-    main.java.srcDirs=['src/main/java']
-    main.resources.srcDirs=['src/main/resources']
+    if (!project.hasProperty('profile') || !profile) {
+        ext.profile = 'dev'
+    }
+    main {
+        java {
+            srcDirs "src/main/java"
+        }
+        resources {
+            srcDirs "src/main/resources", "src/main/resources-env/${profile}"
+        }
+    }
 }
 
 war {
     archiveName 'blog.war'
     from 'webapp'
+    doLast {
+        ant.unzip(src: war.archivePath, dest: "$buildDir/libs/exploded/$war.archiveName")
+    }
 }
