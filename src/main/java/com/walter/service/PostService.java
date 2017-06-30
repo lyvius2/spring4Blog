@@ -15,7 +15,8 @@ import java.util.List;
 public interface PostService {
 	int setPost(PostVO postVO);
 	PostVO getPost(int post_cd);
-	HashMap<String, Object> getPostList(PostSearchVO postSearchVO);
+	List<PostVO> getPostList(PostSearchVO postSearchVO);
+	HashMap<String, Object> getPostListByPaging(PostSearchVO postSearchVO);
 	//int updPost(PostVO postVO);
 	//int delPost(int post_cd);
 

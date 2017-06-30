@@ -50,7 +50,12 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public HashMap<String, Object> getPostList(PostSearchVO postSearchVO) throws IndexOutOfBoundsException {
+	public List<PostVO> getPostList(PostSearchVO postSearchVO) {
+		return dao.getPostList(postSearchVO);
+	}
+
+	@Override
+	public HashMap<String, Object> getPostListByPaging(PostSearchVO postSearchVO) throws IndexOutOfBoundsException {
 		PagingVO pagingVO = new PagingVO(postSearchVO.getCurrPageNo(), postSearchVO.getRowsPerPage());
 		int offset = (pagingVO.getCurrPageNo() - 1) * pagingVO.getRowsPerPage();
 		postSearchVO.setOffset(offset);

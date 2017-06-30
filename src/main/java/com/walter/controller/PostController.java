@@ -6,10 +6,14 @@ import com.walter.config.CustomStringUtils;
 import com.walter.model.*;
 import com.walter.service.ConfigService;
 import com.walter.service.GoogleDriveService;
+import com.walter.service.LuceneService;
 import com.walter.service.PostService;
 import com.walter.util.MediaImageMetadata;
 import org.apache.commons.io.IOUtils;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -23,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by yhwang131 on 2016-10-11.
@@ -42,6 +47,9 @@ public class PostController extends BaseController {
 
 	@Autowired
 	private ConfigService configService;
+
+	@Autowired
+	private LuceneService luceneService;
 
 	@Resource(name = "googleDriveServiceImage")
 	private GoogleDriveService googleDriveImageService;
@@ -89,7 +97,7 @@ public class PostController extends BaseController {
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String postList(@ModelAttribute("postSearchVO")PostSearchVO postSearchVO) {
-		return gson.toJson(postService.getPostList(postSearchVO));
+		return gson.toJson(postService.getPostListByPaging(postSearchVO));
 	}
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
@@ -199,4 +207,23 @@ public class PostController extends BaseController {
 		}
 	}
 	*/
+
+	@RequestMapping(value = "/luceneTest")
+	public ResponseEntity luceneCreateIndex() throws IOException {
+		Boolean success = true;
+		try {
+			List<PostVO> postList = postService.getPostList(new PostSearchVO());
+			luceneService.createIndex(postList);
+		} catch(Exception e) {
+			logger.error(e.toString());
+			success = false;
+		}
+		return new ResponseEntity(new HashMap().put("result", success), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/luceneSearch")
+	public ResponseEntity luceneSearch() throws IOException, ParseException {
+		List<LuceneIndexVO> result = luceneService.searchDataList(PostVO.class, "어쩌고");
+		return new ResponseEntity(result, HttpStatus.OK);
+	}
 }

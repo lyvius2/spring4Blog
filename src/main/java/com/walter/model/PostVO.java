@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * Created by yhwang131 on 2016-10-11.
  */
-public class PostVO {
+public class PostVO implements LuceneIndexVO {
 
 	private int post_cd;
 
@@ -50,6 +50,7 @@ public class PostVO {
 		this.post_cd = post_cd;
 	}
 
+	@Override
 	public String getTitle() {
 		return title;
 	}
@@ -58,6 +59,7 @@ public class PostVO {
 		this.title = title;
 	}
 
+	@Override
 	public String getContent() {
 		return content;
 	}
@@ -168,6 +170,16 @@ public class PostVO {
 
 	public void setTrip_country(String trip_country) {
 		this.trip_country = trip_country;
+	}
+
+	@Override
+	public String getSeq() {
+		return Integer.toString(this.post_cd);
+	}
+
+	@Override
+	public void setSeq(String seq) {
+		this.post_cd = Integer.parseInt(seq);
 	}
 
 	@Override
