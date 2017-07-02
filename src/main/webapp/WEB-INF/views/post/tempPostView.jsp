@@ -21,14 +21,39 @@
 			<div class="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><a href="index.html">Blog</a></li>
-					<li><c:out value="${post.category_name}"/></li>
+					<li class="add-click"><c:out value="${post.category_name}"/> <i class="fa fa-angle-double-down"></i></li>
 				</ul>
 			</div>
+			<div class="listByPaging">
+				<div class="list-group">
+					<a href="#" class="list-group-item" v-for="post in pageList" v-bind:key="post" v-on:click="move_post(post.post_cd)">
+						<span class="badge" style="color: #777; background-color: #fff; border-radius: 0px;">{{post.df_reg_dt}}</span>
+						<i class="fa fa-caret-right"></i> {{post.title}}
+					</a>
+					<nav>
+						<ul class="pagination">
+							<li>
+								<a href="#" aria-label="Previous" v-on:click="move_list(paging.firstPageNo)">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li v-for="num in paging.pagingNumbers" v-bind:class="num == paging.currPageNo ? 'active':''"><a href="#" v-on:click="move_list(num)">{{num}}</a></li>
+							<li>
+								<a href="#" aria-label="Next" v-on:click="move_list(paging.finalPageNo)">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
 			<h1 class="heading"><c:out value="${post.title}"/></h1>
+			<%--
 			<p class="lead">This is the lead paragraph of the article. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget.</p>
+			--%>
 		</div>
 	</section>
-	<c:if test="${post.delegate_img != ''}">
+	<c:if test="${post.delegate_img != null && post.delegate_img != ''}">
 	<figure class="full-image"><img src="/post/images/${post.delegate_img}" alt="">
 		<figcaption><c:out value="${image_spec}"/></figcaption>
 	</figure>
@@ -126,8 +151,69 @@
 			</div>
 		</div>
 	</section>
+	<form name="viewForm" method="post" onsubmit="return false;">
+		<input type="hidden" name="currPageNo" value="<c:out value="${currPageNo}"/>"/>
+		<input type="hidden" name="category_cd" value="<c:out value="${post.category_cd}"/>"/>
+	</form>
 	<content tag="script">
+	<script>
+		var pagination;
+		const category_cd = document.viewForm.category_cd.value
 
+		function getPostList (currPageNo, categoryCd, callback) {
+			let params = {currPageNo: currPageNo, category_cd: categoryCd}
+			$.get('/post/list', params).then(function (data) {
+				document.viewForm.currPageNo.value = currPageNo
+				return callback(data)
+			})
+		}
+
+		function createPagingNumArray (paging) {
+			let array = new Array()
+			array.push(paging.startPageNo)
+			let len = paging.endPageNo - paging.startPageNo + 1
+			for(var i = 1; i < len; i++) {
+				array.push(paging.startPageNo + i)
+			}
+			paging['pagingNumbers'] = array
+			return paging;
+		}
+
+		(function () {
+			let currPageNo = document.viewForm.currPageNo.value
+			getPostList(currPageNo, category_cd, function (data) {
+				pagination = new Vue({
+					el: '.listByPaging',
+					data: {
+						pageList: data.postList,
+						paging: createPagingNumArray(data.paging)
+					},
+					methods: {
+						move_list: function (pageNo) {
+							getPostList(pageNo, category_cd, function (data) {
+								this.pageList = data.postList
+								this.paging = createPagingNumArray(data.paging)
+							})
+						},
+						move_post: function (postCd) {
+							document.viewForm.action = '/post/' + postCd;
+							document.viewForm.submit();
+						}
+					}
+				})
+			})
+
+			$('.add-click').on('click', function () {
+				let parent = this
+				let isNode = $(this).find('i').hasClass('fa-angle-double-down')
+				$('.listByPaging').toggle('blind', function () {
+					if (isNode) $(parent).find('i').removeClass('fa-angle-double-down').addClass('fa-angle-double-up')
+					else $(parent).find('i').removeClass('fa-angle-double-up').addClass('fa-angle-double-down')
+				})
+			})
+		})()
+
+	</script>
 	</content>
 </body>
 </html>

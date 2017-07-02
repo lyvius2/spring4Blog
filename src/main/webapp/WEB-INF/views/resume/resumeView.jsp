@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -166,13 +167,23 @@
 				</section>
 				</c:if><!-- education -->
 
+				<security:authorize access="isAuthenticated()">
+				<section class="resume-item">
+					<div style="padding-top: 20px;">
+						<a href="/resume/register" class="btn btn-success btn-sm">
+							<i class="fa fa-pencil-square-o" aria-hidden="true"> 갱신</i>
+						</a>
+					</div>
+				</section>
+				</security:authorize>
+
 			</div>
 		</section><!-- main -->
 
 		<!-- footer -->
 		<footer>
 			© 2016 <a href="https://github.com/dhparkdh" target="-_blank">dhpark</a>. All rights reserved.
-			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang
+			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang</a>
 		</footer><!-- footer -->
 
 	</div>

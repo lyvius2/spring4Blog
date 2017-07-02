@@ -39,6 +39,7 @@ public class LuceneServiceImpl implements LuceneService {
 	public void createIndex(List<? extends LuceneIndexVO> list) throws IOException {
 		if (list.size() > 0) {
 			File file = new File(LUCENE_INDEX_DIR, list.get(0).getClass().getSimpleName());
+			if (!file.exists()) file.mkdirs();
 			FSDirectory fsDirectory = FSDirectory.open(file.toPath());
 
 			Analyzer analyzer = new KoreanAnalyzer();
@@ -74,7 +75,7 @@ public class LuceneServiceImpl implements LuceneService {
 
 	@Override
 	public List<LuceneIndexVO> searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException {
-		File file = new File(LUCENE_INDEX_DIR, itemType.getClass().getSimpleName());
+		File file = new File(LUCENE_INDEX_DIR, itemType.getSimpleName());
 		IndexReader indexReader = DirectoryReader.open(FSDirectory.open(file.toPath()));
 		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
 		Analyzer analyzer = new KoreanAnalyzer();
@@ -85,26 +86,21 @@ public class LuceneServiceImpl implements LuceneService {
 		if (CustomStringUtils.isNotEmpty(searchText)) {
 			Query query = parser.parse(CustomStringUtils.stripToEmpty(searchText));
 			log.info("### Searching for : {}", query.toString());
-			searchAndBinding(indexSearcher, query, itemType, result);
+			SortField sortField = new SortField("SEQ", SortField.Type.DOC, true);
+			Sort sort = new Sort(sortField);
+
+			TopDocs results = indexSearcher.search(query, DEFAULT_LIMIT_COUNT, sort);
+			//ScoreDoc[] hits = results.scoreDocs;
+
+			Stream<ScoreDoc> scoreDocStream = Arrays.asList(results.scoreDocs).stream();
+			scoreDocStream.map(reThrowsFunction(d -> indexSearcher.doc(d.doc))).forEach(reThrowsConsumer(d -> {
+				LuceneIndexVO idx = itemType.newInstance();
+				idx.setSeq(d.get("SEQ"));
+				idx.setTitle(d.get("TITLE"));
+				idx.setContent(d.get("CONTENT"));
+				result.add(idx);
+			}));
 		}
 		return result;
-	}
-
-	private void searchAndBinding(IndexSearcher indexSearcher, Query query,
-	                            Class<? extends LuceneIndexVO> itemType, List<LuceneIndexVO> result) throws IOException {
-		SortField sortField = new SortField("SEQ", SortField.Type.STRING, true);
-		Sort sort = new Sort(sortField);
-
-		TopDocs results = indexSearcher.search(query, DEFAULT_LIMIT_COUNT, sort);
-		//ScoreDoc[] hits = results.scoreDocs;
-
-		Stream<ScoreDoc> scoreDocStream = Arrays.asList(results.scoreDocs).stream();
-		scoreDocStream.map(reThrowsFunction(d -> indexSearcher.doc(d.doc))).forEach(reThrowsConsumer(d -> {
-			LuceneIndexVO idx = itemType.newInstance();
-			idx.setSeq(d.get("SEQ"));
-			idx.setTitle(d.get("TITLE"));
-			idx.setContent(d.get("CONTENT"));
-			result.add(idx);
-		}));
 	}
 }

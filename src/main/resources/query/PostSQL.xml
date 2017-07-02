@@ -3,9 +3,17 @@
 <mapper namespace="com.walter.dao.PostDao">
 	<insert id="setPost" parameterType="Post">
 		INSERT INTO post
-		(title, content, category_cd, use_yn, comment_yn, reg_id, delegate_img, trip_country)
+		(title, content, category_cd, use_yn, comment_yn, reg_id, delegate_img, post_theme_cd
+		<if test="reg_dt != null">
+			,reg_dt
+		</if>
+		)
 		VALUES
-		(#{title}, #{content}, #{category_cd}, #{use_yn}, ${comment_yn}, #{reg_id}, #{delegate_img}, #{trip_country})
+		(#{title}, #{content}, #{category_cd}, #{use_yn}, ${comment_yn}, #{reg_id}, #{delegate_img}, #{post_theme_cd}
+		<if test="reg_dt != null">
+			,#{reg_dt}
+		</if>
+		)
 		<selectKey keyProperty="post_cd" resultType="java.lang.Integer" order="AFTER">
 			SELECT currval('post_post_cd_seq')
 		</selectKey>
@@ -28,7 +36,7 @@
 			  ,reg_id
 			  ,mod_dt
 			  ,delegate_img
-			  ,trip_country
+			  ,post_theme_cd
 		  FROM post
 	</sql>
 	<select id="getPost" parameterType="java.lang.Integer" resultType="Post">

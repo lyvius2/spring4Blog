@@ -126,6 +126,7 @@
 					</div>
 				</section><!-- education -->
 
+
 				<section class="resume-item">
 					<div style="padding-top: 20px;">
 						<button type="submit" class="btn btn-primary btn-sm">
@@ -190,6 +191,16 @@
 			}
 		}
 
+		function createDatepicker(elements) {
+			$(elements).datepicker({
+				todayBtn: "linked",
+				language: "kr",
+				multidate: false,
+				autoclose: true,
+				format: 'yyyy-mm-dd'
+			})
+		}
+
 		var form_titles = {
 			titles: {
 				experience: {title: '회사명', sub_title: '소속 및 직급', description: '담당업무'},
@@ -197,6 +208,10 @@
 				education: {title: '과정명', sub_title: '교육기관'}
 			}
 		}
+
+		$(document).onCreate('div.input-daterange', function (elements) {
+			createDatepicker(elements)
+		})
 
 		Vue.component('act-form', {
 			template: '#act-form-template',
@@ -227,19 +242,23 @@
 
 		var resume;
 		$.get('/resume/api').then(function (result) {
-			console.log(result)
-			resume = new Vue({
-				el: '.resume-wrapper',
-				data: {
-					data: result,
-					project_seq: 0
-				},
-				methods: {
-					item_plus: function(item) {
-						this.data[item].push(new createActVO(item))
+			setTimeout(function () {
+				resume = new Vue({
+					el: '.resume-wrapper',
+					data: {
+						data: result,
+						project_seq: 0
+					},
+					methods: {
+						item_plus: function(item) {
+							this.data[item].push(new createActVO(item))
+							setTimeout(function () {
+								createDatepicker('div.input-daterange')
+							}, 100)
+						}
 					}
-				}
-			})
+				})
+			}, 100)
 		})
 
 		$('#newTechTag').on('shown.bs.modal', function() {

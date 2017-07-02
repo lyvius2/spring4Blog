@@ -12,6 +12,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.walter.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class GoogleDriveAccessHandler {
 	static final Logger logger = LoggerFactory.getLogger(GoogleDriveAccessHandler.class);
 
 	private static final String APPLICATION_NAME = "Google Drive API 4 Spring Blog";
-	private static final java.io.File DATA_STORE_DIR = new java.io.File(System.getProperty("user.home"), ".credentials/drive-api-4-spring-blog");
+	private static final java.io.File DATA_STORE_DIR = new java.io.File(FileUtil.REAL_CLASS_PATH, "WEB-INF/classes");
 	private static FileDataStoreFactory DATA_STORE_FACTORY;
 	private static JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static HttpTransport HTTP_TRANSFORT;

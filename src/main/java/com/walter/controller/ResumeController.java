@@ -25,15 +25,9 @@ public class ResumeController extends BaseController {
 	@Autowired
 	private ResumeService service;
 
-	@Autowired
-	private FileUtil fileUtil;
-
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String resumeView(Model model) {
 		ResumeVO resumeVO = service.getDefaultResume(null);
-		if (!new File(fileUtil.REAL_CLASS_PATH, fileUtil.PROFILE_IMAGE_PATH + resumeVO.getImage_url()).exists()) {
-			resumeVO.setImage_url(null);
-		}
 		model.addAttribute("resume", resumeVO);
 		return "resume/resumeView";
 	}

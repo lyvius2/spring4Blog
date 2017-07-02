@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -66,7 +65,7 @@ public class PostController extends BaseController {
 		if (errors.hasErrors()) {
 			return "post/postForm";
 		}
-		if (postVO.getDelegate_img_file() != null) {
+		if (postVO.getDelegate_img_file().getSize() > 0) {
 			File uploadFile = googleDriveImageService.createFile(postVO.getDelegate_img_file());
 			postVO.setDelegate_img(uploadFile.getId());
 		}
@@ -80,11 +79,8 @@ public class PostController extends BaseController {
 			throws IOException, ImageProcessingException {
 		int currPageNo
 				= CustomStringUtils.setDefaultNumber(request.getParameter("currPageNo"), 1);
-		int category_cd
-				= CustomStringUtils.setDefaultNumber(request.getParameter("category_cd"), 0);
 		PostVO postVO = postService.getPost(post_cd);
 		model.addAttribute("currPageNo", currPageNo);
-		model.addAttribute("category_cd", category_cd);
 		model.addAttribute("post", postVO);
 		if (postVO.getDelegate_img() != null && !postVO.getDelegate_img().isEmpty()) {
 			HashMap<String, Object> hashMap = googleDriveImageService.openFile(postVO.getDelegate_img());
@@ -102,7 +98,7 @@ public class PostController extends BaseController {
 
 	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
 	public String fileUploadForm() {
-		return "post/fileUpload";
+		return "drive/fileUpload";
 	}
 
 	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
@@ -223,7 +219,7 @@ public class PostController extends BaseController {
 
 	@RequestMapping(value = "/luceneSearch")
 	public ResponseEntity luceneSearch() throws IOException, ParseException {
-		List<LuceneIndexVO> result = luceneService.searchDataList(PostVO.class, "어쩌고");
-		return new ResponseEntity(result, HttpStatus.OK);
+		List<LuceneIndexVO> result = luceneService.searchDataList(PostVO.class, "일본");
+		return super.createResEntity(result);
 	}
 }

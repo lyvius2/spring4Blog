@@ -103,8 +103,8 @@ header {
 }
 section {
   position: relative;
-  padding-top: 90px;
-  padding-bottom: 90px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 section.section--no-padding {
   padding-top: 0;
@@ -1927,4 +1927,7 @@ a.list-group-item.active > .badge,
 }
 .add-click {
 	cursor: pointer;
+}
+.listByPaging {
+  display: none;
 }

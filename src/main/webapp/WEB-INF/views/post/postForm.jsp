@@ -58,8 +58,14 @@
 				</div>
 			</div>
 			<div class="form-group" id="travel-mode">
-				<div class="col-md-4">
-					<form:select path="trip_country" cssClass="form-control selectpicker">
+				<div class="col-md-2">
+					<div class="input-group date">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+						<form:input type="text" cssClass="form-control" path="reg_dt"/>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<form:select path="post_theme_cd" cssClass="form-control selectpicker">
 						<option data-content="여행국가 <span class='caret'></span>" value=""></option>
 						<c:forEach var="item" items="${countryList}">
 							<option data-content="<i class='${fn:toLowerCase(item.cd)} flag'></i> <c:out value="${item.cd_name}"/>" value="${item.cd}"></option>
@@ -134,9 +140,18 @@
 			else {
 				$('#travel-mode').slideUp()
 				$('button > span.filter-option.pull-left').html('여행국가')
-				document.getElementById('trip_country').value = ''
+				document.getElementById('post_theme_cd').value = ''
 				document.getElementById('delegate_img_file').value = ''
 			}
+		})
+
+		$('input[name=reg_dt]').datepicker({
+			todayBtn: 'linked',
+			clearBtn: true,
+			language: 'kr',
+			multidate: false,
+			autoclose: true,
+			format: 'yyyy-mm-dd'
 		})
 	</script>
 </content>

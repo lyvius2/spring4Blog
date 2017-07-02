@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +45,10 @@ public class BaseController {
 	protected String getUsername() {
 		MemberVO memberVO = this.getLoginUser();
 		return memberVO != null ? memberVO.getUsername() : "Anonymous";
+	}
+
+	protected <T> ResponseEntity createResEntity(T body) {
+		return new ResponseEntity(body, HttpStatus.OK);
 	}
 
 	@InitBinder

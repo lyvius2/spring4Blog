@@ -27,12 +27,12 @@
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">기간</label>
-				<div class="col-sm-4">
-					<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].start_dt'" v-model="data.str_start_dt"/>
-				</div>
-				<div class="col-sm-1 text-center">~</div>
-				<div class="col-sm-4">
-					<input type="date" class="form-control" v-bind:name="flag + '[' + seq + '].end_dt'" v-model="data.str_end_dt"/>
+				<div class="col-sm-9">
+					<div class="input-daterange input-group">
+						<input type="text" class="input-sm form-control" v-bind:name="flag + '[' + seq + '].start_dt'" v-model="data.str_start_dt"/>
+						<span class="input-group-addon">to</span>
+						<input type="text" class="input-sm form-control" v-bind:name="flag + '[' + seq + '].end_dt'" v-model="data.str_end_dt"/>
+					</div>
 				</div>
 			</div>
 			<div class="form-group" v-if="flag != 'education'">
