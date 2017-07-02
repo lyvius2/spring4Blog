@@ -87,18 +87,33 @@
 					<!-- /.post-content-->
 					<div class="comments">
 						<h4>2 comments</h4>
-						<div class="row comment">
+						<div v-for="(item, index) in list" v-bind:key="item._id" v-bind:class="index == (list.length - 1) ? 'row comment last':'row comment'">
 							<div class="col-sm-3 col-md-2 text-center-xs">
-								<p><img src="img/blog-avatar2.jpg" alt="" class="img-responsive img-circle"></p>
+								<p><a v-bind:href="item.link" target="_blank">
+									<img v-bind:src="item.profile_image_url" v-bind:alt="item.userName" class="img-responsive img-circle">
+								</a></p>
 							</div>
 							<div class="col-sm-9 col-md-10">
-								<h5>Julie Alma</h5>
-								<p class="posted"><i class="fa fa-clock-o"></i> September 23, 2011 at 12:00 am</p>
-								<p class="text-gray">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+								<h5>{{item.userName}}</h5>
+								<p class="posted"><i class="fa fa-clock-o"></i> {{item.regDt}}</p>
+								<p class="text-gray">{{item.comment}}</p>
 								<p class="reply"><a href="#"><i class="fa fa-reply"></i> Reply</a></p>
 							</div>
+							<!--
+							<div class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10 row">
+								<div class="col-sm-3 col-md-2 text-center-xs">
+									<p><img src="img/blog-avatar2.jpg" alt="" class="img-responsive img-circle"></p>
+								</div>
+								<div class="col-sm-9 col-md-10">
+									<h5>Julie Alma</h5>
+									<p class="posted"><i class="fa fa-clock-o"></i> September 23, 2011 at 12:00 am</p>
+									<p class="text-gray">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+								</div>
+							</div>
+							-->
 						</div>
 						<!-- /.comment-->
+						<%--
 						<div class="row comment last">
 							<div class="col-sm-3 col-md-2 text-center-xs">
 								<p><img src="img/blog-avatar.jpg" alt="" class="img-responsive img-circle"></p>
@@ -110,28 +125,14 @@
 								<p class="reply"><a href="#"><i class="fa fa-reply"></i> Reply</a></p>
 							</div>
 						</div>
+						--%>
 						<!-- /.comment-->
 					</div>
 					<!-- /#comments-->
 					<div class="comment-form">
 						<h4>Leave comment</h4>
-						<form>
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="name">Name <span class="required">*</span></label>
-										<input id="name" type="text" class="form-control">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Email <span class="required">*</span></label>
-										<input id="email" type="text" class="form-control">
-									</div>
-								</div>
-							</div>
+						<form name="commentForm" method="post" onsubmit="return false;">
+							<input type="hidden" name="postCd" value="${post.post_cd}"/>
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="form-group">
@@ -142,7 +143,7 @@
 							</div>
 							<div class="row">
 								<div class="col-sm-12 text-right">
-									<button type="button" class="btn btn-primary"><i class="fa fa-comment-o"></i> Post comment</button>
+									<button type="button" class="btn btn-primary" id="post-comment"><i class="fa fa-comment-o"></i> Post comment</button>
 								</div>
 							</div>
 						</form>
@@ -157,13 +158,20 @@
 	</form>
 	<content tag="script">
 	<script>
-		var pagination;
+		var pagination, comments;
 		const category_cd = document.viewForm.category_cd.value
+		const commentFrm = document.commentForm;
 
 		function getPostList (currPageNo, categoryCd, callback) {
 			let params = {currPageNo: currPageNo, category_cd: categoryCd}
 			$.get('/post/list', params).then(function (data) {
 				document.viewForm.currPageNo.value = currPageNo
+				return callback(data)
+			})
+		}
+
+		function getComments (callback) {
+			$.get('/post/comment', {postCd: document.commentForm.postCd.value}).then(function (data) {
 				return callback(data)
 			})
 		}
@@ -203,6 +211,15 @@
 				})
 			})
 
+			getComments(function (data) {
+				comments = new Vue({
+					el: '.comments',
+					data: {
+						list: data
+					}
+				})
+			})
+
 			$('.add-click').on('click', function () {
 				let parent = this
 				let isNode = $(this).find('i').hasClass('fa-angle-double-down')
@@ -210,6 +227,27 @@
 					if (isNode) $(parent).find('i').removeClass('fa-angle-double-down').addClass('fa-angle-double-up')
 					else $(parent).find('i').removeClass('fa-angle-double-up').addClass('fa-angle-double-down')
 				})
+			})
+
+			$('#post-comment').on('click', function (e) {
+				e.preventDefault()
+				$.ajax({
+					type: 'POST',
+					url: '/post/comment',
+					data: $.param({postCd: Number(commentFrm.postCd.value), comment: commentFrm.comment.value}),
+					dataType: 'json',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+				}).then(function (data) {
+					if (data.status) {
+						commentFrm.comment.value = ''
+						getComments(function (data) {
+							comments.list = data
+						})
+					} else {
+						alert('댓글 내용을 입력하세요.')
+					}
+					return false
+				});
 			})
 		})()
 
