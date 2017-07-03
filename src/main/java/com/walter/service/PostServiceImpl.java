@@ -5,10 +5,13 @@ import com.walter.dao.CodeDao;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
 import com.walter.repository.CommentRepository;
+import com.walter.util.CommonUtil;
+import com.walter.util.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,14 +20,12 @@ import java.util.List;
 /**
  * Created by yhwang131 on 2016-10-27.
  */
+@Slf4j
 @Service
 public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private PostDao dao;
-
-	@Autowired
-	private CodeDao codeDao;
 
 	@Autowired
 	private CommentRepository repository;
@@ -89,7 +90,17 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<CommentVO> getComments(int postCd) {
-		return repository.findByPostCd(postCd);
+		return repository.findByPostCd(postCd, new Sort(Sort.Direction.ASC, "_id"));
+	}
+
+	@Override
+	public Message removeComment(String _id) {
+		CommentVO commentVO = repository.findOne(_id);
+		Message message = removeValidation(commentVO, commentVO.getLink());
+		if (message != null) return message;
+		if (commentVO.getReplys().size() > 0) return Message.ERROR_REMOVE_HAVE_REPLY;
+		repository.delete(_id);
+		return null;
 	}
 
 	@Override
@@ -98,9 +109,27 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public void removeReply(String _id, int index) {
+	public Message removeReply(String _id, int index) {
 		CommentVO commentVO = repository.findOne(_id);
-		//List<ReplyVO>
-		//List<ReplyVO> inputA = input.subList(0, input.size()/2);
+		Message message = removeValidation(commentVO, commentVO.getReplys().get(index).getLink());
+		if (message != null) return message;
+		commentVO.getReplys().remove(index);
+		repository.removeReply(mongoOps, _id, commentVO.getReplys());
+		return null;
+	}
+
+	/**
+	 * 삭제 대상이 없는 경우, 삭제 권한 유무 체크
+	 * @param commentVO
+	 * @param link
+	 * @return
+	 */
+	private Message removeValidation(CommentVO commentVO, String link) {
+		if (commentVO == null) return Message.ERROR_REMOVE_NOT_EXITST;
+		if (CommonUtil.getLoginUserInfo() == null ||
+				!link.equals(CommonUtil.getLoginUserInfo().getLink())) {
+			return Message.ERROR_REMOVE_PERMISSION;
+		}
+		return null;
 	}
 }

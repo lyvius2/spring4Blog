@@ -9,6 +9,7 @@
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,6 +77,8 @@
 								<p><img v-bind:src="item.profile_image_url" v-bind:alt="item.userName" class="img-responsive img-circle" style="width: 50px;"></p>
 							</div>
 							<div class="col-sm-9 col-md-10">
+								<span aria-hidden="true" class="text-danger"
+								      style="position: absolute; top: 5px; right:10px; cursor: pointer;" v-on:click="remove_comment(item._id)">&times;</span>
 								<h5><a v-bind:href="item.link" target="_blank">{{item.userName}}</a></h5>
 								<p class="posted"><i class="fa fa-clock-o"></i> {{item.regDt}}</p>
 								<p class="text-gray">{{item.comment}}</p>
@@ -86,7 +89,7 @@
 							<!-- /.대댓글 -->
 							<div v-for="(reply, index) in item.replys" v-bind:key="reply" class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10 replys">
 								<span aria-hidden="true" class="text-danger"
-								      style="position: absolute; top: 5px; right:10px; cursor: pointer;" v-on:click="remove_reply(item.id, index)">&times;</span>
+								      style="position: absolute; top: 5px; right:10px; cursor: pointer;" v-on:click="remove_reply(item._id, index)">&times;</span>
 								<h5><i class="fa fa-reply fa-rotate-180"></i> <a v-bind:href="reply.link" target="_blank">{{reply.userName}}</a></h5>
 								<p class="posted"><i class="fa fa-clock-o"></i> {{reply.regDt}}</p>
 								<p class="text-gray">{{reply.comment}}</p>
@@ -120,20 +123,29 @@
 					</div>
 					<!-- /#comments-->
 					<div class="comment-form">
-						<h4>Leave comment</h4>
+						<h4>댓글 남기기</h4>
 						<form name="commentForm" method="post" onsubmit="return false;">
 							<input type="hidden" name="postCd" value="${post.post_cd}"/>
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="form-group">
-										<label for="comment">Comment <span class="required">*</span></label>
+										<label for="comment">댓글
+											<span class="required">
+												*
+												<security:authorize access="!isAuthenticated()">
+													(소셜 로그인을 하셔야 댓글을 등록할 수 있습니다)
+												</security:authorize>
+											</span>
+										</label>
 										<textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
 									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col-sm-12 text-right">
+									<security:authorize access="isAuthenticated()">
 									<button type="button" class="btn btn-primary" id="post-comment"><i class="fa fa-comment-o"></i> Post comment</button>
+									</security:authorize>
 								</div>
 							</div>
 						</form>
@@ -160,6 +172,16 @@
 					data: param,
 					dataType: 'json',
 					contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+				})
+			})()
+		}
+
+		function executeDelete (url, param) {
+			return (function () {
+				return $.ajax({
+					type: 'DELETE',
+					url: url + '?' + $.param(param),
+					dataType: 'json'
 				})
 			})()
 		}
@@ -223,6 +245,18 @@
 						replyTargetId: ''
 					},
 					methods: {
+						remove_comment: function(_id) {
+							executeDelete('/post/comment', {_id: _id}).then(function (data) {
+								if (data.status) {
+									getComments(function (data) {
+										comments.list = data
+									})
+								} else {
+									alert(data.message)
+								}
+								return false
+							})
+						},
 						open_reply_modal: function(_id, userName) {
 							this.replyTargetId = _id
 							this.replyTo = userName
@@ -244,14 +278,15 @@
 								})
 						},
 						remove_reply: function(_id, index) {
-							$.ajax({
-								type: 'DELETE',
-								url: '/post/reply' + '?' + $.param({_id: _id, index: index}),
-								dataType: 'json'
-							}).then(function () {
-								getComments(function (data) {
-									comments.list = data
-								})
+							executeDelete('/post/reply', {_id: _id, index: index}).then(function (data) {
+								if (data.status) {
+									getComments(function (data) {
+										comments.list = data
+									})
+								} else {
+									alert(data.message)
+								}
+								return false
 							})
 						}
 					}

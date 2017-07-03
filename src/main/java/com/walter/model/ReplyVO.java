@@ -18,7 +18,6 @@ public class ReplyVO {
 	private String profile_image_url;
 	private String regDt;
 	private String comment;
-	private String targetUserName;
 
 	public ReplyVO() {
 		super();

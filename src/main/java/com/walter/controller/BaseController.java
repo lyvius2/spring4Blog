@@ -2,6 +2,7 @@ package com.walter.controller;
 
 import com.google.gson.Gson;
 import com.walter.model.MemberVO;
+import com.walter.util.CommonUtil;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +34,7 @@ public class BaseController {
 
 	@Nullable
 	protected MemberVO getLoginUser() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = auth.getPrincipal();
-		if (principal != null && principal instanceof MemberVO) {
-			return (MemberVO) principal;
-		} else {
-			return null;
-		}
+		return CommonUtil.getLoginUserInfo();
 	}
 
 	protected String getUsername() {

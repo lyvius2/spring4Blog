@@ -9,6 +9,7 @@ import com.walter.service.GoogleDriveService;
 import com.walter.service.LuceneService;
 import com.walter.service.PostService;
 import com.walter.util.MediaImageMetadata;
+import com.walter.util.Message;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +156,15 @@ public class PostController extends BaseController {
 		return gson.toJson(hashMap);
 	}
 
+	@RequestMapping(value = "/comment", method = RequestMethod.DELETE)
+	public ResponseEntity removeComment(@RequestParam("_id")String _id) {
+		Message msg = postService.removeComment(_id);
+		HashMap<String, Object> hashMap = new HashMap<>();
+		hashMap.put("status", msg == null ? true:false);
+		if (msg != null) hashMap.put("message", msg.getText());
+		return super.createResEntity(hashMap);
+	}
+
 	@RequestMapping(value = "/reply", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String registerReply(@ModelAttribute("replyVo")ReplyVO replyVO, HttpServletRequest request) {
@@ -171,8 +181,12 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/reply", method = RequestMethod.DELETE)
-	public void removeReply(@RequestParam("_id") String _id, @RequestParam("index") int index) {
-
+	public ResponseEntity removeReply(@RequestParam("_id")String _id, @RequestParam("index")int index) {
+		Message msg = postService.removeReply(_id, index);
+		HashMap<String, Object> hashMap = new HashMap<>();
+		hashMap.put("status", msg == null ? true:false);
+		if (msg != null) hashMap.put("message", msg.getText());
+		return super.createResEntity(hashMap);
 	}
 	/*
 	@RequestMapping(value = "/http")
