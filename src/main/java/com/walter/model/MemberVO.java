@@ -102,7 +102,7 @@ public class MemberVO implements UserDetails {
 		this.username = gitHubUserProfile.getName();
 		this.email = gitHubUserProfile.getEmail();
 		this.id = Long.toString(gitHubUserProfile.getId());
-		this.link = "https://github.com/" + this.username;
+		this.link = "https://github.com/" + gitHubUserProfile.getLogin();
 		this.social_type = "github";
 		this.profile_image_url = gitHubUserProfile.getAvatarUrl();
 	}

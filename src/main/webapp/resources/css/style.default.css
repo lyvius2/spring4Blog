@@ -1931,3 +1931,6 @@ a.list-group-item.active > .badge,
 .listByPaging {
   display: none;
 }
+div.replys {
+  background: #f7f7f7;
+}

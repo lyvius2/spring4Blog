@@ -169,6 +169,11 @@ public class PostController extends BaseController {
 		}
 		return gson.toJson(hashMap);
 	}
+
+	@RequestMapping(value = "/reply", method = RequestMethod.DELETE)
+	public void removeReply(@RequestParam("_id") String _id, @RequestParam("index") int index) {
+
+	}
 	/*
 	@RequestMapping(value = "/http")
 	@ResponseBody

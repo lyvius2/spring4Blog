@@ -83,11 +83,6 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public CommentVO setReply(String _id, ReplyVO replyVO) {
-		return repository.insertReply(mongoOps, _id, replyVO);
-	}
-
-	@Override
 	public CommentVO getCommentById(String _id) {
 		return repository.findOne(_id);
 	}
@@ -95,5 +90,17 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<CommentVO> getComments(int postCd) {
 		return repository.findByPostCd(postCd);
+	}
+
+	@Override
+	public CommentVO setReply(String _id, ReplyVO replyVO) {
+		return repository.insertReply(mongoOps, _id, replyVO);
+	}
+
+	@Override
+	public void removeReply(String _id, int index) {
+		CommentVO commentVO = repository.findOne(_id);
+		//List<ReplyVO>
+		//List<ReplyVO> inputA = input.subList(0, input.size()/2);
 	}
 }
