@@ -1,6 +1,7 @@
 package com.walter.service;
 
 import com.walter.model.MemberVO;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.Connection;
@@ -20,9 +21,9 @@ import javax.annotation.Resource;
 /**
  * Created by yhwang131 on 2017-06-26.
  */
+@Slf4j
 @Service
 public class SocialServiceImpl implements SocialService {
-	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Resource(name="inMemoryConnectionRepository")
 	private ConnectionRepository connectionRepository;
@@ -49,7 +50,7 @@ public class SocialServiceImpl implements SocialService {
 					return new MemberVO(gitHubUserProfile);
 			}
 		} catch (Exception e) {
-			logger.error(e.toString());
+			log.error(e.toString());
 		}
 		return null;
 	}

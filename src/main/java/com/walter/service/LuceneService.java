@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface LuceneService {
 	void createIndex(List<? extends LuceneIndexVO> list) throws IOException;
-	List<LuceneIndexVO> searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException;
+	List searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException;
 }

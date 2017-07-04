@@ -32,6 +32,7 @@ public class PostVO implements LuceneIndexVO {
 	private Date mod_dt;
 	private String df_mod_dt;
 	private String mod_id;
+	private String new_delegate_img;
 	private String delegate_img;
 	private MultipartFile delegate_img_file;
 	private String post_theme_cd;

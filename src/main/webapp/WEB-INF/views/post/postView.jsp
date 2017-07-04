@@ -1,297 +1,311 @@
 <%--
   Created by IntelliJ IDEA.
   User: yhwang131
-  Date: 2016-10-12
-  Time: 오후 2:06
+  Date: 2017-04-20
+  Time: 오후 5:50
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>포스트 - <c:out value="${post.title}"/></title>
 </head>
-<body ng-app="postApp">
-	<h4 class="ui dividing header">
-		<i class="link list layout icon"></i>
-		<div class="content">Post List</div>
-	</h4>
-
-	<table class="ui compact selectable blue table" id="postList" style="display:none;" ng-controller="postCtrl">
-		<tr ng-repeat="post in postList" ng-click="viewPost(post.post_cd)">
-			<td><i class="caret right icon"></i>
-				<span ng-bind="post.title"></span>
-			</td>
-			<td class="right aligned"><span class="georgia" ng-bind="post.df_reg_dt"></span></td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				<div class="ui mini right floated pagination menu">
-					<a href="" class="icon item" ng-click="getPage(paging.firstPageNo)">
-						<i class="left chevron icon"></i>
+<body>
+	<section class="background-gray-lightest">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ul class="breadcrumb">
+					<li><a href="index.html">Blog</a></li>
+					<li class="add-click"><c:out value="${post.category_name}"/> <i class="fa fa-angle-double-down"></i></li>
+				</ul>
+			</div>
+			<div class="listByPaging" v-cloak>
+				<div class="list-group">
+					<a href="javascript:void(0);" class="list-group-item" v-for="post in pageList" v-bind:key="post" v-on:click="move_post(post.post_cd)">
+						<span class="badge" style="color: #777; background-color: #fff; border-radius: 0px;">{{post.df_reg_dt}}</span>
+						<i class="fa fa-caret-right"></i> {{post.title}}
 					</a>
-					<a href="" class="item"
-					   ng-repeat="num in paging.pagingNumbers"
-					   ng-bind="num"
-					   ng-class="{active : num==paging.currPageNo}"
-					   ng-click="getPage(num)"></a>
-					<a href="" class="icon item" ng-click="getPage(paging.finalPageNo)">
-						<i class="right chevron icon"></i>
-					</a>
-				</div>
-			</td>
-		</tr>
-	</table>
-
-	<div class="ui">
-		<div class="column">
-			<form name="viewForm" method="post" onsubmit="return false;">
-				<input type="hidden" name="currPageNo" value="<c:out value="${currPageNo}"/>"/>
-				<input type="hidden" name="category_cd" value="<c:out value="${category_cd}"/>"/>
-			</form>
-			<div class="ui raised segment" ng-controller="commentCtrl">
-				<a class="ui red ribbon label">
-					<c:if test="${post.trip_country!=null}"><i class="${fn:toLowerCase(post.trip_country)} flag"></i></c:if>
-					<c:out value="${post.category_name}"/>
-				</a>
-				<span class="georgia">${post.df_reg_dt}</span>
-				<h4 class="header">
-					<c:out value="${post.title}"/>
-				</h4>
-				<div class="ui divider"></div>
-				<div class="ui justified container">
-					<%--
-					에디터(CKEditor) 도입으로 주석 처리
-					<jsp:scriptlet>
-						pageContext.setAttribute("wrap", "\n");
-					</jsp:scriptlet>
-					<c:out value="${fn:replace(post.content, wrap, '<br/>')}" escapeXml="false"/>
-					--%>
-					<c:out value="${post.content}" escapeXml="false"/>
-				</div>
-				<div class="ui divider"></div>
-				<%-- 댓글란은 구현 시까지 주석 처리. (MongoDB 사용 예정) --%>
-
-				<div class="ui comments">
-					<%--
-					<h4 class="ui dividing header">Comments</h4>
-					--%>
-					<div class="comment" ng-repeat="item in commentList" ng-cloak>
-						<%--
-						<a class="avatar">
-							<img src="/images/avatar/small/matt.jpg">
-						</a>
-						--%>
-						<div class="content">
-							<a class="author" ng-bind="item.userName"></a>
-							<div class="metadata">
-								<span class="date" ng-bind="item.regDt"></span>
-							</div>
-							<div class="text">
-								<p ng-bind="item.comment"></p>
-							</div>
-							<div class="actions" ng-click="openReplyForm(item, item.userName)">
-								<a class="reply">Reply</a>
-							</div>
-						</div>
-						<div class="comments" ng-repeat="reply in item.replys" ng-switch="reply.writer">
-							<div class="comment" ng-switch-when="true">
-								<div class="content ui form">
-									<div class="field">
-										<label>Reply to {{reply.targetUserName}}</label>
-										<textarea rows="2" ng-model="reply.comment"></textarea>
-									</div>
-									<div class="ui scrolling dropdown">
-										<%--<input type="hidden" name="gender">
-										<div class="default text">Select Profile</div>
-										<i class="dropdown icon"></i>
-										<div class="menu">
-											<div class="item" data-value="fb">Facebook</div>
-											<div class="item" data-value="gp">Google Plus</div>
-											<div class="item" data-value="nv">Naver</div>
-											<div class="item" data-value="ip">Your IP</div>
-										</div>--%>
-									</div>
-									<div class="mini ui blue labeled submit icon button" ng-click="setReply(item._id, reply)">
-										<i class="icon edit"></i> Add Reply
-									</div>
-								</div>
-							</div>
-							<div class="comment" ng-switch-default>
-								<%--
-								<a class="avatar">
-									<img src="/images/avatar/small/matt.jpg">
+					<nav>
+						<ul class="pagination">
+							<li>
+								<a href="javascript:void(0);" aria-label="Previous" v-on:click="move_list(paging.firstPageNo)">
+									<span aria-hidden="true">&laquo;</span>
 								</a>
-								--%>
-								<div class="content">
-									<a class="author" ng-bind="reply.userName"></a>
-									<div class="metadata">
-										<span class="date" ng-bind="reply.regDt"></span>
+							</li>
+							<li v-for="num in paging.pagingNumbers" v-bind:class="num == paging.currPageNo ? 'active':''">
+								<a href="javascript:void(0);" v-on:click="move_list(num)">{{num}}</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" aria-label="Next" v-on:click="move_list(paging.finalPageNo)">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+			<h1 class="heading"><c:out value="${post.title}"/></h1>
+			<%--
+			<p class="lead">This is the lead paragraph of the article. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget.</p>
+			--%>
+		</div>
+	</section>
+	<c:if test="${post.delegate_img != null && post.delegate_img != ''}">
+	<figure class="full-image"><img src="/post/images/${post.delegate_img}" alt="">
+		<figcaption><c:out value="${image_spec}"/></figcaption>
+	</figure>
+	</c:if>
+	<section class="blog-post">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="post-content">
+						<c:out value="${post.content}" escapeXml="false"/>
+					</div>
+					<!-- /.post-content-->
+					<div class="comments" v-if="list.length > 0" v-cloak>
+						<h4>{{list.length}} comment{{list.length > 1 ? 's':''}}</h4>
+						<!-- /.comment-->
+						<div v-for="(item, index) in list" v-bind:key="item._id" v-bind:class="index == (list.length - 1) ? 'row comment last':'row comment'">
+							<div class="col-sm-3 col-md-2 text-center-xs">
+								<p><img v-bind:src="item.profile_image_url" v-bind:alt="item.userName" class="img-responsive img-circle" style="width: 50px;"></p>
+							</div>
+							<div class="col-sm-9 col-md-10">
+								<span aria-hidden="true" class="text-danger"
+								      style="position: absolute; top: 5px; right:10px; cursor: pointer;" v-on:click="remove_comment(item._id)">&times;</span>
+								<h5><a v-bind:href="item.link" target="_blank">{{item.userName}}</a></h5>
+								<p class="posted"><i class="fa fa-clock-o"></i> {{item.regDt}}</p>
+								<p class="text-gray">{{item.comment}}</p>
+							</div>
+							<div class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10 text-right">
+								<p class="reply"><a href="javascript:void(0)" v-on:click="open_reply_modal(item._id, item.userName)"><i class="fa fa-reply"></i> Reply</a></p>
+							</div>
+							<!-- /.대댓글 -->
+							<div v-for="(reply, index) in item.replys" v-bind:key="reply" class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10 replys">
+								<span aria-hidden="true" class="text-danger"
+								      style="position: absolute; top: 5px; right:10px; cursor: pointer;" v-on:click="remove_reply(item._id, index)">&times;</span>
+								<h5><i class="fa fa-reply fa-rotate-180"></i> <a v-bind:href="reply.link" target="_blank">{{reply.userName}}</a></h5>
+								<p class="posted"><i class="fa fa-clock-o"></i> {{reply.regDt}}</p>
+								<p class="text-gray">{{reply.comment}}</p>
+							</div>
+							<!-- /.대댓글 -->
+						</div>
+						<!-- /.comment-->
+						<div class="modal fade" id="newReply" tabindex="-1">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<h4 class="modal-title">{{replyTo}} 님 댓글에 대한 대댓글</h4>
 									</div>
-									<div class="text">
-										<div class="ui horizontal label" ng-bind="'to : '+reply.targetUserName"></div>
-										<span ng-bind="reply.comment"></span>
+									<div class="modal-body">
+										<textarea id="reply_comment" name="reply_comment" rows="4" class="form-control" required></textarea>
 									</div>
-									<div class="actions" ng-click="openReplyForm(item, reply.userName)">
-										<a class="reply">Reply</a>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
+											<i class="fa fa-times-circle" aria-hidden="true"></i> 닫기
+										</button>
+										<button type="button" class="btn btn-sm btn-primary" v-on:click="insert_reply()">
+											<i class="fa fa-check-circle" aria-hidden="true"></i> 저장
+										</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					<!-- /#comments-->
+					<div class="comment-form">
+						<h4>댓글 남기기</h4>
+						<form name="commentForm" method="post" onsubmit="return false;">
+							<input type="hidden" name="postCd" value="${post.post_cd}"/>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label for="comment">댓글
+											<span class="required">
+												*
+												<security:authorize access="!isAuthenticated()">
+													(소셜 로그인을 하셔야 댓글을 등록할 수 있습니다)
+												</security:authorize>
+											</span>
+										</label>
+										<textarea id="comment" name="comment" rows="4" class="form-control"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 text-right">
+									<security:authorize access="isAuthenticated()">
+									<button type="button" class="btn btn-primary" id="post-comment"><i class="fa fa-comment-o"></i> Post comment</button>
+									</security:authorize>
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
-				<div class="ui comments form">
-					<form name="commentForm" method="post" onsubmit="return false;">
-						<input type="hidden" name="postCd" value="${post.post_cd}"/>
-						<div class="field">
-							<label>Comment</label>
-							<textarea name="comment" rows="4"></textarea>
-						</div>
-						<div class="ui scrolling dropdown">
-							<%--<input type="hidden" name="gender">
-							<div class="default text">Select Profile</div>
-							<i class="dropdown icon"></i>
-							<div class="menu">
-								<div class="item" data-value="fb">Facebook</div>
-								<div class="item" data-value="gp">Google Plus</div>
-								<div class="item" data-value="nv">Naver</div>
-								<div class="item" data-value="ip">Your IP</div>
-							</div>--%>
-						</div>
-						<div class="mini ui blue labeled submit icon button" ng-click="setComment()">
-							<i class="icon edit"></i> Add Comment
-						</div>
-					</form>
+				<div class="col-lg-12 text-right">
+					<a href="/post/register/${post.post_cd}" class="btn btn-success btn-sm">
+						<i class="fa fa-pencil-square-o" aria-hidden="true"> 수정</i>
+					</a>
 				</div>
 			</div>
 		</div>
-	</div>
+	</section>
+	<form name="viewForm" method="post" onsubmit="return false;">
+		<input type="hidden" name="currPageNo" value="<c:out value="${currPageNo}"/>"/>
+		<input type="hidden" name="category_cd" value="<c:out value="${post.category_cd}"/>"/>
+	</form>
 	<content tag="script">
 	<script>
-		$('.ui.dropdown').dropdown();
-		$('h4.ui').on('click', () => {
-			$('#postList').toggle('blind', {}, 500);
-		});
+		var pagination, comments
+		const category_cd = document.viewForm.category_cd.value
+		const commentFrm = document.commentForm;
 
-		var app = angular.module('postApp', []);
-		app.controller('postCtrl', ['$scope', '$http', ($scope, $http) => {
-			var currPageNo = '<c:out value="${currPageNo}"/>';
-			var category_cd = '<c:out value="${category_cd}"/>';
+		function executePost (url, param) {
+			return (function () {
+				return $.ajax({
+					type: 'POST',
+					url: url,
+					data: param,
+					dataType: 'json',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+				})
+			})()
+		}
 
-			var createPagingNumberArray = (paging) => {
-				var array = new Array();
-				array.push(paging.startPageNo);
-				var len = paging.endPageNo - paging.startPageNo + 1;
-				for(var i = 1; i < len; i++) {
-					array.push(paging.startPageNo + i);
-				}
-				angular.extend(paging, {pagingNumbers:array});
-				return paging;
-			};
+		function executeDelete (url, param) {
+			return (function () {
+				return $.ajax({
+					type: 'DELETE',
+					url: url + '?' + $.param(param),
+					dataType: 'json'
+				})
+			})()
+		}
 
-			$scope.getPage = (currPageNo) => {
-				var params = {currPageNo:currPageNo, category_cd:this.category_cd};
-				$http.get('/post/list',{params:params}).then((result) => {
-					$scope.postList = result.data.postList;
-					$scope.paging = createPagingNumberArray(result.data.paging);
-					document.forms[0].currPageNo.value = currPageNo;
-				}, (error) => {
-					console.log(error);
-				});
-			};
+		function getPostList (currPageNo, categoryCd, callback) {
+			let params = {currPageNo: currPageNo, category_cd: categoryCd}
+			$.get('/post/list', params).then(function (data) {
+				document.viewForm.currPageNo.value = currPageNo
+				return callback(data)
+			})
+		}
 
-			$scope.viewPost = (postCd) => {
-				document.forms[0].action = '/post/' + postCd;
-				document.forms[0].submit();
-			};
+		function getComments (callback) {
+			$.get('/post/comment', {postCd: document.commentForm.postCd.value}).then(function (data) {
+				console.log(data)
+				return callback(data)
+			})
+		}
 
-			$scope.getPage(currPageNo);
-		}]);
+		function commonCallback (data) {
+			if (data.status) {
+				commentFrm.comment.value = ''
+				getComments(function (data) {
+					comments.list = data
+				})
+			} else {
+				alert(data.message)
+			}
+			$('#newReply').modal('hide')
+			return false
+		}
 
-		app.controller('commentCtrl', ['$scope', '$http', '$timeout', ($scope, $http, $timeout) => {
-			var createReplyModel = function(_id, targetUserName){
-				this._id = _id;
-				this.targetUserName = targetUserName;
-				this.writer = true;
-			};
+		function createPagingNumArray (paging) {
+			let array = new Array()
+			array.push(paging.startPageNo)
+			let len = paging.endPageNo - paging.startPageNo + 1
+			for(var i = 1; i < len; i++) {
+				array.push(paging.startPageNo + i)
+			}
+			paging['pagingNumbers'] = array
+			return paging;
+		}
 
-			var replyFormDetect = (prevObject, currObject) => {
-				var nextArray;
-				if(!currObject.writer) nextArray = prevObject.concat(currObject);
-				else { nextArray = prevObject; }
-				return nextArray;
-			};
+		(function () {
+			let currPageNo = document.viewForm.currPageNo.value
+			getPostList(currPageNo, category_cd, function (data) {
+				pagination = new Vue({
+					el: '.listByPaging',
+					data: {
+						pageList: data.postList,
+						paging: createPagingNumArray(data.paging)
+					},
+					methods: {
+						move_list: function (pageNo) {
+							getPostList(pageNo, category_cd, function (data) {
+								this.pageList = data.postList
+								this.paging = createPagingNumArray(data.paging)
+							})
+						},
+						move_post: function (postCd) {
+							location.href= '/post/' + postCd;
+						}
+					}
+				})
+			})
 
-			var getComments = () => {
-				var postCd = angular.element('input[name=postCd]').val();
-				$http.get('/post/comment', {params:{postCd:postCd}})
-						.then((result) => {
-							$scope.commentList = result.data;
-						});
-			};
+			getComments(function (data) {
+				comments = new Vue({
+					el: '.comments',
+					data: {
+						list: data,
+						replyTo: '',
+						replyTargetId: ''
+					},
+					methods: {
+						remove_comment: function(_id) {
+							executeDelete('/post/comment', {_id: _id}).then(commonCallback)
+						},
+						open_reply_modal: function(_id, userName) {
+							this.replyTargetId = _id
+							this.replyTo = userName
+							$('#newReply').modal('show')
+						},
+						insert_reply: function() {
+							executePost('/post/reply',
+								$.param({_id: this.replyTargetId, comment: $('#reply_comment').val()}))
+								.then(commonCallback)
+						},
+						remove_reply: function(_id, index) {
+							executeDelete('/post/reply', {_id: _id, index: index}).then(commonCallback)
+						}
+					}
+				})
+			})
 
-			$scope.setComment = () => {
-				var data = angular.element('form[name=commentForm]').serialize();
-				$http.post('/post/comment', data, {headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}})
-						.then((result) => {
-							if(result.data.status) {
-								document.forms.commentForm.comment.value = '';
-								getComments();
-							} else { alert('댓글 내용을 입력하세요.'); }
-							return false;
-						});
-			};
+			$('.add-click').on('click', function () {
+				let parent = this
+				let isNode = $(this).find('i').hasClass('fa-angle-double-down')
+				$('.listByPaging').toggle('blind', function () {
+					if (isNode) $(parent).find('i').removeClass('fa-angle-double-down').addClass('fa-angle-double-up')
+					else $(parent).find('i').removeClass('fa-angle-double-up').addClass('fa-angle-double-down')
+				})
+			})
 
-			$scope.openReplyForm = (comment, targetUserName) => {
-				$scope.commentList.map(function(item){
-					if(item.replys) item.replys = item.replys.reduce(replyFormDetect, new Array())||new Array();
-				});
-				var reply = new createReplyModel(comment._id, targetUserName);
-				comment.replys.push(reply);
-			};
+			$('#post-comment').on('click', function (e) {
+				e.preventDefault()
+				executePost('/post/comment', $(commentFrm).serialize()).then(commonCallback)
+			})
 
-			$scope.setReply = (_id, reply) => {
-				var data = _.clone(reply);
-				angular.extend(data, {_id:_id});
-				$http.post('/post/reply', $.param(data), {headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}})
-						.then((result) => {
-							if(result.data.status) getComments();
-							else { alert('답글 내용을 입력하세요.'); }
-							return false;
-						});
-			};
+			$(document).on('shown.bs.modal', '#newReply', function() {
+				$('#reply_comment').focus()
+			})
 
-			getComments();
-		}]);
-<%--
-		var $commentDiv = $('<div>').addClass('comment');
-		var $contentDiv = $('<div>').addClass('content').addClass('ui').addClass('form');
-
-		var $fieldDiv = $('<div>').addClass('field');
-		var $label = $('<label>').text('Reply to Jenny Hess');
-		var $textarea = $('<textarea>').attr('rows', 2);
-		$fieldDiv.append($label, $textarea);
-
-		var $userDiv = $('<div>').addClass('ui').addClass('scrolling').addClass('dropdown');
-		var $input = $('<input>').attr('type', 'hidden').attr('name', 'gender');
-		var $defaultText = $('<div>').addClass('default').addClass('text').text('Select Profile');
-		var $i = $('<i>').addClass('dropdown').addClass('icon');
-		var $selectDiv = $('<div>').addClass('menu');
-		var $menu1 = $('<div>').addClass('item').attr('data-value', 'fb').text('Facebook');
-		$userDiv.append($input, $defaultText, $i, $selectDiv.append($menu1));
-
-		var $miniDiv = $('<div>').addClass('mini').addClass('ui').addClass('blue').addClass('labeled').addClass('submit').addClass('icon').addClass('button');
-		var $edit = $('<i>').addClass('icon').addClass('edit');
-		$miniDiv.append($edit, ' Add Reply');
-
-		$contentDiv.append($fieldDiv, $userDiv, $miniDiv);
-
-		$commentDiv.append($contentDiv).appendTo('#ppp');
-		$('.ui.dropdown').dropdown(); --%>
-
+			$(document).on('hide.bs.modal', '#newReply', function() {
+				comments.replyTargetId = ''
+				comments.replyTo = ''
+				$('#reply_comment').val('')
+			})
+		})()
 	</script>
 	</content>
 </body>

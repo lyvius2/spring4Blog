@@ -1,5 +1,6 @@
 package com.walter.dao;
 
+import com.walter.model.LuceneIndexVO;
 import com.walter.model.PostSearchVO;
 import com.walter.model.PostVO;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,10 @@ import java.util.List;
  */
 @Component
 public interface PostDao {
-	int setPost(PostVO postVO);
+	int insPost(PostVO postVO);
+	int modPost(PostVO postVO);
 	int delPost(int post_cd);
 	PostVO getPost(int post_cd);
 	List<PostVO> getPostList(PostSearchVO postSearchVO);
+	List<PostVO> getPostListByLucene(List<LuceneIndexVO> list);
 }

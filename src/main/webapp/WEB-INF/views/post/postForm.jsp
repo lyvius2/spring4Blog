@@ -31,6 +31,9 @@
 </head>
 <body>
 <form:form cssClass="form-horizontal" action="/post/register" method="post" commandName="postVO" autocomplete="off" enctype="multipart/form-data">
+	<form:input type="hidden" path="post_cd"/>
+	<form:input type="hidden" path="new_delegate_img"/>
+	<form:input type="hidden" path="delegate_img"/>
 	<section class="background-gray-lightest">
 		<div class="container">
 			<div class="breadcrumbs">
@@ -117,6 +120,9 @@
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap-filestyle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/ckeditor/ckeditor.js"></script>
 	<script>
+		var post_theme_cd = '${postVO.post_theme_cd}'
+		var delegate_img = '${postVO.delegate_img}'
+
 		CKEDITOR.replace('content', {
 			extraPlugins:'uploadimage,image2',
 			uploadUrl:'/post/dragAndDropUpload',
@@ -133,15 +139,17 @@
 
 		$('form').on('submit', function () {
 			document.getElementById('content').value = CKEDITOR.instances.content.getData()
+			$('input[name=new_delegate_img]').val($('#travel-mode > div.col-md-8 > div > input').val())
 		})
 
 		$('#travel-mode-select').change(function () {
 			if ($(this).prop('checked')) $('#travel-mode').slideDown()
 			else {
-				$('#travel-mode').slideUp()
-				$('button > span.filter-option.pull-left').html('여행국가')
 				document.getElementById('post_theme_cd').value = ''
 				document.getElementById('delegate_img_file').value = ''
+				$('button > span.filter-option.pull-left').html('여행국가')
+				$('#travel-mode > div.col-md-8 > div > input').val('')
+				$('#travel-mode').slideUp()
 			}
 		})
 
@@ -153,6 +161,14 @@
 			autoclose: true,
 			format: 'yyyy-mm-dd'
 		})
+
+		if (post_theme_cd != '' || delegate_img != '') {
+			$('#travel-mode-select').trigger('click')
+			document.getElementById('post_theme_cd').value = post_theme_cd
+			setTimeout(function () {
+				$('#travel-mode > div.col-md-8 > div > input').val(delegate_img)
+			}, 100)
+		}
 	</script>
 </content>
 </body>

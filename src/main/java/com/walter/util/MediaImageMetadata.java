@@ -25,11 +25,15 @@ public class MediaImageMetadata {
 		ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
 		ExifSubIFDDescriptor exifSubIFDDescriptor = new ExifSubIFDDescriptor(exifSubIFDDirectory);
 
-		return exifIFD0Descriptor.getDescription(exifIFD0Directory.TAG_MAKE) + " "
-				+ exifIFD0Descriptor.getDescription(exifIFD0Directory.TAG_MODEL) + " ("
-				+ exifSubIFDDescriptor.getLensSpecificationDescription() + ") / ISO "
-				+ exifSubIFDDescriptor.getIsoEquivalentDescription() + ", "
-				+ exifSubIFDDescriptor.getExposureTimeDescription() + ", "
-				+ exifSubIFDDescriptor.getFNumberDescription();
+		if (exifIFD0Directory != null && exifSubIFDDirectory != null) {
+			return exifIFD0Descriptor.getDescription(exifIFD0Directory.TAG_MAKE) + " "
+					+ exifIFD0Descriptor.getDescription(exifIFD0Directory.TAG_MODEL) + " ("
+					+ exifSubIFDDescriptor.getLensSpecificationDescription() + ") / ISO "
+					+ exifSubIFDDescriptor.getIsoEquivalentDescription() + ", "
+					+ exifSubIFDDescriptor.getExposureTimeDescription() + ", "
+					+ exifSubIFDDescriptor.getFNumberDescription();
+		} else {
+			return null;
+		}
 	}
 }

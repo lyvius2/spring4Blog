@@ -12,4 +12,5 @@ import java.util.HashMap;
 public interface GoogleDriveService {
 	File createFile(MultipartFile multipartFile) throws IOException;
 	HashMap<String, Object> openFile(String fileId) throws IOException;
+	void removeFile(String fileId) throws IOException;
 }

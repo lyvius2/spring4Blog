@@ -5,6 +5,7 @@ import com.walter.dao.CodeDao;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
 import com.walter.repository.CommentRepository;
+import com.walter.util.CRUD;
 import com.walter.util.CommonUtil;
 import com.walter.util.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +37,20 @@ public class PostServiceImpl implements PostService {
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
 	@Override
-	public int setPost(PostVO postVO) {
-		return dao.setPost(postVO);
+	public int setPost(PostVO postVO, CRUD crud) {
+		int result = 0;
+		switch(crud) {
+			case CREATE:
+				result = dao.insPost(postVO);
+				break;
+			case UPDATE:
+				result = dao.modPost(postVO);
+				break;
+			case DELETE:
+				result = dao.delPost(postVO.getPost_cd());
+				break;
+		}
+		return result;
 	}
 
 	@Override
@@ -53,6 +66,11 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<PostVO> getPostList(PostSearchVO postSearchVO) {
 		return dao.getPostList(postSearchVO);
+	}
+
+	@Override
+	public List<PostVO> getPostListByLucene(List<LuceneIndexVO> list) {
+		return dao.getPostListByLucene(list);
 	}
 
 	@Override
@@ -79,8 +97,14 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public void setComment(CommentVO commentVO) {
-		repository.insert(commentVO);
+	public Message setComment(CommentVO commentVO) {
+		if (CustomStringUtils.isNotEmpty(commentVO.getComment())) {
+			commentVO.setUserData(CommonUtil.getLoginUserInfo());
+			repository.insert(commentVO);
+			return null;
+		} else {
+			return Message.ERROR_COMMENT_NOT_EXIST;
+		}
 	}
 
 	@Override
@@ -104,8 +128,14 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public CommentVO setReply(String _id, ReplyVO replyVO) {
-		return repository.insertReply(mongoOps, _id, replyVO);
+	public Message setReply(String _id, ReplyVO replyVO) {
+		if(CustomStringUtils.isNotEmpty(replyVO.getComment())) {
+			replyVO.setUserData(CommonUtil.getLoginUserInfo());
+			repository.insertReply(mongoOps, _id, replyVO);
+			return null;
+		} else {
+			return Message.ERROR_COMMENT_NOT_EXIST;
+		}
 	}
 
 	@Override
@@ -125,7 +155,7 @@ public class PostServiceImpl implements PostService {
 	 * @return
 	 */
 	private Message removeValidation(CommentVO commentVO, String link) {
-		if (commentVO == null) return Message.ERROR_REMOVE_NOT_EXITST;
+		if (commentVO == null) return Message.ERROR_REMOVE_NOT_EXIST;
 		if (CommonUtil.getLoginUserInfo() == null ||
 				!link.equals(CommonUtil.getLoginUserInfo().getLink())) {
 			return Message.ERROR_REMOVE_PERMISSION;
