@@ -33,8 +33,13 @@ import java.util.stream.Stream;
 public class LuceneServiceImpl implements LuceneService {
 	private static final String LUCENE_INDEX_DIR = System.getProperty("user.home") + "/.lucene/data";
 	private static final String FIELD = "SEARCH_ALL";
-	private static final int DEFAULT_LIMIT_COUNT = 10000;
+	private static final int DEFAULT_LIMIT_COUNT = 100000;
 
+	/**
+	 * List 형태의 데이터를 받아 Lucene을 이용한 인덱싱 생성
+	 * @param list
+	 * @throws IOException
+	 */
 	@Override
 	public void createIndex(List<? extends LuceneIndexVO> list) throws IOException {
 		if (list.size() > 0) {
@@ -73,8 +78,16 @@ public class LuceneServiceImpl implements LuceneService {
 		}
 	}
 
+	/**
+	 * 검색어를 받아 Lucene 엔진을 통해 인덱싱에서 찾아 검색 결과를 List 형식으로 반환
+	 * @param itemType
+	 * @param searchText
+	 * @return
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	@Override
-	public List<LuceneIndexVO> searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException {
+	public List searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException {
 		File file = new File(LUCENE_INDEX_DIR, itemType.getSimpleName());
 		IndexReader indexReader = DirectoryReader.open(FSDirectory.open(file.toPath()));
 		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
@@ -82,7 +95,7 @@ public class LuceneServiceImpl implements LuceneService {
 
 		QueryParser parser = new QueryParser(FIELD, analyzer);
 
-		List<LuceneIndexVO> result = new ArrayList<>();
+		List result = new ArrayList<>();
 		if (CustomStringUtils.isNotEmpty(searchText)) {
 			Query query = parser.parse(CustomStringUtils.stripToEmpty(searchText));
 			log.info("### Searching for : {}", query.toString());

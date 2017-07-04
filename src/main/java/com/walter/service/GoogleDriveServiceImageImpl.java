@@ -65,6 +65,12 @@ public class GoogleDriveServiceImageImpl implements GoogleDriveService {
 		return resultMap;
 	}
 
+	@Override
+	public void removeFile(String fileId) throws IOException {
+		Drive service = this.getDriveService();
+		service.files().delete(fileId);
+	}
+
 	private String getUploadFolderId(Drive service, String uploadPath) throws IOException {
 		String result;
 		FileList test = service.files()

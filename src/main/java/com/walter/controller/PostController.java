@@ -8,6 +8,7 @@ import com.walter.service.ConfigService;
 import com.walter.service.GoogleDriveService;
 import com.walter.service.LuceneService;
 import com.walter.service.PostService;
+import com.walter.util.CRUD;
 import com.walter.util.MediaImageMetadata;
 import com.walter.util.Message;
 import org.apache.commons.io.IOUtils;
@@ -61,21 +62,32 @@ public class PostController extends BaseController {
 		return "post/postForm";
 	}
 
+	@RequestMapping(value = "/register/{post_cd}", method = RequestMethod.GET)
+	public String modifyPostForm(@PathVariable int post_cd, Model model) {
+		model.addAttribute("postVO", postService.getPost(post_cd));
+		model.addAttribute("countryList", configService.getCodeList(new CodeVO("NAT")));
+		return "post/postForm";
+	}
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerPost(@ModelAttribute("postVO") @Valid PostVO postVO, Errors errors) throws IOException {
-		if (errors.hasErrors()) {
-			return "post/postForm";
+		if (errors.hasErrors()) return "post/postForm";
+		CRUD crud = CRUD.CREATE;
+		if (postVO.getPost_cd() != 0 && postService.getPost(postVO.getPost_cd()) != null) crud = CRUD.UPDATE;
+		if (crud.equals(CRUD.UPDATE) && !postVO.getDelegate_img().equals(postVO.getNew_delegate_img())) {
+			googleDriveImageService.removeFile(postVO.getDelegate_img());
+			postVO.setDelegate_img(null);
 		}
 		if (postVO.getDelegate_img_file().getSize() > 0) {
 			File uploadFile = googleDriveImageService.createFile(postVO.getDelegate_img_file());
 			postVO.setDelegate_img(uploadFile.getId());
 		}
-		postVO.setReg_id(super.getLoginUser()!=null?super.getLoginUser().getUsername():"anonymous");
-		postService.setPost(postVO);
+		postService.setPost(postVO, crud);
+		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
 		return "redirect:" + postVO.getPost_cd();
 	}
 
-	@RequestMapping(value = "/{post_cd}")
+	@RequestMapping(value = "/{post_cd}", method = RequestMethod.GET)
 	public String postView(@PathVariable int post_cd, Model model, HttpServletRequest request)
 			throws IOException, ImageProcessingException {
 		int currPageNo
@@ -87,8 +99,17 @@ public class PostController extends BaseController {
 			HashMap<String, Object> hashMap = googleDriveImageService.openFile(postVO.getDelegate_img());
 			model.addAttribute("image_spec", MediaImageMetadata.getImageSpecString((InputStream)hashMap.get("data")));
 		}
-		//return "post/postView";
-		return "post/tempPostView";
+		return "post/postView";
+	}
+
+	@RequestMapping(value = "/{post_cd}", method = RequestMethod.DELETE)
+	public ResponseEntity removePost(@PathVariable int post_cd) throws IOException {
+		PostVO postVO = postService.getPost(post_cd);
+		if (CustomStringUtils.isNotEmpty(postVO.getDelegate_img())) {
+			googleDriveImageService.removeFile(postVO.getDelegate_img());
+		}
+		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
+		return super.createResEntity(new HashMap<String, Object>().put("status", postService.setPost(postVO, CRUD.DELETE)));
 	}
 
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
@@ -141,48 +162,33 @@ public class PostController extends BaseController {
 		return gson.toJson(postService.getComments(postCd));
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String registerComment(@ModelAttribute("commentVO")CommentVO commentVO, HttpServletRequest request) {
-		HashMap<String, Object> hashMap = new HashMap<>();
-		if(CustomStringUtils.isNotEmpty(commentVO.getComment())) {
-			commentVO.setUserData(super.getLoginUser());
-			commentVO.setIp(request.getRemoteAddr());
-			postService.setComment(commentVO);
-			hashMap.put("status", true);
-		} else {
-			hashMap.put("status", false);
-		}
-		return gson.toJson(hashMap);
+	@RequestMapping(value = "/comment", method = RequestMethod.POST)
+	public ResponseEntity registerComment(@ModelAttribute("commentVO")CommentVO commentVO, HttpServletRequest request) {
+		commentVO.setIp(request.getRemoteAddr());
+		Message msg = postService.setComment(commentVO);
+		return resEntity(msg);
 	}
 
 	@RequestMapping(value = "/comment", method = RequestMethod.DELETE)
 	public ResponseEntity removeComment(@RequestParam("_id")String _id) {
 		Message msg = postService.removeComment(_id);
-		HashMap<String, Object> hashMap = new HashMap<>();
-		hashMap.put("status", msg == null ? true:false);
-		if (msg != null) hashMap.put("message", msg.getText());
-		return super.createResEntity(hashMap);
+		return resEntity(msg);
 	}
 
-	@RequestMapping(value = "/reply", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String registerReply(@ModelAttribute("replyVo")ReplyVO replyVO, HttpServletRequest request) {
-		HashMap<String, Object> hashMap = new HashMap<>();
-		if(CustomStringUtils.isNotEmpty(replyVO.getComment())) {
-			replyVO.setUserData(super.getLoginUser());
-			replyVO.setIp(request.getRemoteAddr());
-			postService.setReply(request.getParameter("_id"), replyVO);
-			hashMap.put("status", true);
-		} else {
-			hashMap.put("status", false);
-		}
-		return gson.toJson(hashMap);
+	@RequestMapping(value = "/reply", method = RequestMethod.POST)
+	public ResponseEntity registerReply(@ModelAttribute("replyVo")ReplyVO replyVO, HttpServletRequest request) {
+		replyVO.setIp(request.getRemoteAddr());
+		Message msg = postService.setReply(request.getParameter("_id"), replyVO);
+		return resEntity(msg);
 	}
 
 	@RequestMapping(value = "/reply", method = RequestMethod.DELETE)
 	public ResponseEntity removeReply(@RequestParam("_id")String _id, @RequestParam("index")int index) {
 		Message msg = postService.removeReply(_id, index);
+		return resEntity(msg);
+	}
+
+	private ResponseEntity resEntity(Message msg) {
 		HashMap<String, Object> hashMap = new HashMap<>();
 		hashMap.put("status", msg == null ? true:false);
 		if (msg != null) hashMap.put("message", msg.getText());
@@ -223,22 +229,9 @@ public class PostController extends BaseController {
 	}
 	*/
 
-	@RequestMapping(value = "/luceneTest")
-	public ResponseEntity luceneCreateIndex() throws IOException {
-		Boolean success = true;
-		try {
-			List<PostVO> postList = postService.getPostList(new PostSearchVO());
-			luceneService.createIndex(postList);
-		} catch(Exception e) {
-			logger.error(e.toString());
-			success = false;
-		}
-		return new ResponseEntity(new HashMap().put("result", success), HttpStatus.OK);
-	}
-
 	@RequestMapping(value = "/luceneSearch")
-	public ResponseEntity luceneSearch() throws IOException, ParseException {
-		List<LuceneIndexVO> result = luceneService.searchDataList(PostVO.class, "일본");
-		return super.createResEntity(result);
+	public ResponseEntity luceneSearch(@RequestParam("searchText") String searchText) throws IOException, ParseException {
+		List result = luceneService.searchDataList(PostVO.class, searchText);
+		return super.createResEntity(postService.getPostListByLucene(result));
 	}
 }
