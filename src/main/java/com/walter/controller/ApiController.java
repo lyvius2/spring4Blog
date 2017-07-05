@@ -9,14 +9,18 @@ import com.walter.service.LuceneService;
 import com.walter.service.PostService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
+import com.walter.service.GoogleDriveService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +40,12 @@ public class ApiController extends BaseController {
 	@Autowired
 	private LuceneService luceneService;
 
-	@RequestMapping(value = "/codeList", produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String getCodeList(@ModelAttribute CodeVO codeVO) {
-		return gson.toJson(configService.getCodeList(codeVO));
+	@Autowired
+	private GoogleDriveService googleDriveService;
+
+	@RequestMapping(value = "/codeList")
+	public ResponseEntity getCodeList(@ModelAttribute CodeVO codeVO) {
+		return super.createResEntity(configService.getCodeList(codeVO));
 	}
 
 	@RequestMapping(value = "/postList")
@@ -60,5 +66,12 @@ public class ApiController extends BaseController {
 			postList = postService.getPostList(postSearchVO);
 		}
 		return super.createResEntity(postList);
+	}
+
+	@RequestMapping(value = "/image/{file_id}", method = RequestMethod.GET)
+	public void imgView(@PathVariable String file_id, HttpServletResponse response) throws IOException {
+		HashMap<String, Object> hashMap = googleDriveService.openFile(file_id);
+		response.setContentType(hashMap.get("mimeType").toString());
+		response.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
 	}
 }

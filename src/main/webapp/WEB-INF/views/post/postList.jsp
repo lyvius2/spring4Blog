@@ -128,6 +128,19 @@
 					if (data.length >= rowsPerPage) nextOffset++;
 				}
 			})
+
+			/**
+			 * 무한 스크롤 구현 시 사용
+			 */
+			function scrollHandler() {
+				if ($(document).height() - 20 <= $(this).height() + $(this).scrollTop()) {
+					console.log('go to next rows')
+					console.log('stop event handler')
+					$(this).off('scroll', scrollHandler)
+				}
+			}
+
+			$(window).on('scroll', scrollHandler)
 		})()
 	</script>
 	</content>

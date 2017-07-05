@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,7 @@ public class LuceneServiceImpl implements LuceneService {
 		if (list.size() > 0) {
 			File file = new File(LUCENE_INDEX_DIR, list.get(0).getClass().getSimpleName());
 			if (!file.exists()) file.mkdirs();
-			FSDirectory fsDirectory = FSDirectory.open(file.toPath());
+			FSDirectory fsDirectory = FSDirectory.open(Paths.get(file.getPath()));
 
 			Analyzer analyzer = new KoreanAnalyzer();
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
