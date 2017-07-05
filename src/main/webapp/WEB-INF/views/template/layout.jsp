@@ -52,6 +52,7 @@
 	<script src="${contextPath}/resources/scripts/bootstrap-toggle.min.js"></script>
 	<script src="${contextPath}/resources/scripts/bootstrap-datepicker.min.js"></script>
 	<script src="${contextPath}/resources/scripts/bootstrap-datepicker.kr.min.js"></script>
+	<script src="${contextPath}/resources/scripts/moment.min.js"></script>
 	<script src="${contextPath}/resources/scripts/lightbox.min.js"></script>
 	<script src="${contextPath}/resources/scripts/front.js"></script>
 <decorator:getProperty property="page.script" />

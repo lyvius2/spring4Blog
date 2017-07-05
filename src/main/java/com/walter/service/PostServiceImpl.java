@@ -1,13 +1,12 @@
 package com.walter.service;
 
 import com.walter.config.CustomStringUtils;
-import com.walter.dao.CodeDao;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
 import com.walter.repository.CommentRepository;
-import com.walter.util.CRUD;
 import com.walter.util.CommonUtil;
-import com.walter.util.Message;
+import com.walter.config.code.Message;
+import com.walter.config.code.DataProcessing;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -37,9 +36,9 @@ public class PostServiceImpl implements PostService {
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
 	@Override
-	public int setPost(PostVO postVO, CRUD crud) {
+	public int setPost(PostVO postVO, DataProcessing dataProcessing) {
 		int result = 0;
-		switch(crud) {
+		switch(dataProcessing) {
 			case CREATE:
 				result = dao.insPost(postVO);
 				break;

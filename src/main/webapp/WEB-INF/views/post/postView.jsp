@@ -21,7 +21,7 @@
 		<div class="container">
 			<div class="breadcrumbs">
 				<ul class="breadcrumb">
-					<li><a href="index.html">Blog</a></li>
+					<li><a href="/post">Blog</a></li>
 					<li class="add-click"><c:out value="${post.category_name}"/> <i class="fa fa-angle-double-down"></i></li>
 				</ul>
 			</div>

@@ -76,8 +76,11 @@
 		<if test="searchText != null">
 		   AND (title LIKE '%'||#{searchText}||'%' OR content LIKE '%'||#{searchText}||'%')
 		</if>
+		<if test="rowsPerPage > 0">
+		 ORDER BY reg_dt DESC
+		 LIMIT #{rowsPerPage} OFFSET #{offset}
+		</if>
 	</select>
-	<!--LIMIT #{limit} OFFSET #{offset}-->
 
 	<select id="getPostListByLucene" parameterType="java.util.List" resultType="Post">
 		<include refid="getPostDefault"/>

@@ -4,7 +4,7 @@ import com.walter.dao.CategoryDao;
 import com.walter.dao.CodeDao;
 import com.walter.model.CategoryVO;
 import com.walter.model.CodeVO;
-import com.walter.util.Message;
+import com.walter.config.code.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

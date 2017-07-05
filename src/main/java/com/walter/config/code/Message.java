@@ -1,4 +1,4 @@
-package com.walter.util;
+package com.walter.config.code;
 
 /**
  * Created by yhwang131 on 2017-06-19.

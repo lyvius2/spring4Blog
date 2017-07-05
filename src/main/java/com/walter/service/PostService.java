@@ -1,9 +1,8 @@
 package com.walter.service;
 
 import com.walter.model.*;
-import com.walter.util.CRUD;
-import com.walter.util.Message;
-import org.springframework.ui.Model;
+import com.walter.config.code.DataProcessing;
+import com.walter.config.code.Message;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
  * Created by yhwang131 on 2016-10-27.
  */
 public interface PostService {
-	int setPost(PostVO postVO, CRUD crud);
+	int setPost(PostVO postVO, DataProcessing dataProcessing);
 	PostVO getPost(int post_cd);
 	List<PostVO> getPostList(PostSearchVO postSearchVO);
 	List<PostVO> getPostListByLucene(List<LuceneIndexVO> list);

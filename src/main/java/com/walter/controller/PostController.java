@@ -8,13 +8,12 @@ import com.walter.service.ConfigService;
 import com.walter.service.GoogleDriveService;
 import com.walter.service.LuceneService;
 import com.walter.service.PostService;
-import com.walter.util.CRUD;
 import com.walter.util.MediaImageMetadata;
-import com.walter.util.Message;
+import com.walter.config.code.DataProcessing;
+import com.walter.config.code.Message;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,6 +54,11 @@ public class PostController extends BaseController {
 	@Resource(name = "googleDriveServiceImage")
 	private GoogleDriveService googleDriveImageService;
 
+	@RequestMapping(value = "")
+	public String postListView() {
+		return "post/postList";
+	}
+
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPostForm(Model model) {
 		model.addAttribute("postVO", new PostVO(true, true));
@@ -72,9 +76,9 @@ public class PostController extends BaseController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerPost(@ModelAttribute("postVO") @Valid PostVO postVO, Errors errors) throws IOException {
 		if (errors.hasErrors()) return "post/postForm";
-		CRUD crud = CRUD.CREATE;
-		if (postVO.getPost_cd() != 0 && postService.getPost(postVO.getPost_cd()) != null) crud = CRUD.UPDATE;
-		if (crud.equals(CRUD.UPDATE) && !postVO.getDelegate_img().equals(postVO.getNew_delegate_img())) {
+		DataProcessing dataProcessing = DataProcessing.CREATE;
+		if (postVO.getPost_cd() != 0 && postService.getPost(postVO.getPost_cd()) != null) dataProcessing = DataProcessing.UPDATE;
+		if (dataProcessing.equals(DataProcessing.UPDATE) && !postVO.getDelegate_img().equals(postVO.getNew_delegate_img())) {
 			googleDriveImageService.removeFile(postVO.getDelegate_img());
 			postVO.setDelegate_img(null);
 		}
@@ -82,7 +86,7 @@ public class PostController extends BaseController {
 			File uploadFile = googleDriveImageService.createFile(postVO.getDelegate_img_file());
 			postVO.setDelegate_img(uploadFile.getId());
 		}
-		postService.setPost(postVO, crud);
+		postService.setPost(postVO, dataProcessing);
 		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
 		return "redirect:" + postVO.getPost_cd();
 	}
@@ -109,7 +113,7 @@ public class PostController extends BaseController {
 			googleDriveImageService.removeFile(postVO.getDelegate_img());
 		}
 		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
-		return super.createResEntity(new HashMap<String, Object>().put("status", postService.setPost(postVO, CRUD.DELETE)));
+		return super.createResEntity(new HashMap<String, Object>().put("status", postService.setPost(postVO, DataProcessing.DELETE)));
 	}
 
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
