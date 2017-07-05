@@ -6,9 +6,14 @@
         <pattern>/api/*</pattern>
         <pattern>/login*</pattern>
         <pattern>/post/images/*</pattern>
+        <pattern>/googleDrive**</pattern>
     </excludes>
 
-    <decorator name="mainTheme" page="template/layout.jsp">
+    <decorator name="resumeTheme" page="template/layout-resume.jsp">
+        <pattern>/resume*</pattern>
+    </decorator>
+
+    <decorator name="mainTheme" page="template/layout-common.jsp">
         <pattern>/*</pattern>
     </decorator>
 </decorators>

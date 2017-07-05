@@ -239,7 +239,7 @@ body {
 }
 
 /* footer */
-footer {
+div.resume-footer {
     position: absolute ;
     bottom: -30px ;
     left: 0 ;
@@ -249,6 +249,6 @@ footer {
     text-align: left ;
     color: #bbb ;
 }
-footer a {
+div.resume-footer a {
     font-weight: bold ;
 }

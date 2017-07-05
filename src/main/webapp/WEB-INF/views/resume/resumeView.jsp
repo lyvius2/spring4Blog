@@ -15,17 +15,11 @@
 <html>
 <head>
 	<title>Profile</title>
-	<!-- Noto Sans KR-Hestia -->
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/resume/NotoSansKR-Hestia.css">
-	<!-- custom css -->
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/resume/resume.css">
 </head>
 <body>
-	<div class="resume-wrapper">
 		<jsp:scriptlet>
 			pageContext.setAttribute("wrap", "\n");
 		</jsp:scriptlet>
-
 		<!-- header -->
 		<section class="resume">
 			<h1 class="heading-container">Résumé</h1>
@@ -166,7 +160,6 @@
 					</div>
 				</section>
 				</c:if><!-- education -->
-
 				<security:authorize access="isAuthenticated()">
 				<section class="resume-item">
 					<div style="padding-top: 20px;">
@@ -176,16 +169,7 @@
 					</div>
 				</section>
 				</security:authorize>
-
 			</div>
 		</section><!-- main -->
-
-		<!-- footer -->
-		<footer>
-			© 2016 <a href="https://github.com/dhparkdh" target="-_blank">dhpark</a>. All rights reserved.
-			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang</a>
-		</footer><!-- footer -->
-
-	</div>
 </body>
 </html>
