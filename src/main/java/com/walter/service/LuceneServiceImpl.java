@@ -90,7 +90,7 @@ public class LuceneServiceImpl implements LuceneService {
 	@Override
 	public List searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException {
 		File file = new File(LUCENE_INDEX_DIR, itemType.getSimpleName());
-		IndexReader indexReader = DirectoryReader.open(FSDirectory.open(file.toPath()));
+		IndexReader indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(file.getPath())));
 		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
 		Analyzer analyzer = new KoreanAnalyzer();
 

@@ -73,7 +73,7 @@
 				<ul class="navigator">
 					<c:forEach var="category" items="${categories}" varStatus="vs">
 						<c:if test="${category.use_yn == true}">
-							<li><a href="javascript:void(0);" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
+							<li><a href="javascript:getPostListByCategory(${category.category_cd}, '${category.category_name}');"><c:out value="${category.category_name}"/></a></li>
 						</c:if>
 					</c:forEach>
 				</ul>
@@ -94,6 +94,17 @@
 				if (data.length >= param.rowsPerPage) param.offset++;
 				else isEnd = true
 				return callback(data)
+			})
+		}
+
+		function getPostListByCategory (category_cd, category_name) {
+			$(window).off('scroll', scrollHandler)
+			param = new initSearchParam()
+			param['category_cd'] = category_cd
+			getPostList(param, function (data) {
+				posts.postList = data
+				$('#listName').text(category_name)
+				if (!isEnd) $(window).on('scroll', scrollHandler)
 			})
 		}
 
@@ -153,10 +164,10 @@
 
 			$('form[name=searchForm]').on('submit', function (e) {
 				e.preventDefault()
+				$(window).off('scroll', scrollHandler)
 				param = new initSearchParam()
 				param['searchText'] = $(this).find('input').val()
 				getPostList(param, function (data) {
-					console.log('data', data)
 					posts.postList = data
 					$('#listName').text('Search Result')
 					if (!isEnd) $(window).on('scroll', scrollHandler)

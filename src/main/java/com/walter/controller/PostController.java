@@ -12,6 +12,7 @@ import com.walter.util.MediaImageMetadata;
 import com.walter.config.code.DataProcessing;
 import com.walter.config.code.Message;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,15 @@ public class PostController extends BaseController {
 	private GoogleDriveService googleDriveImageService;
 
 	@RequestMapping(value = "")
-	public String postListView() {
+	public String postListView(@RequestParam("category_cd")int category_cd) {
+		if (category_cd > 0) {
+			PostSearchVO postSearchVO = new PostSearchVO();
+			postSearchVO.setUse_yn(true);
+			postSearchVO.setCategory_cd(category_cd);
+			postSearchVO.setRowsPerPage(1);
+			List<PostVO> postList = postService.getPostList(postSearchVO);
+			if (postList.size() > 0) return "redirect:post/" + postList.get(0).getPost_cd();
+		}
 		return "post/postList";
 	}
 
@@ -107,13 +116,15 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/{post_cd}", method = RequestMethod.DELETE)
-	public ResponseEntity removePost(@PathVariable int post_cd) throws IOException {
-		PostVO postVO = postService.getPost(post_cd);
-		if (CustomStringUtils.isNotEmpty(postVO.getDelegate_img())) {
+	public ResponseEntity removePost(@PathVariable int post_cd, @ModelAttribute("postVO")PostVO postVO) throws IOException {
+		if (StringUtils.isNotEmpty(postVO.getDelegate_img())) {
 			googleDriveImageService.removeFile(postVO.getDelegate_img());
 		}
 		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
-		return super.createResEntity(new HashMap<String, Object>().put("status", postService.setPost(postVO, DataProcessing.DELETE)));
+		postVO.setPost_cd(post_cd);
+		HashMap<String, Object> hashMap = new HashMap<>();
+		hashMap.put("status", postService.setPost(postVO, DataProcessing.DELETE) == 1 ? true:false);
+		return super.createResEntity(hashMap);
 	}
 
 	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
@@ -233,7 +244,7 @@ public class PostController extends BaseController {
 	}
 	*/
 
-	@RequestMapping(value = "/luceneSearch")
+	@RequestMapping(value = "/search")
 	public ResponseEntity luceneSearch(@RequestParam("searchText") String searchText) throws IOException, ParseException {
 		List result = luceneService.searchDataList(PostVO.class, searchText);
 		return super.createResEntity(postService.getPostListByLucene(result));

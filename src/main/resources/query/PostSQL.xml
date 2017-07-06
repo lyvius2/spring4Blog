@@ -78,7 +78,7 @@
 		</if>
 		<if test="rowsPerPage > 0">
 		 ORDER BY reg_dt DESC
-		 LIMIT #{rowsPerPage} OFFSET #{offset}
+		 LIMIT #{rowsPerPage} OFFSET #{offset}*#{rowsPerPage}
 		</if>
 	</select>
 

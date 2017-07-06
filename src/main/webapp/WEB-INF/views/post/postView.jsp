@@ -133,7 +133,7 @@
 											<span class="required">
 												*
 												<security:authorize access="!isAuthenticated()">
-													(소셜 로그인을 하셔야 댓글을 등록할 수 있습니다)
+												(소셜 로그인을 하셔야 댓글을 등록할 수 있습니다)
 												</security:authorize>
 											</span>
 										</label>
