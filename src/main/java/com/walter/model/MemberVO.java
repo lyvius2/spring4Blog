@@ -1,5 +1,6 @@
 package com.walter.model;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.facebook.api.User;
 import org.springframework.social.github.api.GitHubUserProfile;
 import org.springframework.social.google.api.plus.Person;
+import org.springframework.social.linkedin.api.LinkedInProfile;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -105,6 +107,21 @@ public class MemberVO implements UserDetails {
 		this.link = "https://github.com/" + gitHubUserProfile.getLogin();
 		this.social_type = "github";
 		this.profile_image_url = gitHubUserProfile.getAvatarUrl();
+	}
+
+	/**
+	 * LinkedIn 사용자 정보 매핑
+	 * @param linkedInProfile
+	 */
+	public MemberVO(LinkedInProfile linkedInProfile) {
+		this.username = StringUtils.stripToEmpty(linkedInProfile.getFirstName()) + " " + StringUtils.stripToEmpty(linkedInProfile.getLastName());
+		this.first_name = linkedInProfile.getFirstName();
+		this.last_name = linkedInProfile.getLastName();
+		this.email = linkedInProfile.getEmailAddress();
+		this.id = linkedInProfile.getId();
+		this.link = linkedInProfile.getPublicProfileUrl();
+		this.social_type = "linkedin";
+		this.profile_image_url = linkedInProfile.getProfilePictureUrl();
 	}
 
 	public int getSeq() {

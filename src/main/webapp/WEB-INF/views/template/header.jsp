@@ -85,10 +85,18 @@
 						</form>
 					</div>
 					<div id="sign-in-github">
-						<form action="/connect/github" method="post" id="github-form">
+						<form action="/connect/github" method="post" id="github-form" style="margin-bottom: 5px">
 							<input type="hidden" name="scope" value="user:email"/>
 							<button type="submit" class="btn btn-grey btn-block">
 								<i class="fa fa-github"></i> Sign In with GitHub
+							</button>
+						</form>
+					</div>
+					<div id="sign-in-linkedin">
+						<form action="/connect/linkedin" method="post" id="linkedin-form">
+							<input type="hidden" name="scope" value="r_basicprofile, r_emailaddress"/>
+							<button type="submit" class="btn btn-info btn-block">
+								<i class="fa fa-linkedin-square"></i> Sign In with LinkedIn
 							</button>
 						</form>
 					</div>

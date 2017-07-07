@@ -14,6 +14,9 @@ import org.springframework.social.github.api.UserOperations;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.api.plus.Person;
 import org.springframework.social.google.api.plus.PlusOperations;
+import org.springframework.social.linkedin.api.LinkedIn;
+import org.springframework.social.linkedin.api.LinkedInProfile;
+import org.springframework.social.linkedin.api.ProfileOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,6 +51,11 @@ public class SocialServiceImpl implements SocialService {
 					UserOperations userOperations = gitHub.userOperations();
 					GitHubUserProfile gitHubUserProfile = userOperations.getUserProfile();
 					return new MemberVO(gitHubUserProfile);
+				case "linkedin" :
+					LinkedIn linkedIn = this.getApi(LinkedIn.class);
+					ProfileOperations profileOperations = linkedIn.profileOperations();
+					LinkedInProfile linkedInProfile = profileOperations.getUserProfile();
+					return new MemberVO(linkedInProfile);
 			}
 		} catch (Exception e) {
 			log.error(e.toString());

@@ -63,6 +63,10 @@
 					<beans:constructor-arg value="${spring.social.github.appId}" />
 					<beans:constructor-arg value="${spring.social.github.appSecret}" />
 				</beans:bean>
+				<beans:bean id="linkedInConnectionFactory" class="org.springframework.social.linkedin.connect.LinkedInConnectionFactory">
+					<beans:constructor-arg value="${spring.social.linkedin.appId}" />
+					<beans:constructor-arg value="${spring.social.linkedin.appSecret}" />
+				</beans:bean>
 			</beans:list>
 		</beans:property>
 	</beans:bean>
