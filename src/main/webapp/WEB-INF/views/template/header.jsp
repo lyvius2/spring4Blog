@@ -15,11 +15,11 @@
 				<div id="navigation" class="collapse navbar-collapse navbar-right">
 					<ul class="nav navbar-nav">
 						<li <c:if test="${path == '/'}">class="active"</c:if>><a href="/">Home</a></li>
-						<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Blog <b class="caret"></b></a>
+						<li class="dropdown"><a href="/post" class="dropdown-toggle">Blog <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<c:forEach var="category" items="${categories}" varStatus="vs">
 									<c:if test="${category.use_yn == true}">
-									<li><a href="#" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
+									<li><a href="/post?category_cd=${category.category_cd}" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
 									</c:if>
 								</c:forEach>
 							</ul>
