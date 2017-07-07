@@ -45,28 +45,7 @@
 		<div class="container">
 			<div class="col-lg-8">
 				<div class="row">
-					<div class="col-lg-10 col-md-10 col-sm-12 col-lg-offset-1 col-md-offset-1"
-					     v-for="(post, index) in postList" v-bind:key="post.post_cd" v-cloak="" v-if="postList.length > 0">
-						<div class="thumbnail">
-							<div class="row date">
-								<div class="col-md-6" v-html="post.category_name"></div>
-								<div class="col-md-6 text-right">{{post.reg_dt|formatDate}}</div>
-							</div>
-							<div class="image-box" v-if="post.delegate_img != null && post.delegate_img != ''">
-								<img src="" v-bind:style="'background: url(/post/images/' + post.delegate_img + ') no-repeat center;'">
-							</div>
-							<div class="caption">
-								<h3 class="add-click" v-html="post.title" v-on:click="move_to_post(post.post_cd)"></h3>
-								<p class="add-click" v-on:click="move_to_post(post.post_cd)">{{get_stripped_content(post.content)}}</p>
-								<security:authorize access="isAuthenticated()">
-								<p class="text-right">
-									<a href="javascript:void(0);" class="btn btn-sm btn-success" v-on:click="modify_post(post.post_cd)"><i class="fa fa-pencil-square-o" aria-hidden="true"> 수정</i></a>
-									<a href="javascript:void(0);" class="btn btn-sm btn-danger" v-on:click="remove_post(post.post_cd, post.delegate_img, index, $event)"><i class="fa fa-trash-o" aria-hidden="true"> 삭제</i></a>
-								</p>
-								</security:authorize>
-							</div>
-						</div>
-					</div>
+					<post-item v-for="(post, index) in postList" v-bind:key="post.post_cd" :post="post"></post-item>
 				</div>
 			</div>
 			<div class="col-lg-4">
@@ -82,6 +61,7 @@
 		</div>
 	</section>
 	<content tag="script">
+	<jsp:include page="postItemTemplate.jsp"/>
 	<script>
 		var posts, param, isEnd = false
 
@@ -124,60 +104,65 @@
 			}
 		}
 
-		(function () {
-			Vue.filter('formatDate', function (value) {
-				if (value) return moment(value).format('MMMM DD YYYY, h:mm:ss a')
+		Vue.component('post-item', {
+			template: '#post-item-template',
+			props: {
+				post: {type: Object, required: true}
+			},
+			methods: {
+				get_stripped_content: function (content) {
+					return content.replace(/<(?:.|\n)*?>/gm, '').trim()
+				},
+				move_to_post: function (post_cd) {
+					location.href = '/post/' + post_cd
+				},
+				modify_post: function (post_cd) {
+					location.href = '/post/register/' + post_cd
+				},
+				remove_post: function (post_cd, delegate_img, index, e) {
+					e.preventDefault()
+					if (confirm(post_cd + ' : 포스트를 삭제하시겠습니까?')) {
+						$.ajax({
+							url: '/post/' + post_cd + '?' + $.param({delegate_img: delegate_img}),
+							method: 'DELETE',
+							dataType: 'json'
+						}).then(function (result) {
+							if (result.status) posts.postList.splice(index, 1)
+							return false
+						})
+					}
+					return false
+				}
+			}
+		})
+
+		Vue.filter('formatDate', function (value) {
+			if (value) return moment(value).format('MMMM DD YYYY, h:mm:ss a')
+		})
+
+		param = new initSearchParam()
+		getPostList(param, function (data) {
+			posts = new Vue({
+				el: '.blog-post',
+				data: {
+					postList: data
+				}
 			})
 
-			param = new initSearchParam()
-			getPostList(param, function (data) {
-				posts = new Vue({
-					el: '.blog-post',
-					data: {
-						postList: data
-					},
-					methods: {
-						get_stripped_content: function (content) {
-							return content.replace(/<(?:.|\n)*?>/gm, '').trim()
-						},
-						move_to_post: function (post_cd) {
-							location.href = '/post/' + post_cd
-						},
-						modify_post: function (post_cd) {
-							location.href = '/post/register/' + post_cd
-						},
-						remove_post: function (post_cd, delegate_img, index, e) {
-							e.preventDefault()
-							if (confirm(post_cd + ' : 포스트를 삭제하시겠습니까?')) {
-								$.ajax({
-									url: '/post/' + post_cd + '?' + $.param({delegate_img: delegate_img}),
-									method: 'DELETE',
-									dataType: 'json'
-								}).then(function (result) {
-									if (result.status) posts.postList.splice(index, 1)
-									return false
-								})
-							}
-							return false
-						}
-					}
-				})
+			if (!isEnd) $(window).on('scroll', scrollHandler)
+		})
 
+		$('form[name=searchForm]').on('submit', function (e) {
+			e.preventDefault()
+			$(window).off('scroll', scrollHandler)
+			param = new initSearchParam()
+			param['searchText'] = $(this).find('input').val()
+			getPostList(param, function (data) {
+				posts.postList = data
+				$('#listName').text('Search Result')
 				if (!isEnd) $(window).on('scroll', scrollHandler)
 			})
-
-			$('form[name=searchForm]').on('submit', function (e) {
-				e.preventDefault()
-				$(window).off('scroll', scrollHandler)
-				param = new initSearchParam()
-				param['searchText'] = $(this).find('input').val()
-				getPostList(param, function (data) {
-					posts.postList = data
-					$('#listName').text('Search Result')
-					if (!isEnd) $(window).on('scroll', scrollHandler)
-				})
-			})
-		})()
+		})
 	</script>
 	</content>
 </body>

@@ -48,7 +48,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6">
-					<p>&copy;2016 Best company</p>
+					<p>&copy;2016, 2017 walter.hwang</p>
 				</div>
 				<div class="col-md-6">
 					<p class="credit">Code <a href="https://bootstrapious.com/" class="external">Bootstrapious</a></p>

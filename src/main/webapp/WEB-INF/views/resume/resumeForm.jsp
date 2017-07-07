@@ -76,7 +76,6 @@
 						</div>
 					</section><!-- experience -->
 
-
 					<!-- project -->
 					<section class="resume-item project">
 						<div class="inner">

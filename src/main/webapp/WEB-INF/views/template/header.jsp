@@ -1,4 +1,4 @@
-<%@ page import="org.springframework.web.util.UrlPathHelper" %><%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %><%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><header class="header">
+<%@ page import="org.springframework.web.util.UrlPathHelper" %><%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %><%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><header class="header">
 		<div role="navigation" class="navbar navbar-default">
 			<div class="container">
 				<div class="navbar-header">
@@ -15,7 +15,7 @@
 				<div id="navigation" class="collapse navbar-collapse navbar-right">
 					<ul class="nav navbar-nav">
 						<li <c:if test="${path == '/'}">class="active"</c:if>><a href="/">Home</a></li>
-						<li class="dropdown"><a href="/post" class="dropdown-toggle">Blog <b class="caret"></b></a>
+						<li class="<c:if test="${fn:indexOf(path, '/post') == 0}">active</c:if> dropdown"><a href="/post" class="dropdown-toggle">Blog <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<c:forEach var="category" items="${categories}" varStatus="vs">
 									<c:if test="${category.use_yn == true}">

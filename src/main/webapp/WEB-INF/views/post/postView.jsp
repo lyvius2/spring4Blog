@@ -28,7 +28,7 @@
 			<div class="listByPaging" v-cloak>
 				<div class="list-group">
 					<a href="javascript:void(0);" class="list-group-item" v-for="post in pageList" v-bind:key="post" v-on:click="move_post(post.post_cd)">
-						<span class="badge" style="color: #777; background-color: #fff; border-radius: 0px;">{{post.df_reg_dt}}</span>
+						<span class="badge" style="color: #777; background-color: inherit; border-radius: 0px;">{{post.df_reg_dt}}</span>
 						<i class="fa fa-caret-right"></i> {{post.title}}
 					</a>
 					<nav>
@@ -69,33 +69,10 @@
 						<c:out value="${post.content}" escapeXml="false"/>
 					</div>
 					<!-- /.post-content-->
-					<div class="comments" v-if="list.length > 0" v-cloak>
-						<h4>{{list.length}} comment{{list.length > 1 ? 's':''}}</h4>
+					<div class="comments" v-if="list.length > 0">
+						<h4 v-html="list.length + ' comment' + (list.length > 1 ? 's':'')" v-cloak=""></h4>
 						<!-- /.comment-->
-						<div v-for="(item, index) in list" v-bind:key="item._id" v-bind:class="index == (list.length - 1) ? 'row comment last':'row comment'">
-							<div class="col-sm-3 col-md-2 text-center-xs">
-								<p><img v-bind:src="item.profile_image_url" v-bind:alt="item.userName" class="img-responsive img-circle" style="width: 50px;"></p>
-							</div>
-							<div class="col-sm-9 col-md-10">
-								<span aria-hidden="true" class="text-danger"
-								      style="position: absolute; top: 5px; right:10px; cursor: pointer;" v-on:click="remove_comment(item._id)">&times;</span>
-								<h5><a v-bind:href="item.link" target="_blank">{{item.userName}}</a></h5>
-								<p class="posted"><i class="fa fa-clock-o"></i> {{item.regDt}}</p>
-								<p class="text-gray">{{item.comment}}</p>
-							</div>
-							<div class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10 text-right">
-								<p class="reply"><a href="javascript:void(0)" v-on:click="open_reply_modal(item._id, item.userName)"><i class="fa fa-reply"></i> Reply</a></p>
-							</div>
-							<!-- /.대댓글 -->
-							<div v-for="(reply, index) in item.replys" v-bind:key="reply" class="col-sm-offset-3 col-md-offset-2 col-sm-9 col-md-10 replys">
-								<span aria-hidden="true" class="text-danger"
-								      style="position: absolute; top: 5px; right:10px; cursor: pointer;" v-on:click="remove_reply(item._id, index)">&times;</span>
-								<h5><i class="fa fa-reply fa-rotate-180"></i> <a v-bind:href="reply.link" target="_blank">{{reply.userName}}</a></h5>
-								<p class="posted"><i class="fa fa-clock-o"></i> {{reply.regDt}}</p>
-								<p class="text-gray">{{reply.comment}}</p>
-							</div>
-							<!-- /.대댓글 -->
-						</div>
+						<post-comment v-for="(item, index) in list" v-bind:key="item._id" :item="item" :index="index" :len="list.length"></post-comment>
 						<!-- /.comment-->
 						<div class="modal fade" id="newReply" tabindex="-1">
 							<div class="modal-dialog">
@@ -164,8 +141,10 @@
 		<input type="hidden" name="category_cd" value="<c:out value="${post.category_cd}"/>"/>
 	</form>
 	<content tag="script">
+	<jsp:include page="postCommentTemplate.jsp"/>
 	<script>
 		var pagination, comments
+		var currPageNo = document.viewForm.currPageNo.value
 		const category_cd = document.viewForm.category_cd.value
 		const commentFrm = document.commentForm;
 
@@ -230,82 +209,90 @@
 			return paging;
 		}
 
-		(function () {
-			let currPageNo = document.viewForm.currPageNo.value
-			getPostList(currPageNo, category_cd, function (data) {
-				pagination = new Vue({
-					el: '.listByPaging',
-					data: {
-						pageList: data.postList,
-						paging: createPagingNumArray(data.paging)
+		Vue.component('post-comment', {
+			template: '#post-comment-template',
+			props: {
+				item: {type: Object, required: true},
+				index: {type: Number, required: true},
+				len: {type: Number, required: true}
+			},
+			methods: {
+				remove_comment: function(_id) {
+					executeDelete('/post/comment', {_id: _id}).then(commonCallback)
+				},
+				open_reply_modal: function(_id, userName) {
+					comments.replyTargetId = _id
+					comments.replyTo = userName
+					$('#newReply').modal('show')
+				},
+				remove_reply: function(_id, index) {
+					executeDelete('/post/reply', {_id: _id, index: index}).then(commonCallback)
+				}
+			}
+		})
+
+		getPostList(currPageNo, category_cd, function (data) {
+			pagination = new Vue({
+				el: '.listByPaging',
+				data: {
+					pageList: data.postList,
+					paging: createPagingNumArray(data.paging)
+				},
+				methods: {
+					move_list: function (pageNo) {
+						getPostList(pageNo, category_cd, function (data) {
+							this.pageList = data.postList
+							this.paging = createPagingNumArray(data.paging)
+						})
 					},
-					methods: {
-						move_list: function (pageNo) {
-							getPostList(pageNo, category_cd, function (data) {
-								this.pageList = data.postList
-								this.paging = createPagingNumArray(data.paging)
-							})
-						},
-						move_post: function (postCd) {
-							location.href= '/post/' + postCd;
-						}
+					move_post: function (postCd) {
+						location.href= '/post/' + postCd;
 					}
-				})
+				}
 			})
+		})
 
-			getComments(function (data) {
-				comments = new Vue({
-					el: '.comments',
-					data: {
-						list: data,
-						replyTo: '',
-						replyTargetId: ''
-					},
-					methods: {
-						remove_comment: function(_id) {
-							executeDelete('/post/comment', {_id: _id}).then(commonCallback)
-						},
-						open_reply_modal: function(_id, userName) {
-							this.replyTargetId = _id
-							this.replyTo = userName
-							$('#newReply').modal('show')
-						},
-						insert_reply: function() {
-							executePost('/post/reply',
-								$.param({_id: this.replyTargetId, comment: $('#reply_comment').val()}))
-								.then(commonCallback)
-						},
-						remove_reply: function(_id, index) {
-							executeDelete('/post/reply', {_id: _id, index: index}).then(commonCallback)
-						}
+		getComments(function (data) {
+			comments = new Vue({
+				el: '.comments',
+				data: {
+					list: data,
+					replyTo: '',
+					replyTargetId: ''
+				},
+				methods: {
+					insert_reply: function() {
+						executePost('/post/reply',
+							$.param({_id: this.replyTargetId, comment: $('#reply_comment').val()}))
+							.then(commonCallback)
 					}
-				})
+				}
 			})
+		})
 
-			$('.add-click').on('click', function () {
-				let parent = this
-				let isNode = $(this).find('i').hasClass('fa-angle-double-down')
-				$('.listByPaging').toggle('blind', function () {
-					if (isNode) $(parent).find('i').removeClass('fa-angle-double-down').addClass('fa-angle-double-up')
-					else $(parent).find('i').removeClass('fa-angle-double-up').addClass('fa-angle-double-down')
-				})
+		$('.add-click').on('click', function () {
+			let parent = this
+			let isNode = $(this).find('i').hasClass('fa-angle-double-down')
+			$('.listByPaging').toggle('blind', function () {
+				if (isNode) $(parent).find('i').removeClass('fa-angle-double-down').addClass('fa-angle-double-up')
+				else $(parent).find('i').removeClass('fa-angle-double-up').addClass('fa-angle-double-down')
 			})
+		})
 
-			$('#post-comment').on('click', function (e) {
-				e.preventDefault()
-				executePost('/post/comment', $(commentFrm).serialize()).then(commonCallback)
-			})
+		$('#post-comment').on('click', function (e) {
+			e.preventDefault()
+			executePost('/post/comment', $(commentFrm).serialize()).then(commonCallback)
+		})
 
-			$(document).on('shown.bs.modal', '#newReply', function() {
-				$('#reply_comment').focus()
-			})
+		$(document).on('shown.bs.modal', '#newReply', function() {
+			$('#reply_comment').focus()
+		})
 
-			$(document).on('hide.bs.modal', '#newReply', function() {
-				comments.replyTargetId = ''
-				comments.replyTo = ''
-				$('#reply_comment').val('')
-			})
-		})()
+		$(document).on('hide.bs.modal', '#newReply', function() {
+			comments.replyTargetId = ''
+			comments.replyTo = ''
+			$('#reply_comment').val('')
+		})
 	</script>
 	</content>
 </body>
