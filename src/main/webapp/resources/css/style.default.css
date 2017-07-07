@@ -1956,7 +1956,11 @@ ul.navigator a {
   height: 100%;
 }
 .thumbnail .date {
+  font-family: "Georgia", Arial, sans-serif;
   right: 0;
   color: #bbb;
   font-size: 12px;
+}
+.georgia-num {
+  font-family: "Georgia", sans-serif;
 }

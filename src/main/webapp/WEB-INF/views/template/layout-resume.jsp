@@ -14,8 +14,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="all,follow">
 	<jsp:include page="linkcss.jsp"/>
-	<!-- Noto Sans KR-Hestia -->
-	<link rel="stylesheet" href="${contextPath}/resources/css/resume/NotoSansKR-Hestia.css">
 	<!-- custom css -->
 	<link rel="stylesheet" href="${contextPath}/resources/css/resume/resume.css">
 	<decorator:head />
