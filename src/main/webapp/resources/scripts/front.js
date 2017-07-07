@@ -358,6 +358,16 @@ $(window).load(function () {
 				else $('#sign-in-div p.text-danger').text(data['errorMsg'])
 			})
 	})
+    $('li.dropdown').on('mouseover', function () {
+	    $(this).addClass('active')
+	    $('.dropdown').trigger('show.bs.dropdown')
+    })
+	$('li.dropdown').on('mouseout', function () {
+		$(this).removeClass('active')
+	})
+    $('body').not('li.dropdown').on('click', function () {
+        $('.dropdown').trigger('hide.bs.dropdown')
+    })
 });
 
 $(window).resize(function () {

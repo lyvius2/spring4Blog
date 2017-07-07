@@ -45,7 +45,8 @@
 		<div class="container">
 			<div class="col-lg-8">
 				<div class="row">
-					<div class="col-lg-10 col-md-10 col-sm-12 col-lg-offset-1 col-md-offset-1" v-for="(post, index) in postList" v-bind:key="post.post_cd">
+					<div class="col-lg-10 col-md-10 col-sm-12 col-lg-offset-1 col-md-offset-1"
+					     v-for="(post, index) in postList" v-bind:key="post.post_cd" v-cloak="" v-if="postList.length > 0">
 						<div class="thumbnail">
 							<div class="row date">
 								<div class="col-md-6" v-html="post.category_name"></div>
@@ -55,8 +56,8 @@
 								<img src="" v-bind:style="'background: url(/post/images/' + post.delegate_img + ') no-repeat center;'">
 							</div>
 							<div class="caption">
-								<h3 v-html="post.title"></h3>
-								<p>{{get_stripped_content(post.content)}}</p>
+								<h3 class="add-click" v-html="post.title" v-on:click="move_to_post(post.post_cd)"></h3>
+								<p class="add-click" v-on:click="move_to_post(post.post_cd)">{{get_stripped_content(post.content)}}</p>
 								<security:authorize access="isAuthenticated()">
 								<p class="text-right">
 									<a href="javascript:void(0);" class="btn btn-sm btn-success" v-on:click="modify_post(post.post_cd)"><i class="fa fa-pencil-square-o" aria-hidden="true"> 수정</i></a>
@@ -138,6 +139,9 @@
 					methods: {
 						get_stripped_content: function (content) {
 							return content.replace(/<(?:.|\n)*?>/gm, '').trim()
+						},
+						move_to_post: function (post_cd) {
+							location.href = '/post/' + post_cd
 						},
 						modify_post: function (post_cd) {
 							location.href = '/post/register/' + post_cd
