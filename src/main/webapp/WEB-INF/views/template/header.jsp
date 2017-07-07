@@ -94,7 +94,7 @@
 					</div>
 					<div id="sign-in-linkedin">
 						<form action="/connect/linkedin" method="post" id="linkedin-form">
-							<input type="hidden" name="scope" value="r_basicprofile, r_emailaddress"/>
+							<input type="hidden" name="scope" value="r_emailaddress"/>
 							<button type="submit" class="btn btn-info btn-block">
 								<i class="fa fa-linkedin-square"></i> Sign In with LinkedIn
 							</button>
