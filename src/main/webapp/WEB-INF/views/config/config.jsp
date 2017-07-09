@@ -192,7 +192,7 @@
 		<div class="modal-dialog">
 			<form:form cssClass="form-horizontal" action="/config/admin" method="post" commandName="memberVO" autocomplete="false">
 				<input type="hidden" id="mode" name="mode" value="C"/>
-				<input type="hidden" id="seq" name="seq"/>
+				<input type="hidden" id="seq" name="seq" value="0"/>
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">

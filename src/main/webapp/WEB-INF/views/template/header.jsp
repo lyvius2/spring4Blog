@@ -12,7 +12,7 @@
 					</div>
 				</div>
 				<c:set var="path" value="${pageContext.request.servletPath}"/>
-				<div id="navigation" class="collapse navbar-collapse navbar-right">
+				<div id="navigation" class="collapse navbar-collapse navbar-right" style="padding-right: 0px;">
 					<ul class="nav navbar-nav">
 						<li <c:if test="${path == '/'}">class="active"</c:if>><a href="/">Home</a></li>
 						<li class="<c:if test="${fn:indexOf(path, '/post') == 0}">active</c:if> dropdown"><a href="/post" class="dropdown-toggle">Blog <b class="caret"></b></a>

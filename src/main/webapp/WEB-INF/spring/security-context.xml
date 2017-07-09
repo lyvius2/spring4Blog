@@ -10,7 +10,7 @@
 		<csrf disabled="true"/>
 		<access-denied-handler error-page="/exclude/403"/>
 		<intercept-url pattern="/login" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
-		<intercept-url pattern="/member/list" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/config**" access="hasRole('ROLE_ADMIN')"/>
 		<intercept-url pattern="/member/register" access="hasRole('ROLE_ANONYMOUS')"/>
 		<form-login login-page="/"
 					login-processing-url="/signIn"
