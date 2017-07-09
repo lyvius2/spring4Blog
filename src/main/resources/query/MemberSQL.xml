@@ -55,18 +55,4 @@
     <select id="getMemberList" resultType="Member">
         <include refid="getMemberDefault"/>
     </select>
-
-    <select id="getRoleList" parameterType="java.lang.String" resultType="Role">
-        SELECT fn_code_nm('ROLE', authority) AS "authority"
-          FROM member_authority
-         WHERE use_yn = 'Y'
-           AND username = #{username}
-    </select>
-
-    <insert id="setRole" parameterType="Role">
-        INSERT INTO member_authority
-        (username, authority, reg_id)
-        VALUES
-        (#{username}, #{authority}, #{reg_id})
-    </insert>
 </mapper>

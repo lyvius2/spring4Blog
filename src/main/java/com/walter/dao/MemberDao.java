@@ -1,7 +1,6 @@
 package com.walter.dao;
 
 import com.walter.model.MemberVO;
-import com.walter.model.RoleVO;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -16,7 +15,4 @@ public interface MemberDao {
 	int modMember(MemberVO memberVO);
 	MemberVO getMember(HashMap<String, Object> param);
 	List<MemberVO> getMemberList();
-
-	List<RoleVO> getRoleList(String username);
-	int setRole(RoleVO roleVO);
 }
