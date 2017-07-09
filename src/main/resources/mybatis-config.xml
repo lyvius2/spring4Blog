@@ -11,7 +11,6 @@
 
 	<typeAliases>
 		<typeAlias type="com.walter.model.MemberVO" alias="Member"/>
-		<typeAlias type="com.walter.model.RoleVO" alias="Role"/>
 		<typeAlias type="com.walter.model.CodeVO" alias="Code"/>
 		<typeAlias type="com.walter.model.CategoryVO" alias="Category"/>
 		<typeAlias type="com.walter.model.PostVO" alias="Post"/>
