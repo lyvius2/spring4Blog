@@ -1,43 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.walter.dao.MemberDao">
-    <sql id="getMember">
-        SELECT *
-              ,fn_code_nm('NAT', nationality) AS "nationality_name"
-          FROM member
-    </sql>
-
-    <select id="getMemberList" parameterType="java.lang.String" resultType="Member">
-        <include refid="getMember"/>
-        WHERE use_yn = 'Y'
-        <if test="value != null">
-          AND (username like '%'||#{value}||'%'
-           OR  kr_name like '%'||#{value}||'%'
-           OR  first_name like '%'||#{value}||'%'
-           OR  last_name like '%'||#{value}||'%')
-        </if>
-    </select>
-
-    <select id="getMemberDetail" parameterType="java.util.HashMap" resultType="Member">
-        <include refid="getMember"/>
-        WHERE use_yn = 'Y'
-        <if test="username != null">
-          AND username = #{username}
-        </if>
-        <if test="seq != null">
-          AND seq = #{seq}
-        </if>
-    </select>
-
-    <insert id="setMember" parameterType="Member">
+    <insert id="insMember" parameterType="Member">
         INSERT INTO member
-        (username, password, kr_name, first_name, last_name, email, phone, reg_id, nationality, pw_expire_dt)
+        (username, password, name, reg_id)
         VALUES
-        (#{username}, #{password}, #{kr_name}, #{first_name}, #{last_name}, #{email}, #{phone}, #{username}, #{nationality}, (current_date + INTERVAL '90 days'))
+        (#{username}, #{password}, #{name}, #{reg_id})
         <selectKey keyProperty="seq" resultType="java.lang.Integer" order="AFTER">
             SELECT currval('member_seq_seq')
         </selectKey>
     </insert>
+
+    <update id="modMember" parameterType="Member">
+        UPDATE member
+           SET (mod_dt
+                , mod_id
+                <if test="password != null">, password</if>
+                <if test="name != null">, name</if>
+                <if test="profile_image_url != null">, profile_image_url</if>
+                <if test="use_yn != null">, use_yn</if>
+               ) = (
+                now()
+                , #{mod_id}
+                <if test="password != null">, #{password}</if>
+                <if test="name != null">, #{name}</if>
+                <if test="profile_image_url != null">, #{profile_image_url}</if>
+                <if test="use_yn != null">, #{use_yn}</if>
+               )
+         WHERE 1 = 1
+               <if test="username != null and username != ''">
+                   AND username = #{username}
+               </if>
+               <if test="seq > 0">
+                   AND seq = #{seq}
+               </if>
+    </update>
+
+    <sql id="getMemberDefault">
+        SELECT *
+          FROM member
+    </sql>
+
+    <select id="getMember" parameterType="java.util.HashMap" resultType="Member">
+        <include refid="getMemberDefault"/>
+        WHERE use_yn = TRUE
+        <if test="username != null">
+            AND username = #{username}
+        </if>
+        <if test="seq != null">
+            AND seq = #{seq}
+        </if>
+    </select>
+
+    <select id="getMemberList" resultType="Member">
+        <include refid="getMemberDefault"/>
+    </select>
 
     <select id="getRoleList" parameterType="java.lang.String" resultType="Role">
         SELECT fn_code_nm('ROLE', authority) AS "authority"

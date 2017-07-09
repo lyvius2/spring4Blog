@@ -74,10 +74,12 @@
 								<h3><c:out value="${experience.title}"/></h3>
 								<h4 class="company"><c:out value="${experience.sub_title}"/></h4>
 								<span class="date">
-									<fmt:formatDate value="${experience.start_dt}" pattern="MMM yyyy"/>
+									<fmt:formatDate value="${experience.start_dt}" pattern="MMMM"/>
+									<span class="georgia-num"><fmt:formatDate value="${experience.start_dt}" pattern="yyyy"/></span>
 									-
 									<c:if test="${experience.str_end_dt != 'Present'}">
-										<fmt:formatDate value="${experience.end_dt}" pattern="MMM yyyy"/>
+										<fmt:formatDate value="${experience.end_dt}" pattern="MMMM"/>
+										<spen class="georgia-num"><fmt:formatDate value="${experience.end_dt}" pattern="yyyy"/></spen>
 									</c:if>
 									<c:if test="${experience.end_dt == ''}">
 										Present
@@ -110,7 +112,7 @@
 									</c:choose>
 								</h3>
 								<p class="sub"><c:out value="${project.sub_title}"/></p>
-								<p class="date"><c:out value="${project.str_start_dt}"/> - <c:out value="${project.str_end_dt}"/></p>
+								<p class="date georgia-num"><c:out value="${project.str_start_dt}"/> - <c:out value="${project.str_end_dt}"/></p>
 								<p class="detail"><c:out value="${fn:replace(project.description, wrap, '<br/>')}" escapeXml="false"/></p>
 								<p class="tags">
 									<c:forEach var="tech" items="${fn:split(project.tech, '/')}">
@@ -153,7 +155,7 @@
 								<li>
 									<h3><c:out value="${edu.title}"/></h3>
 									<h4 class="company"><c:out value="${edu.sub_title}"/></h4>
-									<span class="date"><c:out value="${edu.str_start_dt}"/> - <c:out value="${edu.str_end_dt}"/></span>
+									<span class="date georgia-num"><c:out value="${edu.str_start_dt}"/> - <c:out value="${edu.str_end_dt}"/></span>
 								</li>
 							</c:forEach>
 						</ul>

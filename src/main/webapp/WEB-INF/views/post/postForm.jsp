@@ -38,7 +38,7 @@
 		<div class="container">
 			<div class="breadcrumbs">
 				<ul class="breadcrumb">
-					<li><a href="index.html">Blog</a></li>
+					<li><a href="/post">Blog</a></li>
 					<li>Writer</li>
 				</ul>
 			</div>

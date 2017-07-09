@@ -4,6 +4,9 @@ package com.walter.config.code;
  * Created by yhwang131 on 2017-06-19.
  */
 public enum Message {
+	SAVED("저장되었습니다."),
+	REQUEST_RECONFIRM_PW("비밀번호 확인을 다시 한번 해주십시오."),
+	DUPLE_MEMBER_ID("이미 동일한 ID의 사용자가 존재합니다."),
 	DUPLE_CATEGORY("같은 이름으로 이미 등록된 카테고리가 있습니다."),
 	ERROR_SOCIAL_API("소셜 로그인에 실패했습니다. 정보를 가져오지 못했습니다."),
 	ERROR_COMMENT_NOT_EXIST("댓글 내용을 입력하세요."),

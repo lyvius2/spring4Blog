@@ -1,9 +1,9 @@
 package com.walter.config.authentication;
 
+import com.walter.config.code.Role;
 import com.walter.dao.MemberDao;
 import com.walter.model.MemberVO;
 
-import com.walter.model.RoleVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by yhwang131 on 2016-08-26.
@@ -30,62 +27,42 @@ public class SignInUserDetailsService implements UserDetailsService {
 	@Autowired
 	private MemberDao memberDao;
 
-	private enum ROLE {
-		DEFAULT("ROLE_USER"),
-		ADMIN("ROLE_ADMIN"),
-		ANONYMOUS("ROLE_ANONYMOUS");
-
-		private RoleVO roleVO;
-
-		ROLE(String authority) {
-			RoleVO roleVO = new RoleVO();
-			roleVO.setAuthority(authority);
-			this.roleVO = roleVO;
-		}
-
-		public RoleVO getRoleVO() {
-			return this.roleVO;
-		}
-
-		public List<RoleVO> getRoleList() {
-			List<RoleVO> roleVOList = new ArrayList<>();
-			roleVOList.add(this.roleVO);
-			return roleVOList;
-		}
-	}
-
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		HashMap<String, Object> param = new HashMap<>();
-		param.put("username", username);
-		MemberVO memberVO = memberDao.getMemberDetail(param);
+		HashMap<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("username", username);
+		MemberVO memberVO = memberDao.getMember(paramsMap);
 
 		if (memberVO == null) {
 			UsernameNotFoundException unfe = new UsernameNotFoundException(messages.getMessage("JdbcDaoImpl.notFound", new Object[]{username}, "User {0} not found"));
 			throw unfe;
 		}
 
-		memberVO.setAuthorities(memberDao.getRoleList(username));
-		memberVO.setAccountNonExpired(true);
-		memberVO.setAccountNonLocked(true);
-		memberVO.setCredentialsNonExpired(
-				memberVO.getPw_expire_dt() != null && memberVO.getPw_expire_dt().compareTo(new Date()) >= 0 ? true : false
-		);
-		memberVO.setEnabled(
-				memberVO.getUse_yn() != null && "Y".equals(memberVO.getUse_yn()) ? true : false
-		);
+		memberVO.setAuthorities(Role.ADMIN.getRoleList());
+		memberVO.setEnabled(memberVO.isUse_yn());
 		return memberVO;
 	}
 
 	public void onAuthenticationWithSocial(MemberVO memberVO) {
-		memberVO.setAuthorities(ROLE.DEFAULT.getRoleList());
-		memberVO.setAccountNonExpired(true);
-		memberVO.setAccountNonLocked(true);
-		memberVO.setCredentialsNonExpired(true);
-		memberVO.setEnabled(true);
+		HashMap<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("username", memberVO.getUsername());
+		MemberVO existMember = memberDao.getMember(paramsMap);
+		if (existMember != null) {
+			memberVO.setAuthorities(Role.ADMIN.getRoleList());
+			if (existMember.getProfile_image_url() == null
+					|| !existMember.getProfile_image_url().equals(memberVO.getProfile_image_url())) {
+				MemberVO paramsMember = new MemberVO();
+				paramsMember.setUsername(memberVO.getUsername());
+				paramsMember.setMod_id(memberVO.getUsername());
+				paramsMember.setProfile_image_url(memberVO.getProfile_image_url());
+				paramsMember.setUse_yn(true);
+				memberDao.modMember(paramsMember);
+			}
+		}
+		memberVO.setEnabled(memberVO.isUse_yn());
 
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-				memberVO, null, ROLE.DEFAULT.getRoleList()
+				memberVO, null, memberVO.getAuthorities()
 		);
 		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 	}

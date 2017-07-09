@@ -36,7 +36,7 @@ public class MemberController {
 		model.addAttribute("memberVO", new MemberVO());
 		return "member/memberForm";
 	}
-
+/*
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerMember(@ModelAttribute("memberVO") @Valid MemberVO memberVO, Errors errors, HttpServletRequest request) {
 		if(errors.hasErrors()) {
@@ -71,11 +71,12 @@ public class MemberController {
 		model.addAttribute("member", memberDao.getMemberDetail(param));
 		return "member/memberDetail";
 	}
-
+	*/
+/*
 	@RequestMapping("/list")
 	public String memberList(@RequestParam(value = "searchText", required = false)String searchText, Model model) {
 		model.addAttribute("memberList", memberDao.getMemberList(searchText));
 		return "member/memberList";
 	}
-
+*/
 }
