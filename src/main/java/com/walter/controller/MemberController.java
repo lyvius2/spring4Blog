@@ -2,7 +2,6 @@ package com.walter.controller;
 
 import com.walter.dao.MemberDao;
 import com.walter.model.MemberVO;
-import com.walter.model.RoleVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
