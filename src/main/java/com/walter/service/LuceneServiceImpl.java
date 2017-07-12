@@ -6,6 +6,7 @@ import static com.walter.config.lambda.LambdaUtilForException.reThrowsFunction;
 import com.walter.config.CustomStringUtils;
 import com.walter.model.LuceneIndexVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.ko.KoreanAnalyzer;
 import org.apache.lucene.document.Document;
@@ -34,6 +35,7 @@ import java.util.stream.Stream;
 public class LuceneServiceImpl implements LuceneService {
 	private static final String LUCENE_INDEX_DIR = System.getProperty("user.home") + "/.lucene/data";
 	private static final String FIELD = "SEARCH_ALL";
+	private static final String KEY_FIELD = "KEY";
 	private static final int DEFAULT_LIMIT_COUNT = 100000;
 
 	/**
@@ -61,14 +63,15 @@ public class LuceneServiceImpl implements LuceneService {
 			fieldType.freeze();
 
 			indexWriter.deleteAll();
-			list.stream().filter(i -> CustomStringUtils.isNotEmpty(i.getSeq())).forEach(reThrowsConsumer(i -> {
+			list.stream().filter(i -> StringUtils.isNotEmpty(i.getSeq())).forEach(reThrowsConsumer(i -> {
 				Document document = new Document();
 				document.add(new Field("SEQ", i.getSeq(), fieldType));
 				document.add(new Field("TITLE", i.getTitle(), fieldType));
 				document.add(new Field("CONTENT", i.getContent(), fieldType));
 
-				document.add(new Field(FIELD, CustomStringUtils.stripToEmpty(i.getTitle()), fieldType));
-				document.add(new Field(FIELD, CustomStringUtils.stripToEmpty(i.getContent()), fieldType));
+				document.add(new Field(KEY_FIELD, StringUtils.stripToEmpty(i.getSeq()), fieldType));
+				document.add(new Field(FIELD, StringUtils.stripToEmpty(i.getTitle()), fieldType));
+				document.add(new Field(FIELD, StringUtils.stripToEmpty(i.getContent()), fieldType));
 				indexWriter.addDocument(document);
 			}));
 
@@ -98,7 +101,7 @@ public class LuceneServiceImpl implements LuceneService {
 
 		List result = new ArrayList<>();
 		if (CustomStringUtils.isNotEmpty(searchText)) {
-			Query query = parser.parse(CustomStringUtils.stripToEmpty(searchText));
+			Query query = parser.parse(StringUtils.stripToEmpty(searchText));
 			log.info("### Searching for : {}", query.toString());
 			SortField sortField = new SortField("SEQ", SortField.Type.DOC, true);
 			Sort sort = new Sort(sortField);
@@ -112,9 +115,54 @@ public class LuceneServiceImpl implements LuceneService {
 				idx.setSeq(d.get("SEQ"));
 				idx.setTitle(d.get("TITLE"));
 				idx.setContent(d.get("CONTENT"));
+				log.debug("IDX : {}", idx.toString());
 				result.add(idx);
 			}));
 		}
 		return result;
+	}
+
+	@Override
+	public void updateIndex(String seq, LuceneIndexVO luceneIndexVO) throws IOException, ParseException {
+		IndexWriter indexWriter = this.removeIndex(seq, luceneIndexVO.getClass());
+		if (indexWriter != null) {
+			FieldType fieldType = new FieldType();
+			fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+			fieldType.setStored(true);
+			fieldType.setTokenized(true);
+			fieldType.freeze();
+
+			Document document = new Document();
+			document.add(new Field("SEQ", luceneIndexVO.getSeq(), fieldType));
+			document.add(new Field("TITLE", luceneIndexVO.getTitle(), fieldType));
+			document.add(new Field("CONTENT", luceneIndexVO.getContent(), fieldType));
+
+			document.add(new Field(KEY_FIELD, StringUtils.stripToEmpty(luceneIndexVO.getSeq()), fieldType));
+			document.add(new Field(FIELD, StringUtils.stripToEmpty(luceneIndexVO.getTitle()), fieldType));
+			document.add(new Field(FIELD, StringUtils.stripToEmpty(luceneIndexVO.getContent()), fieldType));
+			indexWriter.addDocument(document);
+
+			indexWriter.commit();
+			indexWriter.close();
+		}
+	}
+
+	@Override
+	public IndexWriter removeIndex(String seq, Class<? extends LuceneIndexVO> itemType) throws IOException, ParseException {
+		IndexWriter indexWriter = null;
+		File file = new File(LUCENE_INDEX_DIR, itemType.getSimpleName());
+		if (file.exists()) {
+			FSDirectory fsDirectory = FSDirectory.open(Paths.get(file.getPath()));
+
+			Analyzer analyzer = new KoreanAnalyzer();
+			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+			indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+
+			indexWriter = new IndexWriter(fsDirectory, indexWriterConfig);
+			Query query = new QueryParser(KEY_FIELD, analyzer).parse(seq);
+			indexWriter.deleteDocuments(query);
+			log.info("### Remainder in Index : {}", indexWriter.numDocs());
+		}
+		return indexWriter;
 	}
 }

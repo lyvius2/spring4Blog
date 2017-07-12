@@ -1,6 +1,7 @@
 package com.walter.service;
 
 import com.walter.model.LuceneIndexVO;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 import java.io.IOException;
@@ -12,4 +13,6 @@ import java.util.List;
 public interface LuceneService {
 	void createIndex(List<? extends LuceneIndexVO> list) throws IOException;
 	List searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException;
+	void updateIndex(String seq, LuceneIndexVO luceneIndexVO) throws IOException, ParseException;
+	IndexWriter removeIndex(String seq, Class<? extends LuceneIndexVO> itemType) throws IOException, ParseException;
 }
