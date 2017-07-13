@@ -3,7 +3,9 @@ package com.walter.service;
 import com.walter.model.*;
 import com.walter.config.code.DataProcessing;
 import com.walter.config.code.Message;
+import org.apache.lucene.queryparser.classic.ParseException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,7 +13,7 @@ import java.util.List;
  * Created by yhwang131 on 2016-10-27.
  */
 public interface PostService {
-	int setPost(PostVO postVO, DataProcessing dataProcessing);
+	int setPost(PostVO postVO, DataProcessing dataProcessing) throws IOException, ParseException;
 	PostVO getPost(int post_cd);
 	List<PostVO> getPostList(PostSearchVO postSearchVO);
 	List<PostVO> getPostListByLucene(List<LuceneIndexVO> list);

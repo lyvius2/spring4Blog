@@ -8,7 +8,6 @@ import com.walter.model.LuceneIndexVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.ko.KoreanAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
@@ -17,6 +16,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.FSDirectory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -38,6 +38,9 @@ public class LuceneServiceImpl implements LuceneService {
 	private static final String KEY_FIELD = "KEY";
 	private static final int DEFAULT_LIMIT_COUNT = 100000;
 
+	@Autowired
+	private Analyzer analyzer;
+
 	/**
 	 * List 형태의 데이터를 받아 Lucene을 이용한 인덱싱 생성
 	 * @param list
@@ -50,7 +53,6 @@ public class LuceneServiceImpl implements LuceneService {
 			if (!file.exists()) file.mkdirs();
 			FSDirectory fsDirectory = FSDirectory.open(Paths.get(file.getPath()));
 
-			Analyzer analyzer = new KoreanAnalyzer();
 			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
 			indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 
@@ -77,9 +79,41 @@ public class LuceneServiceImpl implements LuceneService {
 
 			indexWriter.commit();
 			indexWriter.close();
-			analyzer.close();
-			fsDirectory.close();
+			//analyzer.close();
+			//fsDirectory.close();
 		}
+	}
+
+	/**
+	 * Lucene 인덱스 추가
+	 * @param luceneIndexVO
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	@Override
+	public void addIndex(LuceneIndexVO luceneIndexVO) throws IOException, ParseException {
+		IndexWriter indexWriter = this.getIndexWriter(
+				new File(LUCENE_INDEX_DIR, luceneIndexVO.getClass().getSimpleName()),
+				IndexWriterConfig.OpenMode.CREATE_OR_APPEND
+		);
+		FieldType fieldType = new FieldType();
+		fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+		fieldType.setStored(true);
+		fieldType.setTokenized(true);
+		fieldType.freeze();
+
+		Document document = new Document();
+		document.add(new Field("SEQ", luceneIndexVO.getSeq(), fieldType));
+		document.add(new Field("TITLE", luceneIndexVO.getTitle(), fieldType));
+		document.add(new Field("CONTENT", luceneIndexVO.getContent(), fieldType));
+
+		document.add(new Field(KEY_FIELD, StringUtils.stripToEmpty(luceneIndexVO.getSeq()), fieldType));
+		document.add(new Field(FIELD, StringUtils.stripToEmpty(luceneIndexVO.getTitle()), fieldType));
+		document.add(new Field(FIELD, StringUtils.stripToEmpty(luceneIndexVO.getContent()), fieldType));
+		indexWriter.addDocument(document);
+
+		indexWriter.commit();
+		indexWriter.close();
 	}
 
 	/**
@@ -95,7 +129,6 @@ public class LuceneServiceImpl implements LuceneService {
 		File file = new File(LUCENE_INDEX_DIR, itemType.getSimpleName());
 		IndexReader indexReader = DirectoryReader.open(FSDirectory.open(Paths.get(file.getPath())));
 		IndexSearcher indexSearcher = new IndexSearcher(indexReader);
-		Analyzer analyzer = new KoreanAnalyzer();
 
 		QueryParser parser = new QueryParser(FIELD, analyzer);
 
@@ -122,47 +155,50 @@ public class LuceneServiceImpl implements LuceneService {
 		return result;
 	}
 
+	/**
+	 * Lucene 인덱스 내용을 업데이트
+	 * @param luceneIndexVO
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	@Override
-	public void updateIndex(String seq, LuceneIndexVO luceneIndexVO) throws IOException, ParseException {
-		IndexWriter indexWriter = this.removeIndex(seq, luceneIndexVO.getClass());
-		if (indexWriter != null) {
-			FieldType fieldType = new FieldType();
-			fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
-			fieldType.setStored(true);
-			fieldType.setTokenized(true);
-			fieldType.freeze();
+	public void updateIndex(LuceneIndexVO luceneIndexVO) throws IOException, ParseException {
+		this.removeIndex(luceneIndexVO.getSeq(), luceneIndexVO.getClass());
+		this.addIndex(luceneIndexVO);
+	}
 
-			Document document = new Document();
-			document.add(new Field("SEQ", luceneIndexVO.getSeq(), fieldType));
-			document.add(new Field("TITLE", luceneIndexVO.getTitle(), fieldType));
-			document.add(new Field("CONTENT", luceneIndexVO.getContent(), fieldType));
-
-			document.add(new Field(KEY_FIELD, StringUtils.stripToEmpty(luceneIndexVO.getSeq()), fieldType));
-			document.add(new Field(FIELD, StringUtils.stripToEmpty(luceneIndexVO.getTitle()), fieldType));
-			document.add(new Field(FIELD, StringUtils.stripToEmpty(luceneIndexVO.getContent()), fieldType));
-			indexWriter.addDocument(document);
-
+	/**
+	 * Lucene 인덱스 삭제
+	 * @param seq
+	 * @param itemType
+	 * @throws IOException
+	 * @throws ParseException
+	 */
+	@Override
+	public void removeIndex(String seq, Class<? extends LuceneIndexVO> itemType) throws IOException, ParseException {
+		File file = new File(LUCENE_INDEX_DIR, itemType.getSimpleName());
+		if (file.exists()) {
+			IndexWriter indexWriter = this.getIndexWriter(file, IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+			log.info("### Index Length : {}", indexWriter.numDocs());
+			Query query = new QueryParser(KEY_FIELD, analyzer).parse(seq);
+			indexWriter.deleteDocuments(query);
 			indexWriter.commit();
+			log.info("### Remainder in Index : {}", indexWriter.numDocs());
 			indexWriter.close();
 		}
 	}
 
-	@Override
-	public IndexWriter removeIndex(String seq, Class<? extends LuceneIndexVO> itemType) throws IOException, ParseException {
-		IndexWriter indexWriter = null;
-		File file = new File(LUCENE_INDEX_DIR, itemType.getSimpleName());
-		if (file.exists()) {
-			FSDirectory fsDirectory = FSDirectory.open(Paths.get(file.getPath()));
-
-			Analyzer analyzer = new KoreanAnalyzer();
-			IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-			indexWriterConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
-
-			indexWriter = new IndexWriter(fsDirectory, indexWriterConfig);
-			Query query = new QueryParser(KEY_FIELD, analyzer).parse(seq);
-			indexWriter.deleteDocuments(query);
-			log.info("### Remainder in Index : {}", indexWriter.numDocs());
-		}
-		return indexWriter;
+	/**
+	 * 사용할 수 있는 IndexWriter 객체를 반환
+	 * @param file
+	 * @param openMode
+	 * @return
+	 * @throws IOException
+	 */
+	private IndexWriter getIndexWriter(File file, IndexWriterConfig.OpenMode openMode) throws IOException {
+		FSDirectory fsDirectory = FSDirectory.open(Paths.get(file.getPath()));
+		IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+		indexWriterConfig.setOpenMode(openMode);
+		return new IndexWriter(fsDirectory, indexWriterConfig);
 	}
 }

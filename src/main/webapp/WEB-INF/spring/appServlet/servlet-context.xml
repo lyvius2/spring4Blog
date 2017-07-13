@@ -75,12 +75,7 @@
 		<beans:constructor-arg ref="connectionFactoryLocator"/>
 	</beans:bean>
 
-	<!--
-	<beans:bean id="connectController" class="org.springframework.social.connect.web.ConnectController">
-		<beans:constructor-arg ref="connectionFactoryLocator" />
-		<beans:constructor-arg ref="inMemoryConnectionRepository" />
-	</beans:bean>
-	-->
+	<beans:bean id="koreanAnalyzer" class="org.apache.lucene.analysis.ko.KoreanAnalyzer"/>
 
 	<mvc:interceptors>
 		<mvc:interceptor>

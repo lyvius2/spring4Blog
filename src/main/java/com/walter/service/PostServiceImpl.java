@@ -8,11 +8,13 @@ import com.walter.util.CommonUtil;
 import com.walter.config.code.Message;
 import com.walter.config.code.DataProcessing;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,20 +35,26 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private MongoOperations mongoOps;
 
+	@Autowired
+	private LuceneService luceneService;
+
 	private static String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
 	@Override
-	public int setPost(PostVO postVO, DataProcessing dataProcessing) {
+	public int setPost(PostVO postVO, DataProcessing dataProcessing) throws IOException, ParseException {
 		int result = 0;
 		switch(dataProcessing) {
 			case CREATE:
 				result = dao.insPost(postVO);
+				luceneService.createIndex(dao.getPostList(new PostSearchVO()));
 				break;
 			case UPDATE:
 				result = dao.modPost(postVO);
+				luceneService.updateIndex(postVO);
 				break;
 			case DELETE:
 				result = dao.delPost(postVO.getPost_cd());
+				luceneService.removeIndex(postVO.getSeq(), PostVO.class);
 				break;
 		}
 		return result;

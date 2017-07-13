@@ -90,5 +90,6 @@
 				#{item.post_cd}
 			</foreach>
 		</where>
+		 ORDER BY reg_dt DESC
 	</select>
 </mapper>

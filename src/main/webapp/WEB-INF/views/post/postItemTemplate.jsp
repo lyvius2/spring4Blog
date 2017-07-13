@@ -14,7 +14,7 @@
 					<security:authorize access="isAuthenticated()">
 						<p class="text-right">
 							<a href="javascript:void(0);" class="btn btn-sm btn-success" v-on:click="modify_post(post.post_cd)"><i class="fa fa-pencil-square-o" aria-hidden="true"> 수정</i></a>
-							<a href="javascript:void(0);" class="btn btn-sm btn-danger" v-on:click="remove_post(post.post_cd, post.delegate_img, index, $event)"><i class="fa fa-trash-o" aria-hidden="true"> 삭제</i></a>
+							<a href="javascript:void(0);" class="btn btn-sm btn-danger" v-on:click="remove_post(post.post_cd, post.delegate_img, post.$index, $event)"><i class="fa fa-trash-o" aria-hidden="true"> 삭제</i></a>
 						</p>
 					</security:authorize>
 				</div>

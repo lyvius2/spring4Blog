@@ -18,6 +18,5 @@ public class PostSearchVO {
 	public PostSearchVO() {
 		super();
 		if(this.getCurrPageNo() == 0) this.setCurrPageNo(1);
-		if(this.getRowsPerPage() == 0) this.setRowsPerPage(5);
 	}
 }

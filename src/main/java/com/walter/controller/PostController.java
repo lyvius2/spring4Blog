@@ -84,7 +84,7 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerPost(@ModelAttribute("postVO") @Valid PostVO postVO, Errors errors) throws IOException {
+	public String registerPost(@ModelAttribute("postVO") @Valid PostVO postVO, Errors errors) throws IOException, ParseException {
 		if (errors.hasErrors()) return "post/postForm";
 		DataProcessing dataProcessing = DataProcessing.CREATE;
 		if (postVO.getPost_cd() != 0 && postService.getPost(postVO.getPost_cd()) != null) dataProcessing = DataProcessing.UPDATE;
@@ -97,7 +97,6 @@ public class PostController extends BaseController {
 			postVO.setDelegate_img(uploadFile.getId());
 		}
 		postService.setPost(postVO, dataProcessing);
-		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
 		return "redirect:" + postVO.getPost_cd();
 	}
 
@@ -117,11 +116,10 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/{post_cd}", method = RequestMethod.DELETE)
-	public ResponseEntity removePost(@PathVariable int post_cd, @ModelAttribute("postVO")PostVO postVO) throws IOException {
+	public ResponseEntity removePost(@PathVariable int post_cd, @ModelAttribute("postVO")PostVO postVO) throws IOException, ParseException {
 		if (StringUtils.isNotEmpty(postVO.getDelegate_img())) {
 			googleDriveImageService.removeFile(postVO.getDelegate_img());
 		}
-		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
 		postVO.setPost_cd(post_cd);
 		HashMap<String, Object> hashMap = new HashMap<>();
 		hashMap.put("status", postService.setPost(postVO, DataProcessing.DELETE) == 1 ? true:false);

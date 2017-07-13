@@ -12,7 +12,8 @@ import java.util.List;
  */
 public interface LuceneService {
 	void createIndex(List<? extends LuceneIndexVO> list) throws IOException;
+	void addIndex(LuceneIndexVO luceneIndexVO) throws IOException, ParseException;
 	List searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException;
-	void updateIndex(String seq, LuceneIndexVO luceneIndexVO) throws IOException, ParseException;
-	IndexWriter removeIndex(String seq, Class<? extends LuceneIndexVO> itemType) throws IOException, ParseException;
+	void updateIndex(LuceneIndexVO luceneIndexVO) throws IOException, ParseException;
+	void removeIndex(String seq, Class<? extends LuceneIndexVO> itemType) throws IOException, ParseException;
 }
