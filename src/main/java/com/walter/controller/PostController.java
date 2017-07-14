@@ -101,7 +101,7 @@ public class PostController extends BaseController {
 		return "redirect:" + postVO.getPost_cd();
 	}
 
-	@RequestMapping(value = "/{post_cd}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{post_cd}")
 	public String postView(@PathVariable int post_cd, Model model, HttpServletRequest request)
 			throws IOException, ImageProcessingException {
 		int currPageNo

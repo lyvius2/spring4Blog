@@ -121,7 +121,7 @@
 							<div class="row">
 								<div class="col-sm-12 text-right">
 									<security:authorize access="isAuthenticated()">
-									<button type="button" class="btn btn-primary" id="post-comment"><i class="fa fa-comment-o"></i> Post comment</button>
+									<button type="button" class="btn btn-sm btn-primary" id="post-comment"><i class="fa fa-comment-o"></i> 댓글 남기기</button>
 									</security:authorize>
 								</div>
 							</div>
@@ -241,12 +241,13 @@
 				methods: {
 					move_list: function (pageNo) {
 						getPostList(pageNo, category_cd, function (data) {
-							this.pageList = data.postList
-							this.paging = createPagingNumArray(data.paging)
+							pagination.pageList = data.postList
+							pagination.paging = createPagingNumArray(data.paging)
 						})
 					},
 					move_post: function (postCd) {
-						location.href= '/post/' + postCd;
+						document.viewForm.action = '/post/' + postCd;
+						document.viewForm.submit()
 					}
 				}
 			})

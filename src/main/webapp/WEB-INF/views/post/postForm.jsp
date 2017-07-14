@@ -91,7 +91,7 @@
 					<div class="checkbox">
 						<label>
 							<form:checkbox path="use_yn" tabindex="0"/>
-							Show
+							게시
 						</label>
 					</div>
 				</div>
@@ -99,16 +99,16 @@
 					<div class="checkbox">
 						<label>
 							<form:checkbox path="comment_yn" tabindex="0"/>
-							Allow Comments
+							댓글 허용
 						</label>
 					</div>
 				</div>
 				<div class="col-md-8 text-right">
-					<button type="submit" class="btn btn-primary" title="등록">
-						Register
+					<button type="submit" class="btn btn-sm btn-primary" title="저장">
+						<i class="fa fa-check-circle" aria-hidden="true"></i> 저장
 					</button>
-					<a href="#" class="btn btn-danger" title="취소">
-						Cancel
+					<a href="javascript:history.back();" class="btn btn-sm btn-danger" title="취소">
+						<i class="fa fa-times-circle" aria-hidden="true"></i> 취소
 					</a>
 				</div>
 			</div>
