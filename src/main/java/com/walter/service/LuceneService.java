@@ -16,4 +16,5 @@ public interface LuceneService {
 	List searchDataList(Class<? extends LuceneIndexVO> itemType, String searchText) throws IOException, ParseException;
 	void updateIndex(LuceneIndexVO luceneIndexVO) throws IOException, ParseException;
 	void removeIndex(String seq, Class<? extends LuceneIndexVO> itemType) throws IOException, ParseException;
+	int indexLength(LuceneIndexVO luceneIndexVO) throws IOException;
 }

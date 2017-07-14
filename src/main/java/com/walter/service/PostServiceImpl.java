@@ -46,7 +46,9 @@ public class PostServiceImpl implements PostService {
 		switch(dataProcessing) {
 			case CREATE:
 				result = dao.insPost(postVO);
-				luceneService.createIndex(dao.getPostList(new PostSearchVO()));
+				// 인덱싱 존재 여부 확인 뒤 없으면 새로 생성하고 있으면 추가만 진행
+				if (luceneService.indexLength(postVO) > 0) luceneService.addIndex(postVO);
+				else luceneService.createIndex(dao.getPostList(new PostSearchVO()));
 				break;
 			case UPDATE:
 				result = dao.modPost(postVO);

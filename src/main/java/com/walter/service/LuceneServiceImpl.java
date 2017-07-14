@@ -145,6 +145,7 @@ public class LuceneServiceImpl implements LuceneService {
 			Stream<ScoreDoc> scoreDocStream = Arrays.asList(results.scoreDocs).stream();
 			scoreDocStream.map(reThrowsFunction(d -> indexSearcher.doc(d.doc))).forEach(reThrowsConsumer(d -> {
 				LuceneIndexVO idx = itemType.newInstance();
+				log.debug("d.toString() : {}", d.toString());
 				idx.setSeq(d.get("SEQ"));
 				idx.setTitle(d.get("TITLE"));
 				idx.setContent(d.get("CONTENT"));
@@ -186,6 +187,24 @@ public class LuceneServiceImpl implements LuceneService {
 			log.info("### Remainder in Index : {}", indexWriter.numDocs());
 			indexWriter.close();
 		}
+	}
+
+	/**
+	 * Lucene Index Length 반환
+	 * @param luceneIndexVO
+	 * @return
+	 * @throws IOException
+	 */
+	@Override
+	public int indexLength(LuceneIndexVO luceneIndexVO) throws IOException {
+		File file = new File(LUCENE_INDEX_DIR, luceneIndexVO.getClass().getSimpleName());
+		if (file.exists()) {
+			IndexWriter indexWriter = this.getIndexWriter(file, IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+			int result = indexWriter.numDocs();
+			indexWriter.close();
+			return result;
+		}
+		return 0;
 	}
 
 	/**

@@ -25,6 +25,7 @@
 			<list>
 				<value>classpath:query/CategorySQL.xml</value>
 				<value>classpath:query/CodeSQL.xml</value>
+				<value>classpath:query/LogSQL.xml</value>
 				<value>classpath:query/MemberSQL.xml</value>
 				<value>classpath:query/PostSQL.xml</value>
 			</list>

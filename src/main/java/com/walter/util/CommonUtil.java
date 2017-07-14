@@ -16,7 +16,7 @@ public class CommonUtil {
 		if (principal != null && principal instanceof MemberVO) {
 			return (MemberVO) principal;
 		} else {
-			return null;
+			return new MemberVO();
 		}
 	}
 }
