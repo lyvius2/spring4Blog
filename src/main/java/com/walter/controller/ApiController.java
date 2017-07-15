@@ -68,6 +68,12 @@ public class ApiController extends BaseController {
 		return super.createResEntity(postList);
 	}
 
+	@RequestMapping(value = "/exceptionList")
+	public ResponseEntity getExceptionList(@RequestParam(value = "currPageNo", required = false)int currPageNo,
+	                                       @RequestParam(value = "exception", required = false)String exception) {
+		return super.createResEntity(configService.getExceptionList(currPageNo, exception));
+	}
+
 	@RequestMapping(value = "/image/{file_id}", method = RequestMethod.GET)
 	public void imgView(@PathVariable String file_id, HttpServletResponse response) throws IOException {
 		HashMap<String, Object> hashMap = googleDriveService.openFile(file_id);

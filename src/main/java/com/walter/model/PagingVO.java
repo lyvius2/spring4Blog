@@ -1,8 +1,14 @@
 package com.walter.model;
 
+import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by yhwang131 on 2016-10-31.
  */
+@Data
 public class PagingVO {
 
 	private int rowsPerPage;
@@ -16,90 +22,22 @@ public class PagingVO {
 	private int numberOfRows;
 	private int sizeOfPage;
 
+	private List<Integer> pagingNumbers;
+
 	public PagingVO(int currPageNo, int rowsPerPage) {
 		this.currPageNo = currPageNo;
 		this.sizeOfPage = 5;
 		this.rowsPerPage = (rowsPerPage!=0)?rowsPerPage:5;
 	}
 
-	public int getRowsPerPage() {
-		return rowsPerPage;
-	}
-
-	public void setRowsPerPage(int rowsPerPage) {
-		this.rowsPerPage = rowsPerPage;
-	}
-
-	public int getFirstPageNo() {
-		return firstPageNo;
-	}
-
-	public void setFirstPageNo(int firstPageNo) {
-		this.firstPageNo = firstPageNo;
-	}
-
-	public int getPrevPageNo() {
-		return prevPageNo;
-	}
-
-	public void setPrevPageNo(int prevPageNo) {
-		this.prevPageNo = prevPageNo;
-	}
-
-	public int getStartPageNo() {
-		return startPageNo;
-	}
-
-	public void setStartPageNo(int startPageNo) {
-		this.startPageNo = startPageNo;
-	}
-
-	public int getCurrPageNo() {
-		return currPageNo;
-	}
-
-	public void setCurrPageNo(int currPageNo) {
-		this.currPageNo = currPageNo;
-	}
-
-	public int getEndPageNo() {
-		return endPageNo;
-	}
-
-	public void setEndPageNo(int endPageNo) {
-		this.endPageNo = endPageNo;
-	}
-
-	public int getNextPageNo() {
-		return nextPageNo;
-	}
-
-	public void setNextPageNo(int nextPageNo) {
-		this.nextPageNo = nextPageNo;
-	}
-
-	public int getFinalPageNo() {
-		return finalPageNo;
-	}
-
-	public void setFinalPageNo(int finalPageNo) {
-		this.finalPageNo = finalPageNo;
-	}
-
-	public int getNumberOfRows() {
-		return numberOfRows;
-	}
-
-	public void setNumberOfRows(int numberOfRows) {
-		this.numberOfRows = numberOfRows;
-	}
-
-	public int getSizeOfPage() {
-		return sizeOfPage;
-	}
-
-	public void setSizeOfPage(int sizeOfPage) {
-		this.sizeOfPage = sizeOfPage;
+	private void setPagingNumbers(int startPageNo, int endPageNo) {
+		List<Integer> nums = new ArrayList<>();
+		nums.add(startPageNo);
+		int len = endPageNo - startPageNo + 1;
+		for(int i = 1; i < len; i++) {
+			nums.add(startPageNo + i);
+		}
+		this.pagingNumbers = nums;
 	}
 
 	public void Paging() {
@@ -135,5 +73,7 @@ public class PagingVO {
 		}
 
 		this.setFinalPageNo(finalPage);
+
+		setPagingNumbers(this.startPageNo, this.endPageNo);
 	}
 }

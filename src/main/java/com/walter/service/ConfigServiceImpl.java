@@ -2,11 +2,13 @@ package com.walter.service;
 
 import com.walter.dao.CategoryDao;
 import com.walter.dao.CodeDao;
+import com.walter.dao.LogDao;
 import com.walter.dao.MemberDao;
 import com.walter.model.CategoryVO;
 import com.walter.model.CodeVO;
 import com.walter.config.code.Message;
 import com.walter.model.MemberVO;
+import com.walter.model.PagingVO;
 import com.walter.util.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,6 +37,9 @@ public class ConfigServiceImpl implements ConfigService {
 
 	@Autowired
 	private MemberDao memberDao;
+
+	@Autowired
+	private LogDao logDao;
 
 	@Autowired
 	private ShaPasswordEncoder encoder;
@@ -139,5 +144,27 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public List<CodeVO> getCodeList(CodeVO codeVO) {
 		return codeDao.getCodeList(codeVO);
+	}
+
+	@Override
+	public HashMap<String, Object> getExceptionList(int currPageNo, String exception) {
+		HashMap<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("exception", exception);
+		paramsMap.put("currPageNo", currPageNo);
+		List<HashMap<String, Object>> resultList = logDao.getExceptionLogList(paramsMap);
+
+		PagingVO pagingVO = new PagingVO(currPageNo, 10);
+		pagingVO.setNumberOfRows(logDao.getExceptionLogCount(paramsMap));
+		pagingVO.Paging();
+
+		HashMap<String, Object> resultMap = new HashMap<>();
+		resultMap.put("exceptionList", resultList);
+		resultMap.put("paging", pagingVO);
+		return resultMap;
+	}
+
+	@Override
+	public List<String> getExceptionOptions() {
+		return logDao.getExceptionOptions();
 	}
 }

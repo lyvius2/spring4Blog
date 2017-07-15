@@ -106,49 +106,45 @@
 								</div>
 								<div class="col-md-7">
 									<h3 class="h3 heading">Blog Category</h3>
-									<div class="row">
-										<div class="col-md-11">
-											<table class="table sortable_table">
-												<thead>
-												<th width="10%">#</th>
-												<th>카테고리명</th>
-												<th width="10%">공개</th>
-												</thead>
-												<tbody>
-												<c:forEach var="category" items="${categories}" varStatus="status">
-													<tr>
-														<td>
-															<i class="fa fa-bars" aria-hidden="true"></i>
-															<i class="fa fa-minus-square text-danger" aria-hidden="true" style="display:none;"></i>
-														</td>
-														<td>
-															<span><c:out value="${category.category_name}"/></span>
-															<span style="display: none;">
-															<input type="text" class="form-control input-sm"
-															       name="category_name" value="${category.category_name}"
-															       onkeypress="if (event.keyCode == 13) {UpdateCategoryName(this)}"/>
-														</span>
-														</td>
-														<td>
-															<input type="checkbox" name="category_cd" data-toggle="toggle" data-size="small"
-															       value="${category.category_cd}" ${category.use_yn ? 'checked':''}/>
-														</td>
-													</tr>
-												</c:forEach>
-												</tbody>
-											</table>
-											<div class="box-services">
-												<p class="text-left">
-													<button type="button" class="btn btn-sm btn-primary"
-													        data-toggle="modal" data-target="#newCategory">
-														<i class="fa fa-plus-circle" aria-hidden="true"> 추가</i>
-													</button>
-													<button type="button" class="btn btn-sm btn-danger" id="btn-remove">
-														<i class="fa fa-times" aria-hidden="true"> 삭제</i>
-													</button>
-												</p>
-											</div>
-										</div>
+									<table class="table sortable_table">
+										<thead>
+										<th width="10%">#</th>
+										<th>카테고리명</th>
+										<th width="10%">공개</th>
+										</thead>
+										<tbody>
+										<c:forEach var="category" items="${categories}" varStatus="status">
+											<tr>
+												<td>
+													<i class="fa fa-bars" aria-hidden="true"></i>
+													<i class="fa fa-minus-square text-danger" aria-hidden="true" style="display:none;"></i>
+												</td>
+												<td>
+													<span><c:out value="${category.category_name}"/></span>
+													<span style="display: none;">
+													<input type="text" class="form-control input-sm"
+													       name="category_name" value="${category.category_name}"
+													       onkeypress="if (event.keyCode == 13) {UpdateCategoryName(this)}"/>
+												</span>
+												</td>
+												<td>
+													<input type="checkbox" name="category_cd" data-toggle="toggle" data-size="small"
+													       value="${category.category_cd}" ${category.use_yn ? 'checked':''}/>
+												</td>
+											</tr>
+										</c:forEach>
+										</tbody>
+									</table>
+									<div class="box-services">
+										<p class="text-left">
+											<button type="button" class="btn btn-sm btn-primary"
+											        data-toggle="modal" data-target="#newCategory">
+												<i class="fa fa-plus-circle" aria-hidden="true"> 추가</i>
+											</button>
+											<button type="button" class="btn btn-sm btn-danger" id="btn-remove">
+												<i class="fa fa-times" aria-hidden="true"> 삭제</i>
+											</button>
+										</p>
 									</div>
 								</div>
 							</div>
@@ -157,7 +153,72 @@
 				</div>
 				<div role="tabpanel" class="tab-pane" id="resume">resume</div>
 				<div role="tabpanel" class="tab-pane" id="logs">logs</div>
-				<div role="tabpanel" class="tab-pane" id="exceptions">exceptions</div>
+				<div role="tabpanel" class="tab-pane" id="exceptions">
+					<section>
+						<div class="container clearfix">
+							<div class="row services">
+								<div class="col-md-8">
+									<h3 class="h3 heading">Exceptions</h3>
+								</div>
+								<div class="col-md-4">
+									<select name="exception" id="exception" class="form-control">
+										<option value="">---- ALL ----</option>
+										<c:forEach var="exception" items="${exceptionOptions}">
+											<option value="${exception}"><c:out value="${exception}"/></option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="col-md-12">
+									<table class="table">
+										<thead>
+										<th>#</th>
+										<th width="20%">Exception</th>
+										<th width="25%">Message</th>
+										<th>Path</th>
+										<th>Access IP</th>
+										<th>Parameters</th>
+										<th>Trace</th>
+										<th>Time</th>
+										</thead>
+										<tbody>
+										<tr v-for="(item, index) in list" v-bind:key="item.seq">
+											<td>{{item.seq}}</td>
+											<td style="word-break: break-all;">{{item.exception}}</td>
+											<td style="word-break: break-all;">{{item.message}}</td>
+											<td>{{item.request_path}}</td>
+											<td>{{item.ip}}</td>
+											<td>{{item.params}}</td>
+											<td>
+												<button type="button" class="btn btn-sm btn-success" v-on:click="view_trace_log(item.trace_log)">
+													<i class="fa fa-folder-open-o" aria-hidden="true"> 보기</i>
+												</button>
+											</td>
+											<td>{{item.reg_dt|formatDate}}</td>
+										</tr>
+										</tbody>
+									</table>
+									<nav>
+										<ul class="pagination">
+											<li>
+												<a href="javascript:void(0);" aria-label="Previous" v-on:click="move_list(paging.firstPageNo)">
+													<span aria-hidden="true">&laquo;</span>
+												</a>
+											</li>
+											<li v-for="num in paging.pagingNumbers" v-bind:class="num == paging.currPageNo ? 'active':''">
+												<a href="javascript:void(0);" v-on:click="move_list(num)">{{num}}</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" aria-label="Next" v-on:click="move_list(paging.finalPageNo)">
+													<span aria-hidden="true">&raquo;</span>
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -241,9 +302,32 @@
 			</form:form>
 		</div>
 	</div>
+
+	<div class="modal fade" id="newException" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Trace Log</h4>
+				</div>
+				<div class="modal-body" style="white-space: pre-line; word-wrap: break-word;"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
+						<i class="fa fa-times-circle" aria-hidden="true"></i> 닫기
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<content tag="script">
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery-sortable-min.js"></script>
 	<script>
+		/**
+		 * Admin & Category
+		 */
 		function openModifyLayer (seq, name) {
 			document.getElementById('mode').value = 'U'
 			document.getElementById('seq').value = seq
@@ -363,6 +447,45 @@
 		})
 
 		if ($('#newAdmin .alert-danger').get().length > 0) $('#newAdmin').modal('show')
+
+		/**
+		 * Exceptions
+		 */
+		Vue.filter('formatDate', function (value) {
+			if (value) return moment(value).format('YYYY-MM-DD, h:mm:ss')
+		})
+
+		var exception = new Vue({
+			el: '#exceptions',
+			data: {
+				list: new Array(),
+				paging: new Object()
+			},
+			methods: {
+				move_list: function (pageNo) {
+					getExceptionList (pageNo)
+				},
+				view_trace_log: function (log) {
+					$('#newException .modal-body').text(log)
+					$('#newException').modal('show')
+				}
+			}
+		})
+
+		function getExceptionList (currPageNo) {
+			$.get('/api/exceptionList', {currPageNo: currPageNo, exception: $('#exception').val()}).then(
+				function (data) {
+					exception.list = data.exceptionList
+					exception.paging = data.paging
+				}
+			)
+		}
+
+		$('#exception').on('change', function () {
+			getExceptionList(0)
+		})
+
+		getExceptionList(0)
 	</script>
 	${msg}
 	</content>

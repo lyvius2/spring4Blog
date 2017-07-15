@@ -8,13 +8,28 @@
 		(#{exception}, #{message}, #{request_path}, #{ip}, #{method}, #{params}, #{trace_log}, #{username}, #{userlink})
 	</insert>
 
-	<select id="getExceptionLogList" parameterType="java.lang.String">
+	<select id="getExceptionLogList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
 		SELECT *
 		  FROM exception_log
-		<if test="exception != null">
+		<if test="exception != null and exception != ''">
 	  	 WHERE exception = #{exception}
 		</if>
 		ORDER BY reg_dt DESC
+		LIMIT 10 OFFSET #{currPageNo}*10
+	</select>
+
+	<select id="getExceptionLogCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT count(*)
+		  FROM exception_log
+		<if test="exception != null and exception != ''">
+		 WHERE exception = #{exception}
+		</if>
+	</select>
+
+	<select id="getExceptionOptions" resultType="java.lang.String">
+		SELECT exception
+		  FROM exception_log
+ 		GROUP BY exception
 	</select>
 	
 </mapper>
