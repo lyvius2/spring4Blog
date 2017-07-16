@@ -18,7 +18,7 @@ import java.util.HashMap;
  */
 @Slf4j
 @ControllerAdvice
-public class ExceptionHandlerUtil {
+public class WaltersExceptionHandler {
 
 	@Autowired
 	private LogDao logDao;

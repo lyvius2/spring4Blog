@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
  * Created by yhwang131 on 2017-05-23.
  */
 @Service
+@Transactional
 public class ConfigServiceImpl implements ConfigService {
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
