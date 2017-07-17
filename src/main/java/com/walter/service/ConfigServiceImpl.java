@@ -4,6 +4,7 @@ import com.walter.dao.CategoryDao;
 import com.walter.dao.CodeDao;
 import com.walter.dao.LogDao;
 import com.walter.dao.MemberDao;
+import com.walter.jpa.ExceptionRepository;
 import com.walter.model.CategoryVO;
 import com.walter.model.CodeVO;
 import com.walter.config.code.Message;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by yhwang131 on 2017-05-23.
  */
 @Service
-@Transactional
+@Transactional(value = "transactionManager")
 public class ConfigServiceImpl implements ConfigService {
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -42,6 +43,9 @@ public class ConfigServiceImpl implements ConfigService {
 
 	@Autowired
 	private LogDao logDao;
+
+	@Autowired
+	private ExceptionRepository repository;
 
 	@Autowired
 	private ShaPasswordEncoder encoder;
@@ -155,8 +159,10 @@ public class ConfigServiceImpl implements ConfigService {
 		paramsMap.put("currPageNo", currPageNo);
 		List<HashMap<String, Object>> resultList = logDao.getExceptionLogList(paramsMap);
 
+		long numberOfRows = StringUtils.isNotEmpty(exception) ? repository.countByException(exception) : repository.count();
+
 		PagingVO pagingVO = new PagingVO(currPageNo, 10);
-		pagingVO.setNumberOfRows(logDao.getExceptionLogCount(paramsMap));
+		pagingVO.setNumberOfRows((int) numberOfRows);
 		pagingVO.Paging();
 
 		HashMap<String, Object> resultMap = new HashMap<>();

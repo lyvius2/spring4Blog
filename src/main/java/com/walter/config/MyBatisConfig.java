@@ -19,6 +19,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import javax.sql.DataSource;
 
 /**
+ * myBatis Setting JAVA Config
  * Created by Walter on 2017-07-16.
  */
 @Configuration

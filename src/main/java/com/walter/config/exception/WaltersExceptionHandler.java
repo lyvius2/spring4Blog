@@ -1,11 +1,14 @@
 package com.walter.config.exception;
 
 import com.walter.dao.LogDao;
+import com.walter.jpa.ExceptionRepository;
+import com.walter.model.ExceptionVO;
 import com.walter.model.MemberVO;
 import com.walter.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -21,7 +24,7 @@ import java.util.HashMap;
 public class WaltersExceptionHandler {
 
 	@Autowired
-	private LogDao logDao;
+	private ExceptionRepository repository;
 
 	@ExceptionHandler(Exception.class)
 	public void handleException(Exception e, HttpServletRequest request) {
@@ -34,20 +37,21 @@ public class WaltersExceptionHandler {
 		saveExceptionLog(e, request.getServletPath(), request.getRemoteAddr(), request.getMethod(), hashMap);
 	}
 
+	@Transactional(transactionManager = "jpaTransactionManager")
 	private void saveExceptionLog(Exception e, String request_path, String ip, String httpMethodName,
 	                              HashMap<String, Object> params) {
-		HashMap<String, Object> inputMap = new HashMap<>();
-		inputMap.put("exception", e.getClass().getSimpleName());
-		inputMap.put("message", e.toString());
-		inputMap.put("request_path", request_path);
-		inputMap.put("ip", ip);
-		inputMap.put("method", httpMethodName);
-		inputMap.put("params", params.toString());
-		inputMap.put("trace_log", ExceptionUtils.getStackTrace(e));
+		ExceptionVO exceptionVO = new ExceptionVO();
+		exceptionVO.setException(e.getClass().getSimpleName());
+		exceptionVO.setMessage(e.toString());
+		exceptionVO.setRequest_path(request_path);
+		exceptionVO.setIp(ip);
+		exceptionVO.setMethod(httpMethodName);
+		exceptionVO.setParams(params.toString());
+		exceptionVO.setTrace_log(ExceptionUtils.getStackTrace(e));
 
 		MemberVO memberVO = CommonUtil.getLoginUserInfo();
-		inputMap.put("username", memberVO.getUsername());
-		inputMap.put("userlink", memberVO.getLink());
-		logDao.insExceptionLog(inputMap);
+		exceptionVO.setUsername(memberVO.getUsername());
+		exceptionVO.setUserlink(memberVO.getLink());
+		repository.save(exceptionVO);
 	}
 }

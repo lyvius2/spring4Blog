@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@Transactional
+@Transactional(value = "transactionManager")
 public class PostServiceImpl implements PostService {
 
 	@Autowired
