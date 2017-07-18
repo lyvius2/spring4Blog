@@ -27,5 +27,7 @@ public class ExceptionVO {
 	private String trace_log;
 	private String username;
 	private String userlink;
-	private Date reg_dt;
+
+	@Column(name = "reg_dt")
+	private Date regDt = new Date();
 }

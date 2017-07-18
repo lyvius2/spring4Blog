@@ -159,10 +159,8 @@ public class ConfigServiceImpl implements ConfigService {
 		paramsMap.put("currPageNo", currPageNo);
 		List<HashMap<String, Object>> resultList = logDao.getExceptionLogList(paramsMap);
 
-		long numberOfRows = StringUtils.isNotEmpty(exception) ? repository.countByException(exception) : repository.count();
-
 		PagingVO pagingVO = new PagingVO(currPageNo, 10);
-		pagingVO.setNumberOfRows((int) numberOfRows);
+		pagingVO.setNumberOfRows(logDao.getExceptionLogCount(paramsMap));
 		pagingVO.Paging();
 
 		HashMap<String, Object> resultMap = new HashMap<>();

@@ -1,20 +1,28 @@
 package com.walter.jpa;
 
 import com.walter.model.ExceptionVO;
-import jdk.nashorn.internal.objects.annotations.Where;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * Exception_Log Repository (for JPA)
  * Created by yhwang131 on 2017-07-17.
  */
 @Repository
-public interface ExceptionRepository extends CrudRepository<ExceptionVO, Long> {
+public interface ExceptionRepository extends CrudRepository<ExceptionVO, Long>, PagingAndSortingRepository<ExceptionVO, Long> {
 
 	ExceptionVO save(ExceptionVO exceptionVO);
 
 	long count();
 
 	long countByException(String exception);
+
+	Page<ExceptionVO> findAllByOrderByRegDtDesc(Pageable pageable);
+
+	List<ExceptionVO> findByException(String exception, Pageable pageable);
 }
