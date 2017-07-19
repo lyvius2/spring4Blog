@@ -475,6 +475,7 @@
 		function getExceptionList (currPageNo) {
 			$.get('/api/exceptionList', {currPageNo: currPageNo, exception: $('#exception').val()}).then(
 				function (data) {
+					console.log(data)
 					exception.list = data.exceptionList
 					exception.paging = data.paging
 				}
@@ -482,10 +483,10 @@
 		}
 
 		$('#exception').on('change', function () {
-			getExceptionList(0)
+			getExceptionList(1)
 		})
 
-		getExceptionList(0)
+		getExceptionList(1)
 	</script>
 	${msg}
 	</content>

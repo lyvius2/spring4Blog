@@ -1,9 +1,8 @@
 package com.walter.config.exception;
 
-import com.walter.dao.LogDao;
-import com.walter.jpa.ExceptionRepository;
 import com.walter.model.ExceptionVO;
 import com.walter.model.MemberVO;
+import com.walter.service.LogService;
 import com.walter.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -24,7 +23,7 @@ import java.util.HashMap;
 public class WaltersExceptionHandler {
 
 	@Autowired
-	private ExceptionRepository repository;
+	private LogService logService;
 
 	@ExceptionHandler(Exception.class)
 	public void handleException(Exception e, HttpServletRequest request) {
@@ -37,7 +36,6 @@ public class WaltersExceptionHandler {
 		saveExceptionLog(e, request.getServletPath(), request.getRemoteAddr(), request.getMethod(), hashMap);
 	}
 
-	@Transactional(transactionManager = "jpaTransactionManager")
 	private void saveExceptionLog(Exception e, String request_path, String ip, String httpMethodName,
 	                              HashMap<String, Object> params) {
 		ExceptionVO exceptionVO = new ExceptionVO();
@@ -52,6 +50,6 @@ public class WaltersExceptionHandler {
 		MemberVO memberVO = CommonUtil.getLoginUserInfo();
 		exceptionVO.setUsername(memberVO.getUsername());
 		exceptionVO.setUserlink(memberVO.getLink());
-		repository.save(exceptionVO);
+		logService.setException(exceptionVO);
 	}
 }

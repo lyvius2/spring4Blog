@@ -4,12 +4,9 @@ import com.walter.model.CodeVO;
 import com.walter.model.LuceneIndexVO;
 import com.walter.model.PostSearchVO;
 import com.walter.model.PostVO;
-import com.walter.service.ConfigService;
-import com.walter.service.LuceneService;
-import com.walter.service.PostService;
+import com.walter.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
-import com.walter.service.GoogleDriveService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +30,9 @@ public class ApiController extends BaseController {
 
 	@Autowired
 	private ConfigService configService;
+
+	@Autowired
+	private LogService logService;
 
 	@Autowired
 	private PostService postService;
@@ -71,7 +71,7 @@ public class ApiController extends BaseController {
 	@RequestMapping(value = "/exceptionList")
 	public ResponseEntity getExceptionList(@RequestParam(value = "currPageNo", required = false)int currPageNo,
 	                                       @RequestParam(value = "exception", required = false)String exception) {
-		return super.createResEntity(configService.getExceptionList(currPageNo, exception));
+		return super.createResEntity(logService.getExceptionList(exception, currPageNo));
 	}
 
 	@RequestMapping(value = "/image/{file_id}", method = RequestMethod.GET)

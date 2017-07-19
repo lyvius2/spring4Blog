@@ -7,8 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * Exception_Log Repository (for JPA)
  * Created by yhwang131 on 2017-07-17.
@@ -24,5 +22,5 @@ public interface ExceptionRepository extends CrudRepository<ExceptionVO, Long>, 
 
 	Page<ExceptionVO> findAllByOrderByRegDtDesc(Pageable pageable);
 
-	List<ExceptionVO> findByException(String exception, Pageable pageable);
+	Page<ExceptionVO> findByExceptionOrderByRegDtDesc(String exception, Pageable pageable);
 }

@@ -5,6 +5,7 @@ import com.walter.config.code.Message;
 import com.walter.model.CategoryVO;
 import com.walter.model.MemberVO;
 import com.walter.service.ConfigService;
+import com.walter.service.LogService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,9 @@ public class ConfigController extends BaseController {
 	@Autowired
 	private ConfigService configService;
 
+	@Autowired
+	private LogService logService;
+
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
 	public String categoryConfigMap() {
 		return "config/categoryConfig";
@@ -39,7 +43,7 @@ public class ConfigController extends BaseController {
 		model.addAttribute("categoryVO", new CategoryVO());
 		model.addAttribute("memberVO", new MemberVO());
 		model.addAttribute("memberList", configService.getMemberList());
-		model.addAttribute("exceptionOptions", configService.getExceptionOptions());
+		model.addAttribute("exceptionOptions", logService.getExceptionOptions());
 		return "config/config";
 	}
 
