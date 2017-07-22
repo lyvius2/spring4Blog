@@ -6,7 +6,7 @@
 					<div class="col-md-6 text-right">{{post.reg_dt|formatDate}}</div>
 				</div>
 				<div class="image-box" v-if="post.delegate_img != null && post.delegate_img != ''">
-					<img src="" v-bind:style="'background: url(/post/images/' + post.delegate_img + ') no-repeat center;'">
+					<img src="" v-bind:style="'background: url(/api/image/' + post.delegate_img + ') no-repeat center;'">
 				</div>
 				<div class="caption">
 					<h3 class="add-click" v-html="post.title" v-on:click="move_to_post(post.post_cd)"></h3>

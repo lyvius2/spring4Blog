@@ -15,7 +15,7 @@ import java.util.Date;
 public class ExceptionVO {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private int seq;
 
 	private String exception;

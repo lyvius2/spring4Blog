@@ -142,7 +142,7 @@ public class PostController extends BaseController {
 	public String imgUpload(@RequestParam("upload")MultipartFile file, Model model, HttpServletRequest request) throws IOException {
 		File resultFile = googleDriveImageService.createFile(file);
 		model.addAttribute("CKEditorFuncNum",  request.getParameter("CKEditorFuncNum"));
-		model.addAttribute("fileURL", "\\/post\\/images\\/" + resultFile.getId());
+		model.addAttribute("fileURL", "\\/api\\/image\\/" + resultFile.getId());
 		return "post/imgUpload";
 	}
 
@@ -154,7 +154,7 @@ public class PostController extends BaseController {
 			File resultFile = googleDriveImageService.createFile(file);
 			resultMap.put("uploaded", 1);
 			resultMap.put("fileName", resultFile.getName());
-			resultMap.put("url", "/post/images/" + resultFile.getId());
+			resultMap.put("url", "/api/image/" + resultFile.getId());
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
 			resultMap.put("uploaded", 0);
@@ -164,10 +164,8 @@ public class PostController extends BaseController {
 	}
 
 	@RequestMapping(value = "/images/{file_id}", method = RequestMethod.GET)
-	public void imgView(@PathVariable String file_id, HttpServletResponse response) throws IOException {
-		HashMap<String, Object> hashMap = googleDriveImageService.openFile(file_id);
-		response.setContentType(hashMap.get("mimeType").toString());
-		response.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
+	public String imgView(@PathVariable String file_id) {
+		return "redirect:/api/image/" + file_id;
 	}
 
 	@RequestMapping(value = "/comment", method = RequestMethod.GET, produces = "application/json; charset=utf-8")

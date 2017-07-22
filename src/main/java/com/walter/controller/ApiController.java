@@ -9,11 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -74,10 +74,16 @@ public class ApiController extends BaseController {
 		return super.createResEntity(logService.getExceptionList(exception, currPageNo));
 	}
 
-	@RequestMapping(value = "/image/{file_id}", method = RequestMethod.GET)
-	public void imgView(@PathVariable String file_id, HttpServletResponse response) throws IOException {
+	@RequestMapping(value = "/accessLogList")
+	public ResponseEntity getAccessLogList(@RequestParam(value = "currPageNo", required = false)int currPageNo,
+	                                       @RequestParam(value = "method", required = false)String method) {
+		return super.createResEntity(logService.getAccessLogList(method, currPageNo));
+	}
+
+	@RequestMapping(value = "/image/{file_id}", produces = MediaType.IMAGE_JPEG_VALUE)
+	@ResponseBody
+	public byte[] imgView(@PathVariable String file_id) throws IOException {
 		HashMap<String, Object> hashMap = googleDriveService.openFile(file_id);
-		response.setContentType(hashMap.get("mimeType").toString());
-		response.getOutputStream().write(IOUtils.toByteArray((InputStream)hashMap.get("data")));
+		return IOUtils.toByteArray((InputStream)hashMap.get("data"));
 	}
 }

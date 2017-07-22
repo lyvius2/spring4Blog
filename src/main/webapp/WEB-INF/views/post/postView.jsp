@@ -57,7 +57,7 @@
 		</div>
 	</section>
 	<c:if test="${post.delegate_img != null && post.delegate_img != ''}">
-	<figure class="full-image"><img src="/post/images/${post.delegate_img}" alt="">
+	<figure class="full-image"><img src="/api/image/${post.delegate_img}" alt="">
 		<figcaption><c:out value="${image_spec}"/></figcaption>
 	</figure>
 	</c:if>

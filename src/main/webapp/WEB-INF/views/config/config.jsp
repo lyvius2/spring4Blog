@@ -152,7 +152,68 @@
 					</section>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="resume">resume</div>
-				<div role="tabpanel" class="tab-pane" id="logs">logs</div>
+				<div role="tabpanel" class="tab-pane" id="logs">
+					<section>
+						<div class="container clearfix">
+							<div class="row services">
+								<div class="col-md-8">
+									<h3 class="h3 heading">Access Logs</h3>
+								</div>
+								<div class="col-md-4">
+									<select name="method" id="method" class="form-control">
+										<option value="">---- ALL ----</option>
+										<c:forEach var="method" items="${methodOptions}">
+											<option value="${method}"><c:out value="${method}"/></option>
+										</c:forEach>
+									</select>
+								</div>
+								<div class="col-md-12">
+									<table class="table">
+										<thead>
+										<th>#</th>
+										<th width="25%">Path</th>
+										<th>Class</th>
+										<th>Method</th>
+										<th>IP</th>
+										<th>Begin Time</th>
+										<th>End Time</th>
+										<th>Proceed Time</th>
+										</thead>
+										<tbody>
+										<tr v-for="(item, index) in list" v-bind:key="item.seq">
+											<td>{{item.seq}}</td>
+											<td>{{item.request_path}}</td>
+											<td>{{item.target_class}}</td>
+											<td>{{item.method}}</td>
+											<td>{{item.ip}}</td>
+											<td>{{item.beginTime|formatDate}}</td>
+											<td>{{item.endTime|formatDate}}</td>
+											<td>{{item.proceed_time}} ms</td>
+										</tr>
+										</tbody>
+									</table>
+									<nav>
+										<ul class="pagination">
+											<li>
+												<a href="javascript:void(0);" aria-label="Previous" v-on:click="move_list(paging.firstPageNo)">
+													<span aria-hidden="true">&laquo;</span>
+												</a>
+											</li>
+											<li v-for="num in paging.pagingNumbers" v-bind:class="num == paging.currPageNo ? 'active':''">
+												<a href="javascript:void(0);" v-on:click="move_list(num)">{{num}}</a>
+											</li>
+											<li>
+												<a href="javascript:void(0);" aria-label="Next" v-on:click="move_list(paging.finalPageNo)">
+													<span aria-hidden="true">&raquo;</span>
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
 				<div role="tabpanel" class="tab-pane" id="exceptions">
 					<section>
 						<div class="container clearfix">
@@ -193,7 +254,7 @@
 													<i class="fa fa-folder-open-o" aria-hidden="true"> 보기</i>
 												</button>
 											</td>
-											<td>{{item.reg_dt|formatDate}}</td>
+											<td>{{item.regDt|formatDate}}</td>
 										</tr>
 										</tbody>
 									</table>
@@ -326,6 +387,13 @@
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery-sortable-min.js"></script>
 	<script>
 		/**
+		 * Common
+		 */
+		Vue.filter('formatDate', function (value) {
+			if (value) return moment(value).format('YYYY-MM-DD hh:mm:ss')
+		})
+
+		/**
 		 * Admin & Category
 		 */
 		function openModifyLayer (seq, name) {
@@ -449,12 +517,40 @@
 		if ($('#newAdmin .alert-danger').get().length > 0) $('#newAdmin').modal('show')
 
 		/**
-		 * Exceptions
+		 * Logs
 		 */
-		Vue.filter('formatDate', function (value) {
-			if (value) return moment(value).format('YYYY-MM-DD, h:mm:ss')
+		var log = new Vue({
+			el: '#logs',
+			data: {
+				list: new Array(),
+				paging: new Object()
+			},
+			methods: {
+				move_list: function (pageNo) {
+					getAccessLogList (pageNo)
+				}
+			}
 		})
 
+		function getAccessLogList (currPageNo) {
+			$.get('/api/accessLogList', {currPageNo: currPageNo, method: $('#method').val()}).then(
+				function (data) {
+					console.log(data)
+					log.list = data.list
+					log.paging = data.paging
+				}
+			)
+		}
+
+		$('#method').on('change', function () {
+			getAccessLogList(1)
+		})
+
+		getAccessLogList(1)
+
+		/**
+		 * Exceptions
+		 */
 		var exception = new Vue({
 			el: '#exceptions',
 			data: {
@@ -476,7 +572,7 @@
 			$.get('/api/exceptionList', {currPageNo: currPageNo, exception: $('#exception').val()}).then(
 				function (data) {
 					console.log(data)
-					exception.list = data.exceptionList
+					exception.list = data.list
 					exception.paging = data.paging
 				}
 			)

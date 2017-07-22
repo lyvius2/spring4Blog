@@ -7,7 +7,6 @@ import com.walter.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -16,6 +15,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 
 /**
+ * Exception Handler (오류 발생 시 기록을 DB에 저장)
  * Created by yhwang131 on 2017-07-14.
  */
 @Slf4j
@@ -44,7 +44,8 @@ public class WaltersExceptionHandler {
 		exceptionVO.setRequest_path(request_path);
 		exceptionVO.setIp(ip);
 		exceptionVO.setMethod(httpMethodName);
-		exceptionVO.setParams(params.toString());
+		String paramString = params.toString();
+		exceptionVO.setParams(paramString.equals("{}") ? null:paramString);
 		exceptionVO.setTrace_log(ExceptionUtils.getStackTrace(e));
 
 		MemberVO memberVO = CommonUtil.getLoginUserInfo();

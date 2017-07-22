@@ -1,6 +1,10 @@
 package com.walter.service;
 
+import com.walter.jpa.AccessRepository;
+import com.walter.jpa.AccessUserRepository;
 import com.walter.jpa.ExceptionRepository;
+import com.walter.model.AccessUserVO;
+import com.walter.model.AccessVO;
 import com.walter.model.ExceptionVO;
 import com.walter.model.PagingVO;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +33,12 @@ public class LogServiceImpl implements LogService {
 	@Autowired
 	private ExceptionRepository expRepository;
 
+	@Autowired
+	private AccessRepository accRepository;
+
+	@Autowired
+	private AccessUserRepository userRepository;
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -45,14 +55,7 @@ public class LogServiceImpl implements LogService {
 				expRepository.findByExceptionOrderByRegDtDesc(exception, pageRequest):expRepository.findAllByOrderByRegDtDesc(pageRequest);
 		long count = isFilter ? expRepository.countByException(exception):expRepository.count();
 
-		PagingVO pagingVO = new PagingVO(currPageNo, 10);
-		pagingVO.setNumberOfRows((int) count);
-		pagingVO.Paging();
-
-		HashMap<String, Object> resultMap = new HashMap<>();
-		resultMap.put("exceptionList", voPage.getContent());
-		resultMap.put("paging", pagingVO);
-		return resultMap;
+		return rtnPagingDataMap(voPage, currPageNo, count);
 	}
 
 	@Override
@@ -63,5 +66,47 @@ public class LogServiceImpl implements LogService {
 		query.groupBy(exceptionOps.get("exception"));
 		List result = entityManager.createQuery(query.select(exceptionOps.get("exception"))).getResultList();
 		return result;
+	}
+
+	@Override
+	public void setAccessLog(AccessVO accessVO, AccessUserVO accessUserVO) {
+		AccessVO result = accRepository.save(accessVO);
+		if (accessUserVO != null) {
+			accessUserVO.setSeq(result.getSeq());
+			userRepository.save(accessUserVO);
+		}
+	}
+
+	@Override
+	public HashMap<String, Object> getAccessLogList(String method, int currPageNo) {
+		boolean isFilter = StringUtils.isNotEmpty(method);
+		PageRequest pageRequest = new PageRequest(currPageNo - 1, 10);
+		Page<AccessVO> voPage = isFilter ?
+				accRepository.findByMethodOrderByBeginTimeDesc(method, pageRequest):accRepository.findAllByOrderByBeginTimeDesc(pageRequest);
+		long count = isFilter ? accRepository.countByMethod(method):accRepository.count();
+
+		return rtnPagingDataMap(voPage, currPageNo, count);
+	}
+
+	@Override
+	public List<String> getAccessLogOptions() {
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<AccessVO> query = builder.createQuery(AccessVO.class);
+		Root<AccessVO> accessLogOps = query.from(AccessVO.class);
+		query.groupBy(accessLogOps.get("method"));
+		query.orderBy(builder.asc(accessLogOps.get("method")));
+		List result = entityManager.createQuery(query.select(accessLogOps.get("method"))).getResultList();
+		return result;
+	}
+
+	private HashMap<String, Object> rtnPagingDataMap(Page page, int currPageNo, long count) {
+		PagingVO pagingVO = new PagingVO(currPageNo, 10);
+		pagingVO.setNumberOfRows((int) count);
+		pagingVO.Paging();
+
+		HashMap<String, Object> resultMap = new HashMap<>();
+		resultMap.put("list", page.getContent());
+		resultMap.put("paging", pagingVO);
+		return resultMap;
 	}
 }

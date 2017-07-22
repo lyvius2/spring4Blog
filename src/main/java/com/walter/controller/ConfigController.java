@@ -43,6 +43,7 @@ public class ConfigController extends BaseController {
 		model.addAttribute("categoryVO", new CategoryVO());
 		model.addAttribute("memberVO", new MemberVO());
 		model.addAttribute("memberList", configService.getMemberList());
+		model.addAttribute("methodOptions", logService.getAccessLogOptions());
 		model.addAttribute("exceptionOptions", logService.getExceptionOptions());
 		return "config/config";
 	}
