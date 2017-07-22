@@ -10,6 +10,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -151,7 +152,47 @@
 						</div>
 					</section>
 				</div>
-				<div role="tabpanel" class="tab-pane" id="resume">resume</div>
+				<div role="tabpanel" class="tab-pane" id="resume">
+					<section>
+						<div class="container clearfix">
+							<div class="row services">
+								<div class="col-md-12">
+									<h3 class="h3 heading">Resume History</h3>
+								</div>
+								<div class="col-md-12">
+									<table class="table">
+										<thead>
+										<th>#</th>
+										<th>ID</th>
+										<th>Register Date</th>
+										<th></th>
+										<th></th>
+										</thead>
+										<tbody>
+										<c:forEach var="resume" items="${resumeList}" varStatus="vs">
+											<tr>
+												<td><c:out value="${vs.index + 1}"/></td>
+												<td><c:out value="${resume._id}"/></td>
+												<td><fmt:formatDate value="${resume.lastSavedDate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
+												<td>
+													<button type="button" class="btn btn-sm btn-success">
+														<i class="fa fa-folder-open-o" aria-hidden="true"> 보기</i>
+													</button>
+												</td>
+												<td>
+													<button type="button" class="btn btn-sm btn-danger">
+														<i class="fa fa-times" aria-hidden="true"> 삭제</i>
+													</button>
+												</td>
+											</tr>
+										</c:forEach>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
 				<div role="tabpanel" class="tab-pane" id="logs">
 					<section>
 						<div class="container clearfix">
@@ -515,6 +556,11 @@
 		})
 
 		if ($('#newAdmin .alert-danger').get().length > 0) $('#newAdmin').modal('show')
+
+		/**
+		 * Resume History
+		 */
+
 
 		/**
 		 * Logs

@@ -9,9 +9,12 @@ import com.walter.config.code.Message;
 import com.walter.config.code.DataProcessing;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 /**
  * Created by yhwang131 on 2016-10-27.
@@ -142,7 +148,10 @@ public class PostServiceImpl implements PostService {
 	public Message setReply(String _id, ReplyVO replyVO) {
 		if(CustomStringUtils.isNotEmpty(replyVO.getComment())) {
 			replyVO.setUserData(CommonUtil.getLoginUserInfo());
-			repository.insertReply(mongoOps, _id, replyVO);
+			mongoOps.findAndModify(query(where("_id").is(new ObjectId(_id))),
+					new Update().push("replys", replyVO),
+					new FindAndModifyOptions().returnNew(true),
+					CommentVO.class);
 			return null;
 		} else {
 			return Message.ERROR_COMMENT_NOT_EXIST;
@@ -155,7 +164,10 @@ public class PostServiceImpl implements PostService {
 		Message message = removeValidation(commentVO, commentVO.getReplys().get(index).getLink());
 		if (message != null) return message;
 		commentVO.getReplys().remove(index);
-		repository.removeReply(mongoOps, _id, commentVO.getReplys());
+		mongoOps.findAndModify(query(where("_id").is(new ObjectId(_id))),
+				new Update().set("replys", commentVO.getReplys()),
+				new FindAndModifyOptions().returnNew(true),
+				CommentVO.class);
 		return null;
 	}
 

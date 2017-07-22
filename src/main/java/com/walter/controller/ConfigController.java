@@ -6,6 +6,7 @@ import com.walter.model.CategoryVO;
 import com.walter.model.MemberVO;
 import com.walter.service.ConfigService;
 import com.walter.service.LogService;
+import com.walter.service.ResumeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,9 @@ public class ConfigController extends BaseController {
 	private ConfigService configService;
 
 	@Autowired
+	private ResumeService resumeService;
+
+	@Autowired
 	private LogService logService;
 
 	@RequestMapping(value = "/category", method = RequestMethod.GET)
@@ -43,6 +47,7 @@ public class ConfigController extends BaseController {
 		model.addAttribute("categoryVO", new CategoryVO());
 		model.addAttribute("memberVO", new MemberVO());
 		model.addAttribute("memberList", configService.getMemberList());
+		model.addAttribute("resumeList", resumeService.getResumeList());
 		model.addAttribute("methodOptions", logService.getAccessLogOptions());
 		model.addAttribute("exceptionOptions", logService.getExceptionOptions());
 		return "config/config";

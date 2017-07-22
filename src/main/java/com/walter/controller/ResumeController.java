@@ -27,7 +27,7 @@ public class ResumeController extends BaseController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String resumeView(Model model) {
-		ResumeVO resumeVO = service.getDefaultResume(null);
+		ResumeVO resumeVO = service.getResume(null);
 		model.addAttribute("resume", resumeVO);
 		return "resume/resumeView";
 	}
@@ -36,7 +36,7 @@ public class ResumeController extends BaseController {
 	public String resumeRegist(@ModelAttribute("resumeVO") ResumeVO resumeVO,
 	                           @RequestParam("profile")MultipartFile file,
 	                           BindingResult result) throws IOException {
-		service.registerResume(resumeVO, file);
+		service.setResume(resumeVO, file);
 		return "redirect:/resume";
 	}
 
@@ -47,6 +47,6 @@ public class ResumeController extends BaseController {
 
 	@RequestMapping(value = "/api")
 	public ResponseEntity resumeViewApi(@RequestParam(value = "_id", required = false) String _id) {
-		return new ResponseEntity(service.getDefaultResume(_id), HttpStatus.OK);
+		return new ResponseEntity(service.getResume(_id), HttpStatus.OK);
 	}
 }
