@@ -42,12 +42,6 @@ public class ConfigServiceImpl implements ConfigService {
 	private MemberDao memberDao;
 
 	@Autowired
-	private LogDao logDao;
-
-	@Autowired
-	private ExceptionRepository repository;
-
-	@Autowired
 	private ShaPasswordEncoder encoder;
 
 	@Override
@@ -150,27 +144,5 @@ public class ConfigServiceImpl implements ConfigService {
 	@Override
 	public List<CodeVO> getCodeList(CodeVO codeVO) {
 		return codeDao.getCodeList(codeVO);
-	}
-
-	@Override
-	public HashMap<String, Object> getExceptionList(int currPageNo, String exception) {
-		HashMap<String, Object> paramsMap = new HashMap<>();
-		paramsMap.put("exception", exception);
-		paramsMap.put("currPageNo", currPageNo);
-		List<HashMap<String, Object>> resultList = logDao.getExceptionLogList(paramsMap);
-
-		PagingVO pagingVO = new PagingVO(currPageNo, 10);
-		pagingVO.setNumberOfRows(logDao.getExceptionLogCount(paramsMap));
-		pagingVO.Paging();
-
-		HashMap<String, Object> resultMap = new HashMap<>();
-		resultMap.put("exceptionList", resultList);
-		resultMap.put("paging", pagingVO);
-		return resultMap;
-	}
-
-	@Override
-	public List<String> getExceptionOptions() {
-		return logDao.getExceptionOptions();
 	}
 }

@@ -13,4 +13,5 @@ public interface ResumeService {
 	ResumeVO getResume(String _id);
 	List<ResumeVO> getResumeList();
 	void setResume(ResumeVO resumeVO, MultipartFile file) throws IOException;
+	Long removeResume(String _id);
 }

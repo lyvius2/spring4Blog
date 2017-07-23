@@ -19,4 +19,8 @@ public class AccessUserVO {
 	private String username;
 	private String userlink;
 	private String _id;
+
+	@OneToOne(targetEntity = AccessVO.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "seq")
+	private AccessVO accessVO;
 }

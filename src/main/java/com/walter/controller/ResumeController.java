@@ -2,9 +2,7 @@ package com.walter.controller;
 
 import com.walter.model.ResumeVO;
 import com.walter.service.ResumeService;
-import com.walter.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Created by yhwang131 on 2017-06-20.
@@ -26,8 +24,8 @@ public class ResumeController extends BaseController {
 	private ResumeService service;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String resumeView(Model model) {
-		ResumeVO resumeVO = service.getResume(null);
+	public String resumeView(@RequestParam(value = "_id", defaultValue = "", required = false) String _id, Model model) {
+		ResumeVO resumeVO = service.getResume(_id);
 		model.addAttribute("resume", resumeVO);
 		return "resume/resumeView";
 	}
@@ -40,6 +38,13 @@ public class ResumeController extends BaseController {
 		return "redirect:/resume";
 	}
 
+	@RequestMapping(value = "", method = RequestMethod.DELETE)
+	public ResponseEntity removeResume(@RequestParam(value = "_id") String _id) {
+		HashMap<String, Object> resultMap = new HashMap<>();
+		resultMap.put("result", service.removeResume(_id));
+		return super.createResEntity(resultMap);
+	}
+
 	@RequestMapping(value = "/register")
 	public String resumeForm() {
 		return "resume/resumeForm";
@@ -47,6 +52,6 @@ public class ResumeController extends BaseController {
 
 	@RequestMapping(value = "/api")
 	public ResponseEntity resumeViewApi(@RequestParam(value = "_id", required = false) String _id) {
-		return new ResponseEntity(service.getResume(_id), HttpStatus.OK);
+		return super.createResEntity(service.getResume(_id));
 	}
 }

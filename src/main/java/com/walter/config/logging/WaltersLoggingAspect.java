@@ -59,7 +59,7 @@ public class WaltersLoggingAspect {
 			accessUser.setUsername(member.getUsername());
 			accessUser.setUserlink(member.getLink());
 
-			BindingAwareModelMap modelMap = (BindingAwareModelMap)args[0];
+			BindingAwareModelMap modelMap = (BindingAwareModelMap)args[1];
 			accessUser.set_id(((ResumeVO)modelMap.get("resume")).get_id());
 		}
 		logService.setAccessLog(access, accessUser);

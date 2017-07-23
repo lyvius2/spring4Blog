@@ -37,11 +37,6 @@ public class ConfigController extends BaseController {
 	@Autowired
 	private LogService logService;
 
-	@RequestMapping(value = "/category", method = RequestMethod.GET)
-	public String categoryConfigMap() {
-		return "config/categoryConfig";
-	}
-
 	@RequestMapping(value = "")
 	public String configView(Model model) {
 		model.addAttribute("categoryVO", new CategoryVO());

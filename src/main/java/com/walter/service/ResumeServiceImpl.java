@@ -1,6 +1,7 @@
 package com.walter.service;
 
 import com.walter.config.CustomStringUtils;
+import com.walter.jpa.AccessUserRepository;
 import com.walter.model.ResumeVO;
 import com.walter.repository.ResumeRepository;
 import com.walter.util.FileUtil;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -24,6 +26,9 @@ public class ResumeServiceImpl implements ResumeService {
 
 	@Autowired
 	private ResumeRepository repository;
+
+	@Autowired
+	private AccessUserRepository userRepository;
 
 	@Autowired
 	private MongoOperations mongoOps;
@@ -64,5 +69,12 @@ public class ResumeServiceImpl implements ResumeService {
 		}
 		resumeVO.setLastSavedDate(new Date());
 		repository.insert(resumeVO);
+	}
+
+	@Transactional(value = "jpaTransactionManager")
+	@Override
+	public Long removeResume(String _id) {
+		userRepository.deleteBy_id(_id);
+		return repository.deleteBy_id(_id);
 	}
 }

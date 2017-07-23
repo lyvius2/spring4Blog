@@ -19,4 +19,6 @@ public interface LogService {
 	void setAccessLog(AccessVO accessVO, AccessUserVO accessUserVO);
 	HashMap<String, Object> getAccessLogList(String method, int currPageNo);
 	List<String> getAccessLogOptions();
+
+	List getResumeAccessLogList(String _id);
 }

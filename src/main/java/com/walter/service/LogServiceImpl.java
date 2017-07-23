@@ -16,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.HashMap;
 import java.util.List;
 
@@ -97,6 +95,11 @@ public class LogServiceImpl implements LogService {
 		query.orderBy(builder.asc(accessLogOps.get("method")));
 		List result = entityManager.createQuery(query.select(accessLogOps.get("method"))).getResultList();
 		return result;
+	}
+
+	@Override
+	public List getResumeAccessLogList(String _id) {
+		return userRepository.findAllBy_idOrderBySeqDesc(_id);
 	}
 
 	private HashMap<String, Object> rtnPagingDataMap(Page page, int currPageNo, long count) {

@@ -13,14 +13,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ExceptionRepository extends CrudRepository<ExceptionVO, Long>, PagingAndSortingRepository<ExceptionVO, Long> {
-
 	ExceptionVO save(ExceptionVO exceptionVO);
-
 	long count();
-
 	long countByException(String exception);
-
 	Page<ExceptionVO> findAllByOrderByRegDtDesc(Pageable pageable);
-
 	Page<ExceptionVO> findByExceptionOrderByRegDtDesc(String exception, Pageable pageable);
 }

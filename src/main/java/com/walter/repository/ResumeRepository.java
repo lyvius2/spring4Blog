@@ -15,4 +15,5 @@ public interface ResumeRepository extends MongoRepository<ResumeVO, String> {
 	ResumeVO findBy_id(String _id);
 	ResumeVO insert(ResumeVO resumeVO);
 	List<ResumeVO> findAllByOrderByLastSavedDateDesc();
+	Long deleteBy_id(String _id);
 }

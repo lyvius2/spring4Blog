@@ -80,6 +80,11 @@ public class ApiController extends BaseController {
 		return super.createResEntity(logService.getAccessLogList(method, currPageNo));
 	}
 
+	@RequestMapping(value = "/resumeAccessLogList")
+	public ResponseEntity getResumeAccessLogList(@RequestParam(value = "_id", required = false)String _id) {
+		return super.createResEntity(logService.getResumeAccessLogList(_id));
+	}
+
 	@RequestMapping(value = "/image/{file_id}", produces = MediaType.IMAGE_JPEG_VALUE)
 	@ResponseBody
 	public byte[] imgView(@PathVariable String file_id) throws IOException {

@@ -165,8 +165,7 @@
 										<th>#</th>
 										<th>ID</th>
 										<th>Register Date</th>
-										<th></th>
-										<th></th>
+										<th width="20%" colspan="3">Action</th>
 										</thead>
 										<tbody>
 										<c:forEach var="resume" items="${resumeList}" varStatus="vs">
@@ -175,12 +174,17 @@
 												<td><c:out value="${resume._id}"/></td>
 												<td><fmt:formatDate value="${resume.lastSavedDate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
 												<td>
-													<button type="button" class="btn btn-sm btn-success">
+													<button type="button" class="btn btn-sm btn-info" onclick="javascript:openResumeLogModal('${resume._id}');">
+														<i class="fa fa-search-plus" aria-hidden="true"> 조회기록</i>
+													</button>
+												</td>
+												<td>
+													<button type="button" class="btn btn-sm btn-success" onclick="javascript:moveToResume('${resume._id}');">
 														<i class="fa fa-folder-open-o" aria-hidden="true"> 보기</i>
 													</button>
 												</td>
 												<td>
-													<button type="button" class="btn btn-sm btn-danger">
+													<button type="button" class="btn btn-sm btn-danger" data-target="${resume._id}">
 														<i class="fa fa-times" aria-hidden="true"> 삭제</i>
 													</button>
 												</td>
@@ -188,6 +192,9 @@
 										</c:forEach>
 										</tbody>
 									</table>
+									<form name="resume" action="/resume" method="get">
+										<input type="hidden" name="_id"/>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -405,6 +412,45 @@
 		</div>
 	</div>
 
+	<div class="modal fade" id="newResumeAccessLog" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Resume Access Log<span v-if="list.length > 0" v-html="' : ' + list.length"></span></h4>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<thead>
+						<th>#</th>
+						<th>조회 ID</th>
+						<th>IP</th>
+						<th>조회시각</th>
+						</thead>
+						<tbody>
+						<tr v-for="(item, index) in list" v-bind:key="item.seq">
+							<td>{{index + 1}}</td>
+							<td>{{item.username}}</td>
+							<td>{{item.accessVO.ip}}</td>
+							<td>{{item.accessVO.endTime|formatDate}}</td>
+						</tr>
+						<tr v-if="list.length == 0">
+							<td colspan="4" class="text-center">조회 기록이 없습니다.</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
+						<i class="fa fa-times-circle" aria-hidden="true"></i> 닫기
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="modal fade" id="newException" tabindex="-1">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -560,8 +606,41 @@
 		/**
 		 * Resume History
 		 */
+		function moveToResume (_id) {
+			document.resume._id.value = _id
+			document.resume.submit()
+		}
 
+		function openResumeLogModal (_id) {
+			$.get('/api/resumeAccessLogList', {_id: _id}).then(
+				function (data) {
+					resumeLog.list = data
+					$('#newResumeAccessLog').modal('show')
+				}
+			)
+		}
 
+		var resumeLog = new Vue({
+			el: '#newResumeAccessLog',
+			data: {
+				list: new Array()
+			}
+		})
+
+		$('#resume .btn-danger').on('click', function (){
+			if (confirm('정말로 삭제하시겠습니까?')) {
+				let _id = $(this).attr('data-target')
+				let parent = $(this).parent().parent()
+				$.ajax({
+					url: '/resume?' + $.param({_id: _id}),
+					method: 'DELETE',
+					dataType: 'json'
+				}).then(function () {
+					parent.remove()
+					alert('삭제되었습니다.')
+				})
+			}
+		})
 		/**
 		 * Logs
 		 */

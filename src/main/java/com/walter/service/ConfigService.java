@@ -22,7 +22,4 @@ public interface ConfigService {
 	HashMap delCategoryItem(int category_cd);
 
 	List<CodeVO> getCodeList(CodeVO codeVO);
-
-	HashMap<String, Object> getExceptionList(int currPageNo, String exception);
-	List<String> getExceptionOptions();
 }
