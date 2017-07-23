@@ -86,7 +86,7 @@
 			<exclude-mapping path="/google*/**"/>
 			<exclude-mapping path="/api/**"/>
 			<exclude-mapping path="/fb**"/>
-			<beans:bean class="com.walter.config.interceptor.CommonInterceptor"/>
+			<beans:bean class="com.walter.config.interceptor.WaltersInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
 
