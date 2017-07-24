@@ -14,6 +14,7 @@ JAVA, Spring Framework 기반으로 개발하고 있는 포트폴리오 겸 블�
 
 * Server : Spring MVC  
 * Client : JSP + Vue.js
+* DBMS : PostgreSQL (heroku Cloud), MongoDB (mlab)
 
 ### Tech (적용된 기술)
 
