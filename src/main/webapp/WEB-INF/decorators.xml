@@ -2,7 +2,7 @@
 <decorators defaultdir="/WEB-INF/views">
     <excludes>
 		<pattern>/resources/*</pattern>
-        <pattern>/exclude/*</pattern>
+        <pattern>/4*</pattern>
         <pattern>/api/*</pattern>
         <pattern>/login*</pattern>
         <pattern>/post/images/*</pattern>

@@ -20,15 +20,18 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Social SignIn Controller
  * Created by yhwang131 on 2017-05-17.
  */
 @Controller
 @RequestMapping("/connect")
 public class SocialController extends ConnectController {
-	private String TARGET_URL = new String();
 
 	@Autowired
 	private SocialService service;
+
+	@Autowired
+	private HttpServletRequest httpServletRequest;
 
 	@Autowired
 	private SignInUserDetailsService signInUserDetailsService;
@@ -40,8 +43,7 @@ public class SocialController extends ConnectController {
 
 	@RequestMapping(value="/{providerId}", method=RequestMethod.POST)
 	public RedirectView connect(@PathVariable String providerId, NativeWebRequest request) {
-		HttpServletRequest httpServletRequest = (HttpServletRequest)request.getNativeRequest();
-		TARGET_URL = httpServletRequest.getHeader("REFERER");
+		httpServletRequest.getSession().setAttribute("referer", httpServletRequest.getHeader("REFERER"));
 		return super.connect(providerId, request);
 	}
 
@@ -56,7 +58,7 @@ public class SocialController extends ConnectController {
 			httpServletRequest.getSession().setAttribute("msg",
 					CustomStringUtils.executeAlertMessage(Message.ERROR_SOCIAL_API.getText()));
 		}
-		redirectView.setUrl(TARGET_URL);
+		redirectView.setUrl(httpServletRequest.getSession().getAttribute("referer").toString());
 		return redirectView;
 	}
 }

@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * API Controller (Return Type: JSON)
  * Created by yhwang131 on 2016-08-24.
  */
 @Controller
@@ -36,6 +38,9 @@ public class ApiController extends BaseController {
 
 	@Autowired
 	private PostService postService;
+
+	@Autowired
+	private ResumeService resumeService;
 
 	@Autowired
 	private LuceneService luceneService;
@@ -68,21 +73,30 @@ public class ApiController extends BaseController {
 		return super.createResEntity(postList);
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/exceptionList")
 	public ResponseEntity getExceptionList(@RequestParam(value = "currPageNo", required = false)int currPageNo,
 	                                       @RequestParam(value = "exception", required = false)String exception) {
 		return super.createResEntity(logService.getExceptionList(exception, currPageNo));
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/accessLogList")
 	public ResponseEntity getAccessLogList(@RequestParam(value = "currPageNo", required = false)int currPageNo,
 	                                       @RequestParam(value = "method", required = false)String method) {
 		return super.createResEntity(logService.getAccessLogList(method, currPageNo));
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/resumeAccessLogList")
 	public ResponseEntity getResumeAccessLogList(@RequestParam(value = "_id", required = false)String _id) {
 		return super.createResEntity(logService.getResumeAccessLogList(_id));
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/resume")
+	public ResponseEntity getResumeItem(@RequestParam(value = "_id", required = false) String _id) {
+		return super.createResEntity(resumeService.getResume(_id));
 	}
 
 	@RequestMapping(value = "/image/{file_id}", produces = MediaType.IMAGE_JPEG_VALUE)

@@ -8,11 +8,11 @@
 	<!-- Authentication Config -->
 	<http auto-config="false" use-expressions="true" create-session="never" disable-url-rewriting="true">
 		<csrf disabled="true"/>
-		<access-denied-handler error-page="/exclude/403"/>
-		<intercept-url pattern="/login" access="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')"/>
+		<access-denied-handler error-page="/403"/>
 		<intercept-url pattern="/config**" access="hasRole('ROLE_ADMIN')"/>
-		<intercept-url pattern="/member/register" access="hasRole('ROLE_ANONYMOUS')"/>
-		<form-login login-page="/"
+		<intercept-url pattern="/post/register**" access="hasRole('ROLE_ADMIN')"/>
+		<intercept-url pattern="/resume**" access="hasRole('ROLE_USER') || hasRole('ROLE_ADMIN') || hasRole('ROLE_RECRUITER')"/>
+		<form-login login-page="/401"
 					login-processing-url="/signIn"
 					username-parameter="username"
 					password-parameter="password"

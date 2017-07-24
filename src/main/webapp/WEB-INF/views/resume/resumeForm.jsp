@@ -227,7 +227,7 @@
 		})
 
 		var resume;
-		$.get('/resume/api').then(function (result) {
+		$.get('/api/resume').then(function (result) {
 			setTimeout(function () {
 				resume = new Vue({
 					el: '.resume-wrapper',

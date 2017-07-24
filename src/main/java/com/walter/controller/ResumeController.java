@@ -4,6 +4,7 @@ import com.walter.model.ResumeVO;
 import com.walter.service.ResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
+ * 프로필 컨트롤러 (Resume)
  * Created by yhwang131 on 2017-06-20.
  */
 @Controller
@@ -30,6 +32,7 @@ public class ResumeController extends BaseController {
 		return "resume/resumeView";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public String resumeRegist(@ModelAttribute("resumeVO") ResumeVO resumeVO,
 	                           @RequestParam("profile")MultipartFile file,
@@ -38,6 +41,7 @@ public class ResumeController extends BaseController {
 		return "redirect:/resume";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "", method = RequestMethod.DELETE)
 	public ResponseEntity removeResume(@RequestParam(value = "_id") String _id) {
 		HashMap<String, Object> resultMap = new HashMap<>();
@@ -45,6 +49,7 @@ public class ResumeController extends BaseController {
 		return super.createResEntity(resultMap);
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/register")
 	public String resumeForm() {
 		return "resume/resumeForm";

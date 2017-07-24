@@ -61,8 +61,15 @@
 		<!-- main -->
 		<section id="main" style="padding-bottom: 0px;">
 			<div class="resume-item-wrapper">
-
-				<!-- experince -->
+				<security:authorize access="hasRole('ROLE_USER')">
+				<div class="inner">
+					<div class="alert alert-warning" role="alert">
+						<p>죄송하지만 경력 사항을 보시려면 Linked In을 통한 로그인이 필요합니다. ^^;</p>
+					</div>
+				</div>
+				</security:authorize>
+				<!-- experience -->
+				<security:authorize access="hasRole('ROLE_RECRUITER') || hasRole('ROLE_ADMIN')">
 				<c:if test="${fn:length(resume.experience) > 0}">
 				<section class="resume-item experience">
 					<div class="inner">
@@ -91,7 +98,7 @@
 						</ul>
 					</div>
 				</section>
-				</c:if><!-- experince -->
+				</c:if><!-- experience -->
 
 				<!-- project -->
 				<c:if test="${fn:length(resume.project) > 0}">
@@ -124,7 +131,8 @@
 						</ul>
 					</div>
 				</section>
-				</c:if><!-- project -->
+				</c:if>
+				</security:authorize><!-- project -->
 
 				<!-- skill -->
 				<c:if test="${fn:length(resume.skill) > 0}">
@@ -162,7 +170,7 @@
 					</div>
 				</section>
 				</c:if><!-- education -->
-				<security:authorize access="isAuthenticated()">
+				<security:authorize access="hasRole('ROLE_ADMIN')">
 				<section class="resume-item">
 					<div style="padding-top: 20px;">
 						<a href="/resume/register" class="btn btn-success btn-sm">

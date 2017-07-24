@@ -16,12 +16,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -37,21 +39,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/post")
 public class PostController extends BaseController {
-	/*
-	@Autowired
-	private RestTemplate restTemplate;
 
-	@Autowired
-	private HttpServletRequest request;
-	*/
 	@Autowired
 	private PostService postService;
 
 	@Autowired
 	private ConfigService configService;
-
-	@Autowired
-	private LuceneService luceneService;
 
 	@Resource(name = "googleDriveServiceImage")
 	private GoogleDriveService googleDriveImageService;
@@ -116,6 +109,7 @@ public class PostController extends BaseController {
 		return "post/postView";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/{post_cd}", method = RequestMethod.DELETE)
 	public ResponseEntity removePost(@PathVariable int post_cd, @ModelAttribute("postVO")PostVO postVO) throws IOException, ParseException {
 		if (StringUtils.isNotEmpty(postVO.getDelegate_img())) {
@@ -127,17 +121,12 @@ public class PostController extends BaseController {
 		return super.createResEntity(hashMap);
 	}
 
-	@RequestMapping(value = "/list", produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String postList(@ModelAttribute("postSearchVO")PostSearchVO postSearchVO) {
-		return gson.toJson(postService.getPostListByPaging(postSearchVO));
+	@RequestMapping(value = "/list")
+	public ResponseEntity postList(@ModelAttribute("postSearchVO")PostSearchVO postSearchVO) {
+		return super.createResEntity(postService.getPostListByPaging(postSearchVO));
 	}
 
-	@RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
-	public String fileUploadForm() {
-		return "drive/fileUpload";
-	}
-
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
 	public String imgUpload(@RequestParam("upload")MultipartFile file, Model model, HttpServletRequest request) throws IOException {
 		File resultFile = googleDriveImageService.createFile(file);
@@ -146,9 +135,9 @@ public class PostController extends BaseController {
 		return "post/imgUpload";
 	}
 
-	@RequestMapping(value = "/dragAndDropUpload", method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String dragAndDropUpload(@RequestParam("upload")MultipartFile file) throws IOException {
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/dragAndDropUpload", method = RequestMethod.POST)
+	public ResponseEntity dragAndDropUpload(@RequestParam("upload")MultipartFile file) throws IOException {
 		HashMap<String, Object> resultMap = new HashMap<>();
 		try {
 			File resultFile = googleDriveImageService.createFile(file);
@@ -160,7 +149,7 @@ public class PostController extends BaseController {
 			resultMap.put("uploaded", 0);
 			resultMap.put("error", new HashMap<String, Object>().put("message", ioe.getMessage()));
 		}
-		return gson.toJson(resultMap);
+		return super.createResEntity(resultMap);
 	}
 
 	@RequestMapping(value = "/images/{file_id}", method = RequestMethod.GET)
@@ -168,13 +157,13 @@ public class PostController extends BaseController {
 		return "redirect:/api/image/" + file_id;
 	}
 
-	@RequestMapping(value = "/comment", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
-	@ResponseBody
-	public String getCommentList(HttpServletRequest request) {
+	@RequestMapping(value = "/comment", method = RequestMethod.GET)
+	public ResponseEntity getCommentList(HttpServletRequest request) {
 		int postCd = CustomStringUtils.setDefaultNumber(request.getParameter("postCd"), -1);
-		return gson.toJson(postService.getComments(postCd));
+		return super.createResEntity(postService.getComments(postCd));
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@RequestMapping(value = "/comment", method = RequestMethod.POST)
 	public ResponseEntity registerComment(@ModelAttribute("commentVO")CommentVO commentVO, HttpServletRequest request) {
 		commentVO.setIp(request.getRemoteAddr());
@@ -182,12 +171,14 @@ public class PostController extends BaseController {
 		return resEntity(msg);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@RequestMapping(value = "/comment", method = RequestMethod.DELETE)
 	public ResponseEntity removeComment(@RequestParam("_id")String _id) {
 		Message msg = postService.removeComment(_id);
 		return resEntity(msg);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@RequestMapping(value = "/reply", method = RequestMethod.POST)
 	public ResponseEntity registerReply(@ModelAttribute("replyVo")ReplyVO replyVO, HttpServletRequest request) {
 		replyVO.setIp(request.getRemoteAddr());
@@ -195,6 +186,7 @@ public class PostController extends BaseController {
 		return resEntity(msg);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@RequestMapping(value = "/reply", method = RequestMethod.DELETE)
 	public ResponseEntity removeReply(@RequestParam("_id")String _id, @RequestParam("index")int index) {
 		Message msg = postService.removeReply(_id, index);
@@ -206,45 +198,5 @@ public class PostController extends BaseController {
 		hashMap.put("status", msg == null ? true:false);
 		if (msg != null) hashMap.put("message", msg.getText());
 		return super.createResEntity(hashMap);
-	}
-	/*
-	@RequestMapping(value = "/http")
-	@ResponseBody
-	public String http(Model model) {
-		ResultVO resultVO = restTemplate.postForObject("http://localhost:3000/rise", new test(2, "ppp"), ResultVO.class);
-		return resultVO.toString();
-	}
-
-	class test {
-		private int key;
-		private String value;
-
-		public test (int key, String value) {
-			this.key = key;
-			this.value = value;
-		}
-
-		public int getKey() {
-			return key;
-		}
-
-		public void setKey(int key) {
-			this.key = key;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-	}
-	*/
-
-	@RequestMapping(value = "/search")
-	public ResponseEntity luceneSearch(@RequestParam("searchText") String searchText) throws IOException, ParseException {
-		List result = luceneService.searchDataList(PostVO.class, searchText);
-		return super.createResEntity(postService.getPostListByLucene(result));
 	}
 }

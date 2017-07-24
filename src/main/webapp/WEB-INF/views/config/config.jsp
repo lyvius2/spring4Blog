@@ -192,6 +192,11 @@
 										</c:forEach>
 										</tbody>
 									</table>
+									<p class="text-right">
+										<a href="/resume/register" class="btn btn-sm btn-primary">
+											<i class="fa fa-pencil-square-o" aria-hidden="true"> 새로 등록</i>
+										</a>
+									</p>
 									<form name="resume" action="/resume" method="get">
 										<input type="hidden" name="_id"/>
 									</form>
