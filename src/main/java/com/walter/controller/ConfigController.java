@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
+ * Config Controller
  * Created by yhwang131 on 2016-09-13.
  */
 @Controller

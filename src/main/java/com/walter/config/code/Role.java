@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 권한 코드
  * Created by Walter on 2017-07-09.
  */
 public enum Role {
@@ -16,8 +17,7 @@ public enum Role {
 	private List<SimpleGrantedAuthority> authority = new ArrayList<>();
 
 	Role(String role) {
-		authority.add(new SimpleGrantedAuthority("ROLE_USER"));
-		if (!role.equals("ROLE_USER")) authority.add(new SimpleGrantedAuthority(role));
+		authority.add(new SimpleGrantedAuthority(role));
 	}
 
 	public List<SimpleGrantedAuthority> getRoleList() {
