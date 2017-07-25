@@ -6,7 +6,6 @@
         <pattern>/api/*</pattern>
         <pattern>/login*</pattern>
         <pattern>/post/images/*</pattern>
-        <pattern>/googleDrive**</pattern>
     </excludes>
 
     <decorator name="resumeTheme" page="template/layout-resume.jsp">

@@ -11,7 +11,6 @@ import com.walter.service.PostService;
 import com.walter.util.MediaImageMetadata;
 import com.walter.config.code.DataProcessing;
 import com.walter.config.code.Message;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +21,17 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Post Controller (Blog)
  * Created by yhwang131 on 2016-10-11.
  */
 @Controller
@@ -45,6 +43,9 @@ public class PostController extends BaseController {
 
 	@Autowired
 	private ConfigService configService;
+
+	@Autowired
+	private LuceneService luceneService;
 
 	@Resource(name = "googleDriveServiceImage")
 	private GoogleDriveService googleDriveImageService;
@@ -163,7 +164,7 @@ public class PostController extends BaseController {
 		return super.createResEntity(postService.getComments(postCd));
 	}
 
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	@Secured("IS_AUTHENTICATED_FULLY")
 	@RequestMapping(value = "/comment", method = RequestMethod.POST)
 	public ResponseEntity registerComment(@ModelAttribute("commentVO")CommentVO commentVO, HttpServletRequest request) {
 		commentVO.setIp(request.getRemoteAddr());
@@ -171,14 +172,14 @@ public class PostController extends BaseController {
 		return resEntity(msg);
 	}
 
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	@Secured("IS_AUTHENTICATED_FULLY")
 	@RequestMapping(value = "/comment", method = RequestMethod.DELETE)
 	public ResponseEntity removeComment(@RequestParam("_id")String _id) {
 		Message msg = postService.removeComment(_id);
 		return resEntity(msg);
 	}
 
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	@Secured("IS_AUTHENTICATED_FULLY")
 	@RequestMapping(value = "/reply", method = RequestMethod.POST)
 	public ResponseEntity registerReply(@ModelAttribute("replyVo")ReplyVO replyVO, HttpServletRequest request) {
 		replyVO.setIp(request.getRemoteAddr());
@@ -186,11 +187,31 @@ public class PostController extends BaseController {
 		return resEntity(msg);
 	}
 
-	@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	@Secured("IS_AUTHENTICATED_FULLY")
 	@RequestMapping(value = "/reply", method = RequestMethod.DELETE)
 	public ResponseEntity removeReply(@RequestParam("_id")String _id, @RequestParam("index")int index) {
 		Message msg = postService.removeReply(_id, index);
 		return resEntity(msg);
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/indexingStatus")
+	public String getIndexingStatus(Model model) throws IOException {
+		PostVO postVO = new PostVO();
+		HashMap<String, Object> hashMap = new HashMap<>();
+		hashMap.put("object", postVO.getClass().getSimpleName());
+		hashMap.put("dataLength", postService.getPostList(new PostSearchVO()).size());
+		hashMap.put("indexLength", luceneService.indexLength(postVO));
+		model.addAttribute("data", hashMap);
+		return "post/indexingStatus";
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/indexingBuild")
+	public String buildIndex(RedirectAttributes redirectAttr) throws IOException {
+		luceneService.createIndex(postService.getPostList(new PostSearchVO()));
+		redirectAttr.addFlashAttribute("msg", "alert('인덱스가 재생성되었습니다.')");
+		return "redirect:/post";
 	}
 
 	private ResponseEntity resEntity(Message msg) {
