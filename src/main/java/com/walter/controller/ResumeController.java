@@ -54,9 +54,4 @@ public class ResumeController extends BaseController {
 	public String resumeForm() {
 		return "resume/resumeForm";
 	}
-
-	@RequestMapping(value = "/api")
-	public ResponseEntity resumeViewApi(@RequestParam(value = "_id", required = false) String _id) {
-		return super.createResEntity(service.getResume(_id));
-	}
 }

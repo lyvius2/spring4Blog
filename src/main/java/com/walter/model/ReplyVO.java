@@ -11,8 +11,8 @@ import java.util.Date;
 @Data
 public class ReplyVO {
 
-	private String userId;
-	private String userName;
+	private String id;
+	private String name;
 	private String ip;
 	private String link;
 	private String profile_image_url;
@@ -26,8 +26,8 @@ public class ReplyVO {
 
 	public void setUserData(MemberVO memberVO) {
 		if (memberVO != null) {
-			this.userId = memberVO.getId();
-			this.userName = memberVO.getUsername();
+			this.id = memberVO.getId();
+			this.name = memberVO.getName();
 			this.link = memberVO.getLink();
 			this.profile_image_url = memberVO.getProfile_image_url();
 		}
