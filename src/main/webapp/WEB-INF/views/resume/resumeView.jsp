@@ -61,7 +61,7 @@
 		<!-- main -->
 		<section id="main" style="padding-bottom: 0px;">
 			<div class="resume-item-wrapper">
-				<security:authorize access="hasRole('ROLE_USER')">
+				<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_RECRUITER')">
 				<div class="inner">
 					<div class="alert alert-warning" role="alert">
 						<p>죄송하지만 경력 사항을 보시려면 Linked In을 통한 로그인이 필요합니다. ^^;</p>

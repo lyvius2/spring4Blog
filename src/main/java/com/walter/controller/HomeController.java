@@ -1,8 +1,11 @@
 package com.walter.controller;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import com.walter.model.MemberVO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,5 +52,13 @@ public class HomeController extends BaseController {
 		model.addAttribute("message",
 				messages.getMessage("JdbcDaoImpl.noAuthority", new Object[]{memberVO!=null?memberVO.getUsername():""}, "User {0} has no GrantedAuthority"));
 		return "status/403";
+	}
+
+	@RequestMapping("/healthCheck")
+	public ResponseEntity healthChk() {
+		HashMap<String, Object> hashMap = new HashMap<>();
+		hashMap.put("status", "OK");
+		hashMap.put("time", new Date());
+		return super.createResEntity(hashMap);
 	}
 }

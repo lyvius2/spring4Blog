@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /**
- * 프로필 컨트롤러 (Resume)
+ * Resume Controller (Profile)
  * Created by yhwang131 on 2017-06-20.
  */
 @Controller
