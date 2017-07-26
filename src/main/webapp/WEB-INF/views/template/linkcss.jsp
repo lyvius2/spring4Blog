@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%><%@ page contentType="text/html;charset=UTF-8" language="java" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 	<style>
-		@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+		@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
 	</style>
 	<!-- Bootstrap CSS-->
 	<link rel="stylesheet" href="${contextPath}/resources/css/bootstrap.min.css">
@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="${contextPath}/resources/css/font-awesome.min.css">
 	<link rel="stylesheet" href="${contextPath}/resources/css/pe-icon-7-stroke.css">
 	<!-- Google fonts - Roboto-->
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,700">
+	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,700">
 	<!-- lightbox-->
 	<link rel="stylesheet" href="${contextPath}/resources/css/lightbox.min.css">
 	<!-- datepicker -->
