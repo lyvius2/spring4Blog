@@ -24,7 +24,7 @@ public class TaskScheduled {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 900000)
 	public void healthChk() {
 		HashMap<String, Object> result = restTemplate.postForObject(url, null, HashMap.class);
 		log.info("Health Check ---> {}", result.toString());
