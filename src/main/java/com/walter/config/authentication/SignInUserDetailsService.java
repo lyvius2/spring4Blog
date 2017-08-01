@@ -23,6 +23,7 @@ import java.util.HashMap;
 public class SignInUserDetailsService implements UserDetailsService {
 	public static final Logger logger = LoggerFactory.getLogger(SignInUserDetailsService.class);
 	protected final MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+	private String adminEmail;
 
 	@Autowired
 	private MemberDao memberDao;
@@ -58,6 +59,8 @@ public class SignInUserDetailsService implements UserDetailsService {
 				paramsMember.setUse_yn(true);
 				memberDao.modMember(paramsMember);
 			}
+		} else if (memberVO.getUsername().equals(adminEmail)) {
+			memberVO.setAuthorities(Role.ADMIN.getRoleList());
 		}
 		memberVO.setEnabled(memberVO.isUse_yn());
 
@@ -67,4 +70,7 @@ public class SignInUserDetailsService implements UserDetailsService {
 		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 	}
 
+	public void setAdminEmail(String adminEmail) {
+		this.adminEmail = adminEmail;
+	}
 }

@@ -7,8 +7,8 @@ JAVA, Spring Framework 기반으로 개발하고 있는 포트폴리오 겸 블�
 
 ### Languages
 
-* [JAVA] - Java is a general-purpose computer programming language that is concurrent, class-based, object-oriented, and specifically designed.
-* [JavaScript] - JavaScript is a high-level, dynamic, weakly typed, object-based, multi-paradigm, and interpreted client-side programming language.
+* [JAVA]
+* [JavaScript]
 
 ### Structure
 
@@ -56,6 +56,12 @@ JAVA, Spring Framework 기반으로 개발하고 있는 포트폴리오 겸 블�
 * [lucy-xss] - Cross-site Scripting 처리
 * [drewnoakes] - 이미지 메타 데이터 추출
 * [arirang-analyzer-6] - Lucene 한글 형태소 분석기
+
+### Installation
+
+* application.properties - Facebook, Google+, GitHub, LinkedIn API 연결용 App ID와 App Secret 코드, 관리자 계정 E-MAIL, HOME URL 등록
+* db.properties - PostgreSQL과 MongoDB 접속정보
+* resources 디렉터리에 Google Drive API를 사용하기 위한 client_secret.json 파일 삽입 (from Google API Console)
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
