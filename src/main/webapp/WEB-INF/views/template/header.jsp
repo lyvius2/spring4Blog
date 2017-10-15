@@ -21,7 +21,7 @@
 							<ul class="dropdown-menu">
 								<c:forEach var="category" items="${categories}" varStatus="vs">
 									<c:if test="${category.use_yn == true}">
-									<li><a href="/post?category_cd=${category.category_cd}" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
+									<li><a href="/?category_cd=${category.category_cd}" data-target="${category.category_cd}"><c:out value="${category.category_name}"/></a></li>
 									</c:if>
 								</c:forEach>
 							</ul>

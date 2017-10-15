@@ -49,11 +49,6 @@
 					<jsp:include page="/post/indexingStatus"/>
 					</security:authorize>
 					<post-item v-for="(post, index) in postList" v-bind:key="post.post_cd" :post="post"></post-item>
-					<div class="col-lg-10 col-md-10 col-sm-12 col-lg-offset-1 col-md-offset-1" v-if="postList.length == 0">
-						<hr/>
-						<h5 class="text-center">검색 결과가 없습니다.</h5>
-						<hr/>
-					</div>
 				</div>
 			</div>
 			<div class="col-lg-4">
@@ -79,6 +74,7 @@
 		}
 
 		function getPostList (param, callback) {
+			$('#nothingMsg').remove()
 			$.get('/api/postList', param).then(function (data) {
 				if (data.length >= param.rowsPerPage) param.offset++;
 				else isEnd = true
@@ -92,9 +88,18 @@
 			param['category_cd'] = category_cd
 			getPostList(param, function (data) {
 				posts.postList = data
+				if (posts.postList.length == 0) insertNoDataMsg()
 				$('#listName').text(category_name)
 				if (!isEnd) $(window).on('scroll', scrollHandler)
 			})
+		}
+
+		function insertNoDataMsg () {
+			var $div = $('<div>')
+				.attr('id', 'nothingMsg')
+				.attr('class', 'col-lg-10 col-md-10 col-sm-12 col-lg-offset-1 col-md-offset-1')
+			var $msg = $('<h5>').addClass('text-center').text('검색 결과가 없습니다.')
+			$div.append($('<hr/>'), $msg, $('<hr/>')).appendTo('.blog-post div.row')
 		}
 
 		/**
@@ -167,6 +172,7 @@
 			param['searchText'] = $(this).find('input').val()
 			getPostList(param, function (data) {
 				posts.postList = data
+				if (posts.postList.length == 0) insertNoDataMsg()
 				$('#listName').text('Search Result')
 				if (!isEnd) $(window).on('scroll', scrollHandler)
 			})

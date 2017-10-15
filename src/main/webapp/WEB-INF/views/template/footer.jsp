@@ -4,18 +4,36 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-sm-12">
-					<h4 class="heading">About Multi</h4>
-					<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus magna. Cras in mi at felis aliquet congue.  Vivamus magna. Cras in mi at felis aliquet congue.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. </p>
+					<h4 class="heading">About Walter's Home</h4>
+					<p>일본 여행과 북유럽의 대자연을 좋아하는 평범한 개발자의 기술, 여행 이야기입니다.</p>
+					<p>日本旅行と北欧の大自然が好きな普通の開発者のブログです。</p>
 				</div>
 				<div class="col-md-4 col-sm-12">
-					<h4 class="heading">Our offices</h4>
-					<h5>London</h5>
-					<p> Donec eleifend<br />libero at sagittis<br />mollis + 44 2556 789 8799</p>
-					<h5>Paris</h5>
-					<p> Donec eleifend<br />libero at sagittis<br />mollis + 41 2556 789 8799</p>
+					<h4 class="heading">My travels</h4>
+					<p>
+						<i class="jp flag" title="All 47 prefectures"></i>
+						<i class="tw flag" title="Taipei"></i>
+						<i class="is flag" title="Reykjavik, Jokulsarlon, Golden Circle, Jökulsárgljúfur, Langjökull"></i>
+						<i class="fi flag" title="Helsinki"></i>
+						<i class="ee flag" title="Tallinn"></i>
+						<i class="hk flag" title="Hongkong"></i><br/>
+						<i class="kr flag" title="Seoul, Jeju"></i>
+						<i class="se flag" title="Stockholm"></i>
+						<i class="no flag" title="Bergen, Flåm, Sognefjorden, Stavanger, Pulpit Rock"></i>
+						<i class="fr flag" title="Paris"></i>
+						<i class="nl flag" title="Amsterdam"></i>
+						<i class="gb flag" title="London, Brighton"></i><br/>
+						<i class="gb sct flag" title="Edinburgh, Highland"></i>
+						<i class="dk flag" title="København, Helsingør"></i>
+						<i class="fo flag" title="Mykines, Sørvágur, Tórshavn, Klaksvík, Kalsoy, Gjogv"></i>
+						<i class="de flag" title="Rüdesheim am Rhein"></i>
+						<i class="sg flag" title="Singapore"></i>
+						<i class="cn flag" title="Beijing"></i><br/>
+						<i class="nz flag" title="Auckland, Queenstown, Milford Sound, Mt.Cook, Christchurch"></i>
+					</p>
 				</div>
 			</div>
+			<%--
 			<div class="row">
 				<div class="col-md-4 col-sm-6">
 					<h4 class="heading">Popular Categories</h4>
@@ -41,6 +59,7 @@
 					</form>
 				</div>
 			</div>
+			--%>
 		</div>
 	</div>
 	</c:if>

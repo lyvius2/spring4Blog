@@ -2,14 +2,20 @@ package com.walter.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import com.walter.model.MemberVO;
+import com.walter.model.PostSearchVO;
+import com.walter.model.PostVO;
+import com.walter.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -18,15 +24,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class HomeController extends BaseController {
 
+	@Autowired
+	private PostService postService;
+
 	/**
-	 * 기본 Page
+	 * 기본 Page (Blog Post List)
+	 * @param category_cd
 	 * @param locale
 	 * @return
+	 * @throws IllegalStateException
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		return "redirect:/post";
+	@RequestMapping(value = "")
+	public String main(@RequestParam(name = "category_cd", required = false)String category_cd, Locale locale)
+			throws IllegalStateException {
+		logger.info("Welcome Walter's Home! The client locale is {}.", locale);
+		if (category_cd != null && !category_cd.equals("")) {
+			PostSearchVO postSearchVO = new PostSearchVO();
+			postSearchVO.setUse_yn(true);
+			postSearchVO.setCategory_cd(Integer.parseInt(category_cd));
+			postSearchVO.setRowsPerPage(1);
+			List<PostVO> postList = postService.getPostList(postSearchVO);
+			if (postList.size() > 0) return "redirect:post/" + postList.get(0).getPost_cd();
+		}
+		return "post/postList";
 	}
 
 	/**

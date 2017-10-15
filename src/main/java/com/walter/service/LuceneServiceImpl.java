@@ -79,8 +79,6 @@ public class LuceneServiceImpl implements LuceneService {
 
 			indexWriter.commit();
 			indexWriter.close();
-			//analyzer.close();
-			//fsDirectory.close();
 		}
 	}
 
@@ -153,6 +151,7 @@ public class LuceneServiceImpl implements LuceneService {
 				result.add(idx);
 			}));
 		}
+		log.debug("Index Length : {}", result.size());
 		return result;
 	}
 

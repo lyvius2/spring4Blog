@@ -4,7 +4,7 @@
   Date: 2017-07-05
   Time: 오후 10:33
   To change this template use File | Settings | File Templates.
---%><%@ page contentType="text/html;charset=UTF-8" language="java" %><script src="${contextPath}/resources/scripts/jquery-2.2.4.min.js"></script>
+--%><%@ page contentType="text/html;charset=UTF-8" language="java" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><script src="${contextPath}/resources/scripts/jquery-2.2.4.min.js"></script>
 	<script src="${contextPath}/resources/scripts/jquery.cookie.js"></script>
 	<script src="${contextPath}/resources/scripts/jquery.onmutate.min.js"></script>
 	<script src="${contextPath}/resources/scripts/vue.min.js"></script>
@@ -15,3 +15,9 @@
 	<script src="${contextPath}/resources/scripts/moment.min.js"></script>
 	<script src="${contextPath}/resources/scripts/lightbox.min.js"></script>
 	<script src="${contextPath}/resources/scripts/front.js"></script>
+<c:if test="${requestSignIn == true}">
+	<script>
+		alert('로그인이 필요합니다.')
+		$('#sign-in-headerBtn').trigger('click')
+	</script>
+</c:if>
