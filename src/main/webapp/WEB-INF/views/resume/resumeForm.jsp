@@ -129,34 +129,34 @@
 
 				</div>
 			</section><!-- main -->
-
-			<!-- modal -->
-			<div class="modal fade" id="newTechTag" tabindex="-1">
-				<div class="modal-dialog">
-					<form id="techTag" onsubmit="return false">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-								<h4 class="modal-title">기술태그 추가</h4>
-							</div>
-							<div class="modal-body">
-								<input type="text" name="tech_tag" class="form-control input-lg" placeholder="기술명을 입력하세요." required/>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
-									<i class="fa fa-times-circle" aria-hidden="true"></i> 닫기
-								</button>
-								<button type="submit" class="btn btn-sm btn-primary">
-									<i class="fa fa-check-circle" aria-hidden="true"></i> 등록
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div><!--//modal -->
 		</form>
+
+		<!-- modal -->
+		<div class="modal fade" id="newTechTag" tabindex="-1">
+			<div class="modal-dialog">
+				<form id="techTag" onsubmit="return false">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title">기술태그 추가</h4>
+						</div>
+						<div class="modal-body">
+							<input type="text" name="tech_tag" class="form-control input-lg" placeholder="기술명을 입력하세요." required/>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">
+								<i class="fa fa-times-circle" aria-hidden="true"></i> 닫기
+							</button>
+							<button type="submit" class="btn btn-sm btn-primary" id="setTechTag">
+								<i class="fa fa-check-circle" aria-hidden="true"></i> 등록
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div><!--//modal -->
 	<content tag="script">
 	<jsp:include page="resumeFormTemplate.jsp"/>
 	<script>
@@ -187,6 +187,12 @@
 			})
 		}
 
+		function setTechTag() {
+			let tech_tag = $('input[name=tech_tag]').val()
+			resume.data.project[resume.project_seq].tech = resume.data.project[resume.project_seq].tech + '/' + tech_tag
+			$('#newTechTag').modal('hide')
+		}
+
 		var form_titles = {
 			titles: {
 				experience: {title: '회사명', sub_title: '소속 및 직급', description: '담당업무'},
@@ -197,6 +203,19 @@
 
 		$(document).onCreate('div.input-daterange', function (elements) {
 			createDatepicker(elements)
+
+			$('#newTechTag').on('shown.bs.modal', function() {
+				$('input[name=tech_tag]').focus()
+			})
+
+			$('#newTechTag').on('hide.bs.modal', function() {
+				$('input[name=tech_tag]').val('')
+			})
+
+			$('form#techTag').on('submit', function(e) {
+				e.preventDefault()
+				setTechTag()
+			})
 		})
 
 		Vue.component('act-form', {
@@ -245,21 +264,6 @@
 					}
 				})
 			}, 100)
-		})
-
-		$('#newTechTag').on('shown.bs.modal', function() {
-			$('input[name=tech_tag]').focus()
-		})
-
-		$('#newTechTag').on('hide.bs.modal', function() {
-			$('input[name=tech_tag]').val(null)
-		})
-
-		$('form#techTag').on('submit', function(e) {
-			e.preventDefault()
-			let tech_tag = $('input[name=tech_tag]').val()
-			resume.data.project[resume.project_seq].tech = resume.data.project[resume.project_seq].tech + '/' + tech_tag
-			$('#newTechTag').modal('hide')
 		})
 	</script>
 	</content>
