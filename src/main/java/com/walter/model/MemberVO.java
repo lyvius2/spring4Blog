@@ -1,5 +1,6 @@
 package com.walter.model;
 
+import com.mornya.lib.springsocialnaver.api.abstracts.UserOperation;
 import com.walter.config.code.Role;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -113,5 +114,18 @@ public class MemberVO implements UserDetails {
 		this.social_type = "linkedin";
 		this.profile_image_url = linkedInProfile.getProfilePictureUrl();
 		this.authorities = Role.RECRUITER.getRoleList();
+	}
+
+	/**
+	 * Naver 사용자 정보 매핑
+	 * @param userOperation
+	 */
+	public MemberVO(UserOperation userOperation) {
+		this.name = userOperation.getName();
+		this.username = userOperation.getNickname();
+		this.id = userOperation.getId();
+		this.social_type = "naver";
+		this.profile_image_url = userOperation.getProfile_image();
+		this.authorities = Role.DEFAULT.getRoleList();
 	}
 }

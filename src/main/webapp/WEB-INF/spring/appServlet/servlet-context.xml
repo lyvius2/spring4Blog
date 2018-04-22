@@ -55,6 +55,10 @@
 					<beans:constructor-arg value="${spring.social.linkedin.appId}" />
 					<beans:constructor-arg value="${spring.social.linkedin.appSecret}" />
 				</beans:bean>
+				<beans:bean id="naverConnectionFactory" class="com.mornya.lib.springsocialnaver.connect.NaverConnectionFactory">
+					<beans:constructor-arg value="${spring.social.naver.appId}" />
+					<beans:constructor-arg value="${spring.social.naver.appSecret}" />
+				</beans:bean>
 			</beans:list>
 		</beans:property>
 	</beans:bean>

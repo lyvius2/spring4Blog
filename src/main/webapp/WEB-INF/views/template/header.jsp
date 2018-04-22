@@ -102,6 +102,14 @@
 							</button>
 						</form>
 					</div>
+					<div id="sign-in-naver">
+						<form action="/connect/naver" method="post" id="naver-form">
+							<input type="hidden" name="scope" value="email, nickname, id, name"/>
+							<button type="submit" class="btn btn-success btn-block">
+								Sign In with Naver
+							</button>
+						</form>
+					</div>
 					<div id="sign-up-div">
 						<p class="text-center text-muted">사이트 관리자 이외 소셜 로그인만 지원합니다.<br/>개인정보는 DB에 저장하지 않습니다!</p>
 					</div>

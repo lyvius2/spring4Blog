@@ -1,5 +1,6 @@
 package com.walter.service;
 
+import com.mornya.lib.springsocialnaver.api.Naver;
 import com.walter.model.MemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -56,6 +57,10 @@ public class SocialServiceImpl implements SocialService {
 					ProfileOperations profileOperations = linkedIn.profileOperations();
 					LinkedInProfile linkedInProfile = profileOperations.getUserProfile();
 					return new MemberVO(linkedInProfile);
+				case "naver" :
+					Naver naver = this.getApi(Naver.class);
+					com.mornya.lib.springsocialnaver.api.abstracts.UserOperation naverOperation = naver.userOperation();
+					return new MemberVO(naverOperation);
 			}
 		} catch (Exception e) {
 			log.error(e.toString());

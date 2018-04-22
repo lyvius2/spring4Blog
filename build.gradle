@@ -47,6 +47,7 @@ dependencies {
     compile group: 'com.github.spring-social', name: 'spring-social-google', version:'latest.release'
     compile 'org.springframework.social:spring-social-github:1.0.0.BUILD-SNAPSHOT'
     compile group: 'org.springframework.social', name: 'spring-social-linkedin', version:'1.0.2.RELEASE'
+    compile group: 'com.mornya.lib', name: 'spring-social-naver', version: '1.0.2'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.5'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.6.0'
     compile group: 'net.sf.ehcache', name: 'ehcache', version:'2.10.4'
