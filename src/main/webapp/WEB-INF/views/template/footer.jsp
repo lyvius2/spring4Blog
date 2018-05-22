@@ -30,6 +30,7 @@
 						<i class="sg flag" title="Singapore"></i>
 						<i class="cn flag" title="Beijing"></i><br/>
 						<i class="nz flag" title="Auckland, Queenstown, Milford Sound, Mt.Cook, Christchurch"></i>
+						<i class="ca flag" title="Vancouver, Banff, Niagara Falls"></i>
 					</p>
 				</div>
 			</div>

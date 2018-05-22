@@ -13,6 +13,18 @@
 				</div>
 				<c:set var="path" value="${pageContext.request.servletPath}"/>
 				<div id="navigation" class="collapse navbar-collapse navbar-right" style="padding-right: 0px;">
+					<security:authorize access="!isAuthenticated()">
+						<a href="#" id="sign-in-headerBtn" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost">
+							<i class="fa fa-sign-in"></i>Sign in
+						</a>
+					</security:authorize>
+					<security:authorize access="isAuthenticated()">
+						<a href="/signOut" id="sign-out-headerBtn" class="btn navbar-btn btn-ghost">
+							<i class="fa fa-sign-out"></i>Sign out
+						</a>
+					</security:authorize>
+				</div>
+				<div id="navigation" class="collapse navbar-collapse navbar-right" style="padding-right: 0px;">
 					<ul class="nav navbar-nav">
 						<%--
 						<li <c:if test="${path == '/'}">class="active"</c:if>><a href="/">Home</a></li>
@@ -29,16 +41,6 @@
 						<li <c:if test="${path == '/resume'}">class="active"</c:if>><a href="/resume">Profile</a></li>
 						<li <c:if test="${path == '/config'}">class="active"</c:if>><a href="/config">Config</a></li>
 					</ul>
-					<security:authorize access="!isAuthenticated()">
-					<a href="#" id="sign-in-headerBtn" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost">
-						<i class="fa fa-sign-in"></i>Sign in
-					</a>
-					</security:authorize>
-					<security:authorize access="isAuthenticated()">
-					<a href="/signOut" id="sign-out-headerBtn" class="btn navbar-btn btn-ghost">
-						<i class="fa fa-sign-out"></i>Sign out
-					</a>
-					</security:authorize>
 				</div>
 			</div>
 		</div>
