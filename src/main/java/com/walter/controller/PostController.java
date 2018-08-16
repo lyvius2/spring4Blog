@@ -50,6 +50,25 @@ public class PostController extends BaseController {
 	@Resource(name = "googleDriveServiceImage")
 	private GoogleDriveService googleDriveImageService;
 
+	@RequestMapping(value = "")
+	public String post() {
+		return "post/postList";
+	}
+
+	@RequestMapping(value = "/category/{category_cd}")
+	public String postViewByCategory(@PathVariable int category_cd) {
+		int post_cd = 0;
+		if (category_cd != 0) {
+			PostSearchVO postSearchVO = new PostSearchVO();
+			postSearchVO.setUse_yn(true);
+			postSearchVO.setCategory_cd(category_cd);
+			postSearchVO.setRowsPerPage(1);
+			List<PostVO> postList = postService.getPostList(postSearchVO);
+			if (postList.size() > 0) post_cd = postList.get(0).getPost_cd();
+		}
+		return "redirect:/post" + ((post_cd != 0) ? "/" + post_cd : "");
+	}
+
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPostForm(Model model) {
 		model.addAttribute("postVO", new PostVO(true, true));

@@ -29,23 +29,13 @@ public class HomeController extends BaseController {
 
 	/**
 	 * 기본 Page (Blog Post List)
-	 * @param category_cd
 	 * @param locale
 	 * @return
 	 * @throws IllegalStateException
 	 */
 	@RequestMapping(value = "")
-	public String main(@RequestParam(name = "category_cd", required = false)String category_cd, Locale locale)
-			throws IllegalStateException {
+	public String main(Locale locale) throws IllegalStateException {
 		logger.info("Welcome Walter's Home! The client locale is {}.", locale);
-		if (category_cd != null && !category_cd.equals("")) {
-			PostSearchVO postSearchVO = new PostSearchVO();
-			postSearchVO.setUse_yn(true);
-			postSearchVO.setCategory_cd(Integer.parseInt(category_cd));
-			postSearchVO.setRowsPerPage(1);
-			List<PostVO> postList = postService.getPostList(postSearchVO);
-			if (postList.size() > 0) return "redirect:post/" + postList.get(0).getPost_cd();
-		}
 		return "post/postList";
 	}
 
