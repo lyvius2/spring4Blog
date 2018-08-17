@@ -69,6 +69,7 @@ public class PostController extends BaseController {
 		return "redirect:/post" + ((post_cd != 0) ? "/" + post_cd : "");
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String registerPostForm(Model model) {
 		model.addAttribute("postVO", new PostVO(true, true));
@@ -76,6 +77,7 @@ public class PostController extends BaseController {
 		return "post/postForm";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/register/{post_cd}", method = RequestMethod.GET)
 	public String modifyPostForm(@PathVariable int post_cd, Model model) {
 		model.addAttribute("postVO", postService.getPost(post_cd));
@@ -83,6 +85,7 @@ public class PostController extends BaseController {
 		return "post/postForm";
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerPost(@ModelAttribute("postVO") @Valid PostVO postVO, Errors errors) throws IOException, ParseException {
 		if (errors.hasErrors()) return "post/postForm";

@@ -128,11 +128,13 @@
 						</form>
 					</div>
 				</div>
+				<security:authorize access="hasRole('ROLE_ADMIN')">
 				<div class="col-lg-12 text-right">
 					<a href="/post/register/${post.post_cd}" class="btn btn-success btn-sm">
 						<i class="fa fa-pencil-square-o" aria-hidden="true"> 수정</i>
 					</a>
 				</div>
+				</security:authorize>
 			</div>
 		</div>
 	</section>
