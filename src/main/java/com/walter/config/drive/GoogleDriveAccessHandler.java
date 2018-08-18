@@ -15,8 +15,10 @@ import com.google.api.services.drive.DriveScopes;
 import com.walter.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,6 +40,9 @@ public class GoogleDriveAccessHandler {
 	private static HttpTransport HTTP_TRANSFORT;
 	private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE);
 
+	@Autowired
+	private GoogleDriveClientSecret googleDriveClientSecret;
+
 	static {
 		try {
 			HTTP_TRANSFORT = GoogleNetHttpTransport.newTrustedTransport();
@@ -48,8 +53,8 @@ public class GoogleDriveAccessHandler {
 		}
 	}
 
-	private static Credential authorize() throws IOException {
-		InputStream in = GoogleDriveAccessHandler.class.getResourceAsStream("/client_secret.json");
+	public Credential authorize() throws IOException {
+		InputStream in = new ByteArrayInputStream(googleDriveClientSecret.getJsonStringify().getBytes());
 		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
 		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
@@ -62,7 +67,7 @@ public class GoogleDriveAccessHandler {
 		return credential;
 	}
 
-	public static Drive getDriveInstance() throws IOException {
+	public Drive getDriveInstance() throws IOException {
 		Credential credential = authorize();
 		return new Drive.Builder(HTTP_TRANSFORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME)

@@ -69,6 +69,16 @@
 
 	<beans:bean id="koreanAnalyzer" class="org.apache.lucene.analysis.ko.KoreanAnalyzer"/>
 
+	<beans:bean id="googleDriveClientSecret" class="com.walter.config.drive.GoogleDriveClientSecret">
+		<beans:property name="client_id" value="${google.drive.api.client_id}" />
+		<beans:property name="project_id" value="${google.drive.api.project_id}" />
+		<beans:property name="auth_uri" value="${google.drive.api.auth_uri}" />
+		<beans:property name="token_uri" value="${google.drive.api.token_uri}" />
+		<beans:property name="auth_provider_x509_cert_url" value="${google.drive.api.auth_provider_x509_cert_url}" />
+		<beans:property name="client_secret" value="${google.drive.api.client_secret}" />
+		<beans:property name="redirect_uris" value="${google.drive.api.redirect_uris}" />
+	</beans:bean>
+
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mapping path="/**"/>
