@@ -36,10 +36,10 @@
 		<beans:constructor-arg name="strength" value="512"/>
 	</beans:bean>
 
-	<beans:bean id="signInAuthenticationProvider" class="com.walter.config.authentication.SignInAuthenticationProvider"/>
+	<beans:bean id="signInAuthenticationProvider" class="com.walter.config.authentication.SignInAuthenticationProvider"/><!--
 	<beans:bean id="signInUserDetailsService" class="com.walter.config.authentication.SignInUserDetailsService">
 		<beans:property name="adminEmail" value="${admin.email}"/>
-	</beans:bean>
+	</beans:bean> -->
 	<beans:bean id="signInSuccessHandler" class="com.walter.config.authentication.SignInSuccessHandler">
 		<beans:property name="refererUse" value="false"/>
 		<beans:property name="defaultUrl" value="/"/>

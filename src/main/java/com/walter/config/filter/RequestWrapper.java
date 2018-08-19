@@ -1,4 +1,4 @@
-package com.walter.config.xssfilter;
+package com.walter.config.filter;
 
 import com.nhncorp.lucy.security.xss.XssFilter;
 import com.nhncorp.lucy.security.xss.XssPreventer;

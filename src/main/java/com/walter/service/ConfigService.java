@@ -14,6 +14,8 @@ import java.util.List;
 public interface ConfigService {
 	Message insAdmin(MemberVO memberVO, boolean isCreate);
 	List<MemberVO> getMemberList();
+	MemberVO getMember(HashMap<String, Object> paramsMap);
+	HashMap modMember(MemberVO memberVO);
 
 	List<CategoryVO> getCategoryList();
 	CategoryVO getCategoryItemByCd(int category_cd);

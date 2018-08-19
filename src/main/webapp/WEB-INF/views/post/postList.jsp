@@ -60,6 +60,9 @@
 						</c:if>
 					</c:forEach>
 				</ul>
+				<security:authorize access="hasRole('ROLE_ADMIN')">
+				<a href="/post/register" class="btn btn-sm btn-primary-invert"><i class="fa fa-edit" aria-hidden="true"> 새 포스트 작성</i></a>
+				</security:authorize>
 			</div>
 		</div>
 	</section>

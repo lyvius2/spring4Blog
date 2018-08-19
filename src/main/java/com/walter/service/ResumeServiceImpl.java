@@ -1,6 +1,6 @@
 package com.walter.service;
 
-import com.walter.config.CustomStringUtils;
+import com.walter.util.CustomStringUtils;
 import com.walter.jpa.AccessUserRepository;
 import com.walter.model.ResumeVO;
 import com.walter.repository.ResumeRepository;

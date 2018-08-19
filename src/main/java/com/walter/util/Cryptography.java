@@ -1,4 +1,4 @@
-package com.walter.config;
+package com.walter.util;
 
 import java.security.spec.KeySpec;
 import javax.crypto.Cipher;
@@ -6,10 +6,12 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by yhwang131 on 2016-08-08.
  */
+@Component
 public class Cryptography {
 
 	private static final String UNICODE_FORMAT = "UTF8";

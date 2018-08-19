@@ -3,7 +3,7 @@ package com.walter.service;
 import static com.walter.config.lambda.LambdaUtilForException.reThrowsConsumer;
 import static com.walter.config.lambda.LambdaUtilForException.reThrowsFunction;
 
-import com.walter.config.CustomStringUtils;
+import com.walter.util.CustomStringUtils;
 import com.walter.model.LuceneIndexVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -1,32 +1,24 @@
 package com.walter.config;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 
 /**
  * myBatis Setting JAVA Config
  * Created by Walter on 2017-07-16.
  */
-/*
 @Configuration
 @PropertySource("classpath:/db.properties")
 @MapperScan(basePackages = "com.walter.dao", sqlSessionFactoryRef = "sqlSessionFactory")
@@ -53,41 +45,28 @@ public class MyBatisConfig {
 	}
 
 	@Bean
-	public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+	public DataSourceTransactionManager transactionManager() {
+		return new DataSourceTransactionManager(dataSource());
+	}
+
+	@Bean
+	public SqlSessionFactoryBean sqlSessionFactory(DataSource dataSource) throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(dataSource);
 		factoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
-
+		factoryBean.setTypeAliasesPackage("com.walter.model");
 		ClassPathResource[] resources = new ClassPathResource[5];
 		resources[0] = new ClassPathResource("query/CategorySQL.xml");
 		resources[1] = new ClassPathResource("query/CodeSQL.xml");
-		resources[2] = new ClassPathResource("query/LogSQL.xml");
 		resources[3] = new ClassPathResource("query/MemberSQL.xml");
 		resources[4] = new ClassPathResource("query/PostSQL.xml");
 
 		factoryBean.setMapperLocations(resources);
-		factoryBean.setTypeAliasesPackage("com.walter.model");
-		factoryBean.afterPropertiesSet();
-		return factoryBean.getObject();
+		return factoryBean;
 	}
 
 	@Bean
-	public SqlSession sqlSession(SqlSessionFactory sqlSessionFactory) throws Exception {
+	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
 		return new SqlSessionTemplate(sqlSessionFactory);
 	}
-
-	@Bean
-	public PlatformTransactionManager transactionManager(DataSource dataSource) {
-		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-		transactionManager.setDataSource(dataSource);
-		return transactionManager;
-	}
-
-	@Bean
-	public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
-		TransactionTemplate transactionTemplate = new TransactionTemplate();
-		transactionTemplate.setTransactionManager(transactionManager);
-		return transactionTemplate;
-	}
 }
-*/

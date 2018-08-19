@@ -1,6 +1,6 @@
 package com.walter.controller;
 
-import com.walter.config.CustomStringUtils;
+import com.walter.util.CustomStringUtils;
 import com.walter.config.authentication.SignInUserDetailsService;
 import com.walter.model.MemberVO;
 import com.walter.service.SocialService;

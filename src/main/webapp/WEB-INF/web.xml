@@ -8,7 +8,6 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			/WEB-INF/spring/root-context.xml
-			/WEB-INF/spring/mybatis-context.xml
 			/WEB-INF/spring/mongo-context.xml
 			/WEB-INF/spring/security-context.xml
 		</param-value>
@@ -17,7 +16,7 @@
 	<!-- XSS Filter -->
 	<filter>
 		<filter-name>xssFilter</filter-name>
-		<filter-class>com.walter.config.xssfilter.CrossSiteScriptingFilter</filter-class>
+		<filter-class>com.walter.config.filter.CrossSiteScriptingFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>xssFilter</filter-name>
@@ -41,7 +40,7 @@
 	<!-- CORS Filter -->
 	<filter>
 		<filter-name>corsFilter</filter-name>
-		<filter-class>com.walter.config.CorsFilter</filter-class>
+		<filter-class>com.walter.config.filter.CorsFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>corsFilter</filter-name>

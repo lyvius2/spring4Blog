@@ -1,4 +1,4 @@
-package com.walter.config.xssfilter;
+package com.walter.config.filter;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 

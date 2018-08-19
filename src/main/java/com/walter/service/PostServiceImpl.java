@@ -1,6 +1,6 @@
 package com.walter.service;
 
-import com.walter.config.CustomStringUtils;
+import com.walter.util.CustomStringUtils;
 import com.walter.dao.PostDao;
 import com.walter.model.*;
 import com.walter.repository.CommentRepository;

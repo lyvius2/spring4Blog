@@ -1,6 +1,6 @@
 package com.walter.model;
 
-import com.walter.config.CustomStringUtils;
+import com.walter.util.CustomStringUtils;
 import lombok.Data;
 
 import java.util.Date;

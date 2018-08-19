@@ -1,4 +1,4 @@
-package com.walter.config;
+package com.walter.util;
 
 import org.apache.commons.lang3.StringUtils;
 

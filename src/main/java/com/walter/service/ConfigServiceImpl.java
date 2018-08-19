@@ -65,6 +65,25 @@ public class ConfigServiceImpl implements ConfigService {
 	}
 
 	@Override
+	public MemberVO getMember(HashMap<String, Object> paramsMap) {
+		return memberDao.getMember(paramsMap);
+	}
+
+	@Override
+	public HashMap modMember(MemberVO memberVO) {
+		HashMap resultMap = new HashMap();
+		try {
+			int result = memberDao.modMember(memberVO);
+			resultMap.put("success", result == 1 ? true:false);
+		} catch (Exception e) {
+			logger.error(e.toString());
+			resultMap.put("success", false);
+			resultMap.put("message", e.getMessage());
+		}
+		return resultMap;
+	}
+
+	@Override
 	@Cacheable(value = "categoryCache")
 	public List<CategoryVO> getCategoryList() {
 		return categoryDao.getCategoryList();

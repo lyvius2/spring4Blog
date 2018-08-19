@@ -1,9 +1,9 @@
 package com.walter.config.authentication;
 
 import com.walter.config.code.Role;
-import com.walter.dao.MemberDao;
 import com.walter.model.MemberVO;
 
+import com.walter.service.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,13 @@ public class SignInUserDetailsService implements UserDetailsService {
 	private String adminEmail;
 
 	@Autowired
-	private MemberDao memberDao;
+	private ConfigService service;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		HashMap<String, Object> paramsMap = new HashMap<>();
 		paramsMap.put("username", username);
-		MemberVO memberVO = memberDao.getMember(paramsMap);
+		MemberVO memberVO = service.getMember(paramsMap);
 
 		if (memberVO == null) {
 			UsernameNotFoundException unfe = new UsernameNotFoundException(messages.getMessage("JdbcDaoImpl.notFound", new Object[]{username}, "User {0} not found"));
@@ -47,7 +47,7 @@ public class SignInUserDetailsService implements UserDetailsService {
 	public void onAuthenticationWithSocial(MemberVO memberVO) {
 		HashMap<String, Object> paramsMap = new HashMap<>();
 		paramsMap.put("username", memberVO.getUsername());
-		MemberVO existMember = memberDao.getMember(paramsMap);
+		MemberVO existMember = service.getMember(paramsMap);
 		if (existMember != null) {
 			memberVO.setAuthorities(Role.ADMIN.getRoleList());
 			if (existMember.getProfile_image_url() == null
@@ -57,7 +57,7 @@ public class SignInUserDetailsService implements UserDetailsService {
 				paramsMember.setMod_id(memberVO.getUsername());
 				paramsMember.setProfile_image_url(memberVO.getProfile_image_url());
 				paramsMember.setUse_yn(true);
-				memberDao.modMember(paramsMember);
+				service.modMember(paramsMember);
 			}
 		} else if (memberVO.getUsername().equals(adminEmail)) {
 			memberVO.setAuthorities(Role.ADMIN.getRoleList());

@@ -2,7 +2,7 @@ package com.walter.controller;
 
 import com.drew.imaging.ImageProcessingException;
 import com.google.api.services.drive.model.File;
-import com.walter.config.CustomStringUtils;
+import com.walter.util.CustomStringUtils;
 import com.walter.model.*;
 import com.walter.service.ConfigService;
 import com.walter.service.GoogleDriveService;
