@@ -1,14 +1,11 @@
 package com.walter.config;
 
-import com.walter.config.authentication.SignInUserDetailsService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -18,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import javax.servlet.Filter;
 import java.nio.charset.Charset;
 
-import static org.springframework.social.facebook.api.Page.PriceRange.$;
 
 /**
  * Created by yhwang131 on 2016-09-21.
