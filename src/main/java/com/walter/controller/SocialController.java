@@ -51,7 +51,7 @@ public class SocialController extends ConnectController {
 	public RedirectView oauth2Callback(@PathVariable String providerId, NativeWebRequest request) {
 		RedirectView redirectView = super.oauth2Callback(providerId, request);
 
-		MemberVO memberVO = service.bindingSocialUserInfo(providerId);
+		MemberVO memberVO = service.bindingSocialUserInfo(providerId, request);
 		if (memberVO != null) signInUserDetailsService.onAuthenticationWithSocial(memberVO);
 		else {
 			HttpServletRequest httpServletRequest = (HttpServletRequest)request.getNativeRequest();
