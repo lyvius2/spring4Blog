@@ -21,6 +21,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.filter.DelegatingFilterProxy;
 
 import java.util.Arrays;
 
@@ -28,13 +29,13 @@ import java.util.Arrays;
  * 향후 web.xml을 JAVA Config로 전환하면서 주석 삭제 예정
  */
 @Configuration
-@PropertySource("classpath:/application.properties")/*
-@EnableWebSecurity */
-public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
+@PropertySource("classpath:/application.properties")
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Value("${admin.email}")
 	private String adminEmail;
-/*
+
 	@Autowired
 	private AuthenticationSuccessHandler signInSuccessHandler;
 
@@ -48,6 +49,11 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
 	private UserDetailsService signInUserDetailsService;
 
 	@Bean
+	public DelegatingFilterProxy delegatingFilterProxy() {
+		return new DelegatingFilterProxy();
+	}
+
+	@Bean
 	public ShaPasswordEncoder passwordEncoder() {
 		return new ShaPasswordEncoder(512);
 	}
@@ -56,14 +62,14 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
 	public SignInAuthenticationProvider signInAuthenticationProvider() {
 		return new SignInAuthenticationProvider();
 	}
-*/
+
 	@Bean
 	public SignInUserDetailsService signInUserDetailsService() {
 		SignInUserDetailsService signInUserDetailsService = new SignInUserDetailsService();
 		signInUserDetailsService.setAdminEmail(this.adminEmail);
 		return signInUserDetailsService;
 	}
-/*
+
 	@Bean
 	public SignInSuccessHandler signInSuccessHandler() {
 		SignInSuccessHandler signInSuccessHandler = new SignInSuccessHandler();
@@ -96,7 +102,7 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
 					.and()
 				.csrf().disable()
 				.authorizeRequests()
-					.antMatchers("/post/register**", "/config**").hasRole("ROLE_ADMIN")
+					.antMatchers("/post/register**", "/config**").hasRole("ADMIN")
 					.antMatchers("/resume**").access("hasRole('ROLE_USER') || hasRole('ROLE_ADMIN') || hasRole('ROLE_RECRUITER')")
 					.and()
 				.exceptionHandling().accessDeniedPage("/403")
@@ -114,7 +120,7 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
 					.invalidateHttpSession(true)
 					.logoutUrl("/signOut")
 					.logoutSuccessUrl("/")
-					.deleteCookies("JSESSIONID, SPRING_SECURITY_REMEMBER_ME_COOKIE")
+					.deleteCookies("JSESSIONID", "SPRING_SECURITY_REMEMBER_ME_COOKIE")
 					.and()
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.NEVER)
@@ -135,5 +141,5 @@ public class SecurityConfig /*extends WebSecurityConfigurerAdapter*/ {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
 	}
-*/
+
 }

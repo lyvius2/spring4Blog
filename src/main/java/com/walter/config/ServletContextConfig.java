@@ -7,10 +7,20 @@ import com.walter.config.drive.GoogleDriveUploaderProgress;
 import com.walter.config.interceptor.WaltersInterceptor;
 import org.apache.lucene.analysis.ko.KoreanAnalyzer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.support.ConnectionFactoryRegistry;
@@ -19,12 +29,18 @@ import org.springframework.social.github.connect.GitHubConnectionFactory;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesView;
+import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
+import javax.servlet.Filter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +54,7 @@ import java.util.List;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableAspectJAutoProxy
 @EnableScheduling
+@EnableCaching
 @EnableWebMvc
 public class ServletContextConfig extends WebMvcConfigurerAdapter {
 
@@ -52,16 +69,22 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new WaltersInterceptor()).addPathPatterns("/**").excludePathPatterns("/resources/**", "/connect/**", "/api/**", "/healthCheck");
+		registry.addInterceptor(waltersInterceptor()).addPathPatterns("/**").excludePathPatterns("/resources/**", "/connect/**", "/api/**", "/healthCheck");
+	}
+
+	@Bean
+	public WaltersInterceptor waltersInterceptor() {
+		return new WaltersInterceptor();
 	}
 
 	@Bean
 	public InternalResourceViewResolver internalResourceViewResolver() {
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-		resolver.setPrefix("/WEB-INF/views");
+
+		resolver.setPrefix("/WEB-INF/views/");
 		resolver.setSuffix(".jsp");
 		resolver.setContentType("text/html; charset=UTF-8");
-		resolver.setOrder(1);
+		//resolver.setOrder(2);
 		return resolver;
 	}
 
@@ -73,6 +96,25 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public Gson gson() {
 		return new Gson();
+	}
+
+	@Bean
+	public TilesConfigurer tilesConfigurer() {
+		TilesConfigurer tiles = new TilesConfigurer();
+		tiles.setDefinitions(new String[]{
+				"/WEB-INF/tiles.xml"
+		});
+		tiles.setCheckRefresh(true);
+		return tiles;
+	}
+
+	@Bean
+	public TilesViewResolver tilesViewResolver() {
+		TilesViewResolver tilesViewResolver = new TilesViewResolver();
+		tilesViewResolver.setViewClass(TilesView.class);
+		tilesViewResolver.setContentType("text/html; charset=UTF-8");
+		tilesViewResolver.setOrder(1);
+		return tilesViewResolver;
 	}
 
 	@Bean
@@ -109,12 +151,44 @@ public class ServletContextConfig extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public InMemoryUsersConnectionRepository inMemoryUsersConnectionRepository() {
-		return new InMemoryUsersConnectionRepository(connectionFactoryLocator());
+	public ConnectionRepository inMemoryConnectionRepository() {
+		InMemoryUsersConnectionRepository usersConnectionRepository = new InMemoryUsersConnectionRepository(connectionFactoryLocator());
+		return usersConnectionRepository.createConnectionRepository("walters");
 	}
 
 	@Bean
 	public KoreanAnalyzer koreanAnalyzer() {
 		return new KoreanAnalyzer();
+	}
+
+	@Bean
+	public TaskScheduler taskScheduler() {
+		return new ConcurrentTaskScheduler();
+	}
+
+	@Bean
+	public HttpMessageConverter<String> responseBodyConverter() {
+		return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+	}
+
+	@Bean
+	public Filter characterEncodingFilter() {
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+		characterEncodingFilter.setEncoding("UTF-8");
+		characterEncodingFilter.setForceEncoding(true);
+		return characterEncodingFilter;
+	}
+
+	@Bean
+	public CacheManager cacheManager() {
+		return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+	}
+
+	@Bean
+	public EhCacheManagerFactoryBean ehCacheCacheManager() {
+		EhCacheManagerFactoryBean ehCacheManagerFactoryBean = new EhCacheManagerFactoryBean();
+		ehCacheManagerFactoryBean.setConfigLocation(new ClassPathResource("ehcache.xml"));
+		ehCacheManagerFactoryBean.setShared(true);
+		return ehCacheManagerFactoryBean;
 	}
 }
