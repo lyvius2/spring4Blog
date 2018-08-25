@@ -6,16 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Profile Editor</title>
-</head>
-<body>
+	<div class="resume-wrapper">
 		<form id="resumeVO" action="/resume" method="post" enctype="multipart/form-data" autocomplete="off">
 			<!-- header -->
 			<header class="resume">
@@ -157,7 +151,12 @@
 				</form>
 			</div>
 		</div><!--//modal -->
-	<content tag="script">
+		<!-- footer -->
+		<div class="resume-footer">
+			© 2016 <a href="https://github.com/dhparkdh" target="-_blank">dhpark</a>. All rights reserved.
+			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang</a>
+		</div><!--//footer -->
+	</div>
 	<jsp:include page="resumeFormTemplate.jsp"/>
 	<script>
 		function createActVO(flag) {
@@ -245,7 +244,7 @@
 			}
 		})
 
-		var resume;
+		var resume
 		$.get('/api/resume').then(function (result) {
 			setTimeout(function () {
 				resume = new Vue({
@@ -266,6 +265,3 @@
 			}, 100)
 		})
 	</script>
-	</content>
-</body>
-</html>

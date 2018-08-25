@@ -2,16 +2,12 @@
 		<div role="navigation" class="navbar navbar-default">
 			<div class="container">
 				<div class="navbar-header">
-					<a href="/" class="navbar-brand">Walter's Home
-						<security:authorize access="isAuthenticated()">
-							<%--<security:authentication property="principal.kr_name"/>--%>
-						</security:authorize>
-					</a>
+					<a href="/" class="navbar-brand">Walter's Home</a>
 					<div class="navbar-buttons">
 						<button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle navbar-btn">Menu<i class="fa fa-align-justify"></i></button>
 					</div>
 				</div>
-				<c:set var="path" value="${pageContext.request.servletPath}"/>
+				<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}"/>
 				<div id="navigation" class="collapse navbar-collapse navbar-right" style="padding-right: 0px;">
 					<security:authorize access="!isAuthenticated()">
 						<a href="#" id="sign-in-headerBtn" data-toggle="modal" data-target="#login-modal" class="btn navbar-btn btn-ghost">
@@ -26,9 +22,6 @@
 				</div>
 				<div id="navigation" class="collapse navbar-collapse navbar-right" style="padding-right: 0px;">
 					<ul class="nav navbar-nav">
-						<%--
-						<li <c:if test="${path == '/'}">class="active"</c:if>><a href="/">Home</a></li>
-						--%>
 						<li class="<c:if test="${fn:indexOf(path, '/post') == 0}">active</c:if> dropdown"><a href="/post" class="dropdown-toggle">Blog <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<c:forEach var="category" items="${categories}" varStatus="vs">
@@ -38,15 +31,15 @@
 								</c:forEach>
 							</ul>
 						</li>
-						<li <c:if test="${path == '/resume'}">class="active"</c:if>><a href="/resume">Profile</a></li>
-						<li <c:if test="${path == '/config'}">class="active"</c:if>><a href="/config">Config</a></li>
+						<li<c:if test="${path == '/resume'}"> class="active"</c:if>><a href="/resume">Profile</a></li>
+						<li<c:if test="${path == '/config'}"> class="active"</c:if>><a href="/config">Config</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</header><%--
 	<security:authorize access="isAuthenticated()">
-		<div class="item right floated"><c:out value="${pageContext.request.remoteUser}"/>(<c:out value="${sessionScope.userInfo.kr_name}"/>) 님 안녕하세요.</div>
+		<div class="item right floated"><security:authentication property="principal.kr_name"/>) 님 안녕하세요.</div>
 	</security:authorize>--%>
 	<!-- *** LOGIN MODAL *** -->
 	<div id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true" class="modal fade">

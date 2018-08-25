@@ -1,9 +1,6 @@
 ## Spring4 Blog
 
 JAVA, Spring Framework 기반으로 개발하고 있는 포트폴리오 겸 블로그입니다.  
-배포는 [heroku]에 업로드하여 deploy할 예정입니다.  
-스터디의 목적도 있으므로 프로젝트 규모는 작지만 myBatis와 JPA가 같이 적용되어 있는 등,  
-되도록 알고 있는 기술을 여러 개 사용해 보았습니다.
 
 ### Languages
 
@@ -32,8 +29,8 @@ JAVA, Spring Framework 기반으로 개발하고 있는 포트폴리오 겸 블�
 * ControllerAdvice - ExceptionHandler. 오류 발생 시 내용을 DB에 저장
 * Generic Type - from JDK 5
 * Lambda Expressions - from JDK 8
-* [SiteMesh] - 레이아웃 템플릿 엔진
-* ~~Tiles~~ - SiteMesh로 교체
+* ~~SiteMesh~~ - ~~레이아웃 템플릿 엔진~~Tiles3로 재교체
+* [Tiles3] - 레이아웃 템플릿 엔진
 * [Lombok] - 개발 생산성을 높이는 도구
 * [Vue.js] - The Progressive JavaScript Framework
 * ~~AngularJS~~ - 원래 1.6버전으로 개발하다가 Vue.js로 교체
@@ -46,7 +43,7 @@ JAVA, Spring Framework 기반으로 개발하고 있는 포트폴리오 겸 블�
 
 ### IDE
 
-* ~~Spring Tool Suite~~ → [IntelliJ IDEA] 2017
+* ~~Spring Tool Suite~~ → [IntelliJ IDEA] 2018
 
 ### Library
 
@@ -80,6 +77,7 @@ JAVA, Spring Framework 기반으로 개발하고 있는 포트폴리오 겸 블�
    [Google Drive API]: <https://developers.google.com/drive/>
    [Spring AOP]: <https://docs.spring.io/spring/docs/current/spring-framework-reference/html/aop.html>
    [SiteMesh]: <http://wiki.sitemesh.org/wiki/display/sitemesh/Home>
+   [Tiles3]: <https://tiles.apache.org>
    [Lombok]: <https://projectlombok.org>
    [Vue.js]: <https://vuejs.org>
    [AngularJS]: <https://angularjs.org>

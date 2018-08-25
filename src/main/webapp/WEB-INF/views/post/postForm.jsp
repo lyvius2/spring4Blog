@@ -6,35 +6,19 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="UTF-8">
-	<title>포스트 쓰기</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
-	<style>
-		section {
-			padding-top: 40px;
-			padding-bottom: 40px;
-		}
-		.toggle.btn {
-			min-width: 100%;
-		}
-		#travel-mode {
-			display: none;
-		}
-	</style>
-</head>
-<body>
+<style>
+	.toggle.btn {
+		min-width: 100%;
+	}
+</style>
 <form:form cssClass="form-horizontal" action="/post/register" method="post" commandName="postVO" autocomplete="off" enctype="multipart/form-data">
 	<form:input type="hidden" path="post_cd"/>
 	<form:input type="hidden" path="new_delegate_img"/>
 	<form:input type="hidden" path="delegate_img"/>
-	<section class="background-gray-lightest">
+	<section class="background-gray-lightest" style="padding-top: 40px; padding-bottom: 40px;">
 		<div class="container">
 			<div class="breadcrumbs">
 				<ul class="breadcrumb">
@@ -60,7 +44,7 @@
 					<input id="travel-mode-select" type="checkbox" data-toggle="toggle" data-on="Option" data-off="Option" />
 				</div>
 			</div>
-			<div class="form-group" id="travel-mode">
+			<div class="form-group" id="travel-mode" style="display: none;">
 				<div class="col-md-2">
 					<div class="input-group date">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
@@ -115,8 +99,7 @@
 		</div>
 	</section>
 </form:form>
-<content tag="script">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap-select.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/scripts/bootstrap-filestyle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/ckeditor/ckeditor.js"></script>
 	<script>
@@ -170,6 +153,3 @@
 			}, 100)
 		}
 	</script>
-</content>
-</body>
-</html>

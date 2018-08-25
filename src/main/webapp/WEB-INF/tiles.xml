@@ -3,7 +3,23 @@
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
+    <definition name="status/4*" template="/WEB-INF/views/template/empty.jsp">
+        <put-attribute name="body" value="/WEB-INF/views/status/4{1}.jsp"/>
+    </definition>
+    <definition name="post/indexingStatus" template="/WEB-INF/views/template/empty.jsp">
+        <put-attribute name="body" value="/WEB-INF/views/post/indexingStatus.jsp"/>
+    </definition>
+
+    <definition name="resume/*" template="/WEB-INF/views/template/layout-resume.jsp">
+        <put-attribute name="css" value="/WEB-INF/views/template/css.jsp" />
+        <put-attribute name="js" value="/WEB-INF/views/template/js.jsp" />
+        <put-attribute name="header" value="/WEB-INF/views/template/header.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/resume/{1}.jsp" />
+    </definition>
+
     <definition name="default" template="/WEB-INF/views/template/layout-common.jsp">
+        <put-attribute name="css" value="/WEB-INF/views/template/css.jsp" />
+        <put-attribute name="js" value="/WEB-INF/views/template/js.jsp" />
         <put-attribute name="header" value="/WEB-INF/views/template/header.jsp" />
         <put-attribute name="body" value="" />
         <put-attribute name="footer" value="/WEB-INF/views/template/footer.jsp" />

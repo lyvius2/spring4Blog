@@ -6,15 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>설정</title>
 	<style>
 		body.dragging, body.dragging * {
 			cursor: move !important; }
@@ -43,8 +38,6 @@
 			left: -5px;
 			border-right: none; }
 	</style>
-</head>
-<body>
 	<section>
 		<div class="container clearfix" role="tabpanel">
 			<ul class="nav nav-tabs" role="tablist">
@@ -475,7 +468,6 @@
 		</div>
 	</div>
 
-	<content tag="script">
 	<script src="${pageContext.request.contextPath}/resources/scripts/jquery-sortable-min.js"></script>
 	<script>
 		/**
@@ -715,6 +707,3 @@
 		getExceptionList(1)
 	</script>
 	${msg}
-	</content>
-</body>
-</html>

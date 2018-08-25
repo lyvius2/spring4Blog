@@ -15,9 +15,3 @@
 	<script src="${contextPath}/resources/scripts/moment.min.js"></script>
 	<script src="${contextPath}/resources/scripts/lightbox.min.js"></script>
 	<script src="${contextPath}/resources/scripts/front.js"></script>
-<c:if test="${requestSignIn == true}">
-	<script>
-		alert('로그인이 필요합니다.')
-		$('#sign-in-headerBtn').trigger('click')
-	</script>
-</c:if>

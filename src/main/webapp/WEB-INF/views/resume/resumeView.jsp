@@ -6,17 +6,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Profile</title>
-</head>
-<body>
+	<div class="resume-wrapper">
 		<jsp:scriptlet>
 			pageContext.setAttribute("wrap", "\n");
 		</jsp:scriptlet>
@@ -181,5 +175,9 @@
 				</security:authorize>
 			</div>
 		</section><!-- main -->
-</body>
-</html>
+		<!-- footer -->
+		<div class="resume-footer">
+			© 2016 <a href="https://github.com/dhparkdh" target="-_blank">dhpark</a>. All rights reserved.
+			Customized by <a href="https://github.com/lyvius2" target="_blank">walter.hwang</a>
+		</div><!--//footer -->
+	</div>
