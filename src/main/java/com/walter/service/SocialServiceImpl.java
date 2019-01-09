@@ -66,25 +66,30 @@ public class SocialServiceImpl implements SocialService {
 							"picture", "locale", "name", "third_party_id", "verified" };
 					User user = facebook.fetchObject("me", User.class, fields);
 					memberVO = new MemberVO(user);
+					break;
 				case "google" :
 					Google google = this.getApi(Google.class, connection);
 					PlusOperations plusOperations = google.plusOperations();
 					Person person = plusOperations.getGoogleProfile();
 					memberVO = new MemberVO(person);
+					break;
 				case "github" :
 					GitHub gitHub = this.getApi(GitHub.class, connection);
 					UserOperations userOperations = gitHub.userOperations();
 					GitHubUserProfile gitHubUserProfile = userOperations.getUserProfile();
 					memberVO = new MemberVO(gitHubUserProfile);
+					break;
 				case "linkedin" :
 					LinkedIn linkedIn = this.getApi(LinkedIn.class, connection);
 					ProfileOperations profileOperations = linkedIn.profileOperations();
 					LinkedInProfile linkedInProfile = profileOperations.getUserProfile();
 					memberVO = new MemberVO(linkedInProfile);
+					break;
 				case "naver" :
 					Naver naver = this.getApi(Naver.class, connection);
 					com.mornya.lib.springsocialnaver.api.abstracts.UserOperation naverOperation = naver.userOperation();
 					memberVO = new MemberVO(naverOperation);
+					break;
 			}
 			this.connectionRepository.removeConnection(new ConnectionKey(connection.getKey().getProviderId(), connection.getKey().getProviderUserId()));
 			this.addConnection(connection, connectionFactory, request);
